@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:text="NAME"
+        android:layout_width="@dimen/item_column_width"
+        android:layout_height="wrap_content"
+        android:layout_weight="8" />
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:text="Batch No."
+        android:layout_width="@dimen/item_column_width"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:text="QUANTITY"
+        android:layout_width="@dimen/item_column_width"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:text="Cost"
+        android:layout_width="@dimen/item_column_width"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+</LinearLayout>

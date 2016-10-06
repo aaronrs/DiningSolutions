@@ -1,0 +1,31 @@
+package net.astechdesign.diningsolutions.model;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DSDDateFormatter {
+    private static DSDDateFormatter instance;
+
+    private SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat outputDateFormat = new SimpleDateFormat("EEE dd MMM yyyy");
+
+    public Date parse(String dateString) {
+        try {
+            return dbDateFormat.parse(dateString);
+        } catch (ParseException e) {
+            throw new RuntimeException("Date parse failed: " + dateString);
+        }
+    }
+
+    public static DSDDateFormatter instance() {
+        if (instance == null) {
+            instance = new DSDDateFormatter();
+        }
+        return instance;
+    }
+
+    public String format(Date date) {
+        return outputDateFormat.format(date);
+    }
+}

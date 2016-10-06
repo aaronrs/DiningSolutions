@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">DiningSolutions</string>
+    <string name="name_hint">Enter Customer Name</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="customer_created_label">Date here</string>
+    <string name="customer_current_label">Current customer?</string>
+    <string name="date_picker_title">Date</string>
+    <string name="house_name_number_hint">Enter House Name / Number</string>
+    <string name="street_hint">Enter Street</string>
+    <string name="town_hint">Enter Town</string>
+    <string name="county_hint">Enter County</string>
+    <string name="postcode_hint">Enter Postcode</string>
+</resources>

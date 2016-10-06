@@ -1,0 +1,131 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Customer Name" />
+
+        <Button
+            android:text="Orders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:id="@+id/orders_button" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/customer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/name_hint" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Telephone" />
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="679dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="phone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView2"
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Email" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="680dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textEmailAddress" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Address" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/house_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/house_name_number_hint" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/street"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/street_hint" />
+
+    <EditText
+        android:id="@+id/town"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/town_hint" />
+
+    <EditText
+        android:id="@+id/county"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/county_hint" />
+
+    <EditText
+        android:id="@+id/postcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/postcode_hint" />
+
+    <Button
+        android:id="@+id/customer_created"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/customer_created_label" />
+
+    <CheckBox
+        android:id="@+id/customer_current"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/customer_current_label" />
+</LinearLayout>
