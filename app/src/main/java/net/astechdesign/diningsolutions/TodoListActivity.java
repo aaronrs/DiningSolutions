@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 
 import net.astechdesign.diningsolutions.dummy.DummyContent;
+import net.astechdesign.diningsolutions.model.Todo;
+import net.astechdesign.diningsolutions.repositories.TodoRepo;
 
 import java.util.List;
 
@@ -67,15 +69,15 @@ public class TodoListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(TodoRepo.get()));
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<Todo> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<Todo> items) {
             mValues = items;
         }
 
@@ -89,7 +91,7 @@ public class TodoListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
+            holder.mIdView.setText(mValues.get(position).id.toString());
             holder.mContentView.setText(mValues.get(position).content);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +99,7 @@ public class TodoListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(TodoDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putString(TodoDetailFragment.ARG_ITEM_ID, holder.mItem.id.toString());
                         TodoDetailFragment fragment = new TodoDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -123,7 +125,7 @@ public class TodoListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public Todo mItem;
 
             public ViewHolder(View view) {
                 super(view);

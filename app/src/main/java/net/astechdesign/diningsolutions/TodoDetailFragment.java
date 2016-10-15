@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.dummy.DummyContent;
+import net.astechdesign.diningsolutions.model.Todo;
+import net.astechdesign.diningsolutions.repositories.TodoRepo;
+
+import java.util.UUID;
 
 /**
  * A fragment representing a single Todo detail screen.
@@ -27,7 +31,7 @@ public class TodoDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private Todo mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,7 +48,8 @@ public class TodoDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            UUID uuid = UUID.randomUUID();
+            mItem = TodoRepo.get(uuid);
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
