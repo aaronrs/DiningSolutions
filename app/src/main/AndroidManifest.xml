@@ -19,6 +19,7 @@
         <activity android:name=".CustomerActivity"></activity>
         <activity android:name=".OrderActivity"></activity>
         <activity android:name=".OrderListActivity"></activity>
+        <activity android:name=".OrderPagerActivity"></activity>
     </application>
 
 </manifest>

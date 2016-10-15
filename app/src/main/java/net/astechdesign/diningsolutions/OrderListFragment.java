@@ -1,12 +1,15 @@
 package net.astechdesign.diningsolutions;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,13 +17,17 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class OrderListFragment extends Fragment {
     private RecyclerView mOrderRecyclerView;
     private OrderAdapter mAdapter;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -32,6 +39,23 @@ public class OrderListFragment extends Fragment {
 
         updateUI();
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_order_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_new_order:
+                Intent intent = OrderActivity.newIntent(getActivity());
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateUI() {
@@ -65,7 +89,7 @@ public class OrderListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), OrderActivity.class);
+            Intent intent = new Intent(getActivity(), OrderPagerActivity.class);
             startActivity(intent);
         }
     }

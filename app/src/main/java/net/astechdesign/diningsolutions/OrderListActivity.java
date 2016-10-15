@@ -1,6 +1,7 @@
 package net.astechdesign.diningsolutions;
 
-import android.app.Fragment;
+
+import android.support.v4.app.Fragment;
 
 public class OrderListActivity extends SingleFragmentActivity {
     @Override

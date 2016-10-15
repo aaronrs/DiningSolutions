@@ -1,8 +1,10 @@
 package net.astechdesign.diningsolutions;
 
-import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,9 +22,12 @@ import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
 import java.util.List;
+import java.util.UUID;
 
 public class OrderFragment extends Fragment {
 
+
+    private static final String EXTRA_ORDER_ID = "net.astechdesign.diningsolutions.order_id";
 
     private Order mOrder;
     private TextView mNameField;
@@ -33,6 +38,14 @@ public class OrderFragment extends Fragment {
     private ListAdapter mOrderAdapter = new OrderItemListAdapter();
     private Button mAddProductButton;
 
+    public static Fragment newInstance(UUID id) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(EXTRA_ORDER_ID, id);
+        OrderFragment orderFragment = new OrderFragment();
+        orderFragment.setArguments(bundle);
+        return orderFragment;
+    }
+
     public OrderFragment() {
         // Required empty public constructor
     }
@@ -40,7 +53,13 @@ public class OrderFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOrder = OrderRepo.get(getActivity()).getmOrders().get(0);
+        if (savedInstanceState != null) {
+            UUID orderId = (UUID)  savedInstanceState.getSerializable(EXTRA_ORDER_ID);
+            mOrder = OrderRepo.get(getActivity()).getOrder(orderId);
+        } else {
+            mOrder = OrderRepo.get(getActivity()).getmOrders().get(0);
+        }
+
         mOrderItems = mOrder.orderItems;
     }
 
