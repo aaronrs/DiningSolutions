@@ -8,18 +8,31 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CustomerListActivity">
+        <activity android:name=".CustomerListActivity" />
+        <activity android:name=".DiningSolutionsActivity" />
+        <activity android:name=".CustomerActivity" />
+        <activity android:name=".OrderActivity" />
+        <activity android:name=".OrderListActivity" />
+        <activity android:name=".OrderPagerActivity" />
+        <activity
+            android:name=".TodoListActivity"
+            android:label="@string/title_todo_list"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DiningSolutionsActivity"></activity>
-        <activity android:name=".CustomerActivity"></activity>
-        <activity android:name=".OrderActivity"></activity>
-        <activity android:name=".OrderListActivity"></activity>
-        <activity android:name=".OrderPagerActivity"></activity>
+        <activity
+            android:name=".TodoDetailActivity"
+            android:label="@string/title_todo_detail"
+            android:parentActivityName=".TodoListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.astechdesign.diningsolutions.TodoListActivity" />
+        </activity>
     </application>
 
 </manifest>

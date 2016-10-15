@@ -13,4 +13,6 @@
     <string name="county_hint">Enter County</string>
     <string name="postcode_hint">Enter Postcode</string>
     <string name="new_order">New Order</string>
+    <string name="title_todo_list">Todos</string>
+    <string name="title_todo_detail">Todo Detail</string>
 </resources>
