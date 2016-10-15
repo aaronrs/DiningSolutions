@@ -4,18 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-import net.astechdesign.diningsolutions.dummy.DummyContent;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Todo;
 import net.astechdesign.diningsolutions.repositories.TodoRepo;
 
@@ -31,11 +35,15 @@ import java.util.List;
  */
 public class TodoListActivity extends AppCompatActivity {
 
+    private static final String ADD_TODO = "add_todo";
+    private static final String DATE_PICKER = "date_picker";
+
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
     private boolean mTwoPane;
+    private NewTodoFragment newTodoFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +73,25 @@ public class TodoListActivity extends AppCompatActivity {
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_todo_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_new_todo:
+                FragmentManager fm = getSupportFragmentManager();
+                newTodoFragment = new NewTodoFragment();
+                newTodoFragment.show(fm, ADD_TODO);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -140,4 +167,15 @@ public class TodoListActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void getDate(View v) {
+        FragmentManager fm = getSupportFragmentManager();
+        DatePickerFragment dialog = DatePickerFragment.newInstance(new DSDDate());
+        dialog.setTargetFragment(newTodoFragment, DatePickerFragment.REQUEST_DATE);
+        dialog.show(fm, DATE_PICKER);
+
+        Toast toast = Toast.makeText(this, "get date picker", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
 }
