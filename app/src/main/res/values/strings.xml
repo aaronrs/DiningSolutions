@@ -7,6 +7,7 @@
     <string name="customer_created_label">Date here</string>
     <string name="customer_current_label">Current customer?</string>
     <string name="date_picker_title">Date</string>
+    <string name="time_picker_title">Time</string>
     <string name="house_name_number_hint">Enter House Name / Number</string>
     <string name="street_hint">Enter Street</string>
     <string name="town_hint">Enter Town</string>
@@ -16,4 +17,6 @@
     <string name="title_todo_list">Todos</string>
     <string name="title_todo_detail">Todo Detail</string>
     <string name="new_todo_title">New Todo</string>
+    <string name="title_product_list">Products</string>
+    <string name="title_product_detail">Product Detail</string>
 </resources>

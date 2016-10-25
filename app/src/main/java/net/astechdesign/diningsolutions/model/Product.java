@@ -1,13 +1,18 @@
 package net.astechdesign.diningsolutions.model;
 
+import java.util.UUID;
+
 public class Product {
-    private final Long id;
+
+    public final UUID id;
     private final String category;
     public final String name;
+    public final double price;
 
-    public Product(Long id, String category, String name) {
+    public Product(UUID id, String category, String name, double price) {
         this.id = id;
         this.category = category;
         this.name = name;
+        this.price = price;
     }
 }

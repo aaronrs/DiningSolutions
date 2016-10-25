@@ -9,6 +9,7 @@ public class DSDDateFormatter {
 
     private SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat outputDateFormat = new SimpleDateFormat("EEE dd MMM yyyy");
+    private SimpleDateFormat outputTimeFormat = new SimpleDateFormat("HH:mm");
 
     public Date parse(String dateString) {
         try {
@@ -27,5 +28,9 @@ public class DSDDateFormatter {
 
     public String format(Date date) {
         return outputDateFormat.format(date);
+    }
+
+    public String formatTime(Date date) {
+        return outputTimeFormat.format(date);
     }
 }
