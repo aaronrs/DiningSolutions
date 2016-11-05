@@ -51,8 +51,7 @@
         style="?android:listSeparatorTextViewStyle"
         android:text="Customer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView4" />
+        android:layout_height="wrap_content" />
 
     <EditText
         android:layout_width="match_parent"
@@ -60,36 +59,34 @@
         android:inputType="textPersonName"
         android:text="Name"
         android:ems="10"
-        android:id="@+id/editText2" />
+        android:id="@+id/todo_customer_name" />
 
     <TextView
         style="?android:listSeparatorTextViewStyle"
         android:text="Telephone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView5" />
+        android:layout_height="wrap_content" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="phone"
         android:text="Telephone"
         android:ems="10"
-        android:id="@+id/editText3" />
+        android:id="@+id/todo_phone" />
 
     <TextView
         style="?android:listSeparatorTextViewStyle"
         android:text="Details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView6" />
+        android:layout_height="wrap_content" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:text="Visit overdue"
         android:ems="10"
-        android:id="@+id/editText4" />
+        android:id="@+id/todo_details" />
 
 </LinearLayout>

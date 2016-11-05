@@ -19,4 +19,6 @@
     <string name="new_todo_title">New Todo</string>
     <string name="title_product_list">Products</string>
     <string name="title_product_detail">Product Detail</string>
+    <string name="new_product_title">New Product</string>
+    <string name="edit_product_title">Edit Product</string>
 </resources>

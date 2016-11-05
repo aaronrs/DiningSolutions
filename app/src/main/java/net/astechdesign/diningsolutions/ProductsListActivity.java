@@ -7,12 +7,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import net.astechdesign.diningsolutions.model.Todo;
-import net.astechdesign.diningsolutions.repositories.TodoRepo;
+import net.astechdesign.diningsolutions.model.Product;
+import net.astechdesign.diningsolutions.repositories.ProductsRepo;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * An activity representing a list of Todos. This activity
@@ -22,16 +24,16 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class TodoListActivity extends AbstractListActivity<Todo, TodoListActivity.TodoViewHolder> {
+public class ProductsListActivity extends AbstractListActivity<Product, ProductsListActivity.ProductViewHolder> {
 
-    private static final String ADD_TODO = "add_todo";
+    private static final String ADD_PRODUCT = "add_product";
 
     @Override
     protected boolean optionItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_new_todo:
+            case R.id.menu_item_new_product:
                 FragmentManager fm = getSupportFragmentManager();
-                dialogFragment = new NewTodoFragment();
+                dialogFragment = new NewProductFragment();
                 dialogFragment.show(fm, getDialogTitle());
                 return true;
             default:
@@ -41,32 +43,31 @@ public class TodoListActivity extends AbstractListActivity<Todo, TodoListActivit
 
     @Override
     protected String getDialogTitle() {
-        return ADD_TODO;
+        return ADD_PRODUCT;
     }
 
     @Override
-    protected List<Todo> getAdapter() {
-        return TodoRepo.get();
+    protected List<Product> getAdapter() {
+        return ProductsRepo.get(this);
     }
 
     @Override
-    protected View.OnClickListener getItemOnClickListener(final Todo value) {
+    protected View.OnClickListener getItemOnClickListener(final Product value) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putString(getArgItemId(), value.id.toString());
-                    TodoDetailFragment fragment = new TodoDetailFragment();
+                    ProductDetailFragment fragment = new ProductDetailFragment();
                     fragment.setArguments(arguments);
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.todo_detail_container, fragment)
+                            .replace(R.id.product_detail_container, fragment)
                             .commit();
                 } else {
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, TodoDetailActivity.class);
-                    intent.putExtra(TodoDetailFragment.ARG_ITEM_ID, value.id);
-
+                    Intent intent = new Intent(context, ProductDetailActivity.class);
+                    intent.putExtra(ProductDetailFragment.ARG_ITEM_ID, value.id.toString());
                     context.startActivity(intent);
                 }
             }
@@ -74,63 +75,62 @@ public class TodoListActivity extends AbstractListActivity<Todo, TodoListActivit
     }
 
     @Override
-    protected TodoViewHolder getNewViewHolder(View view) {
-        return new TodoViewHolder(view);
+    protected ProductViewHolder getNewViewHolder(View view) {
+        return new ProductViewHolder(view);
     }
 
     @Override
-    protected void setHolderContent(TodoListActivity.TodoViewHolder holder, Todo value) {
-        holder.mIdView.setText(value.id.toString());
-        holder.mContentView.setText(value.content);
+    protected void setHolderContent(ProductsListActivity.ProductViewHolder holder, Product value) {
+        holder.mNameView.setText(value.name);
     }
 
     @Override
     protected String getArgItemId() {
-        return TodoDetailFragment.ARG_ITEM_ID;
+        return ProductDetailFragment.ARG_ITEM_ID;
     }
 
     @Override
     protected int getListContentId() {
-        return R.layout.todo_list_content;
+        return R.layout.product_list_content;
     }
 
     @Override
     protected int getListMenu() {
-        return R.menu.menu_todo_list;
+        return R.menu.menu_product_list;
     }
 
     @Override
     protected int getContainerView() {
-        return R.id.todo_detail_container;
+        return R.id.product_detail_container;
     }
 
     @Override
     protected int getRecyclerView() {
-        return R.id.todo_list;
+        return R.id.product_list;
     }
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_todo_list;
+        return R.layout.activity_product_list;
     }
 
-    public class TodoViewHolder extends RecyclerView.ViewHolder {
+    public class ProductViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public Todo mItem;
+        public final TextView mNameView;
+        public Product mItem;
 
-        public TodoViewHolder(View view) {
+        public ProductViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            mNameView = (TextView) view.findViewById(R.id.product_name);
         }
     }
 
+    public void saveProduct(View view) {
+        UUID id = (UUID) view.getTag();
+        String newName = ((EditText) this.findViewById(R.id.product_detail)).getText().toString();
+        EditText price = (EditText)this.findViewById(R.id.product_price);
+        String newPrice = price.getText().toString();
+        ProductsRepo.update(id, newName, newPrice);
+    }
 }

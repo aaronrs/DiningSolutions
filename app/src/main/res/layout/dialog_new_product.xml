@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:text="Product Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/productName" />
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:text="Product Id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/productId" />
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:text="Price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:text="Price"
+        android:ems="10"
+        android:id="@+id/productPrice" />
+
+</LinearLayout>

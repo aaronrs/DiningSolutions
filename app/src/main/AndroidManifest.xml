@@ -17,11 +17,6 @@
         <activity
             android:name=".TodoListActivity"
             android:label="@string/title_todo_list">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".TodoDetailActivity"
@@ -33,13 +28,17 @@
         </activity>
         <activity
             android:name=".ProductListActivity"
-            android:label="@string/title_product_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_product_list">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ProductDetailActivity"
             android:label="@string/title_product_detail"
-            android:parentActivityName=".ProductListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".ProductsListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.astechdesign.diningsolutions.ProductListActivity" />
