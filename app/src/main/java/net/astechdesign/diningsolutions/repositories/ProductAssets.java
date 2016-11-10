@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ProductAssets {
 
@@ -31,7 +32,7 @@ public class ProductAssets {
             while ((line = br.readLine()) != null) {
                 String[] productInfo = line.split("\\|");
                 if (! previous.equals(productInfo[2])) {
-                    productList.add(new Product(new Long(productInfo[0]), productInfo[1], productInfo[2], new Double(productInfo[3])));
+                    productList.add(new Product(UUID.randomUUID(), productInfo[1], productInfo[2], new Double(productInfo[3])));
                     previous = productInfo[2];
                 }
             }

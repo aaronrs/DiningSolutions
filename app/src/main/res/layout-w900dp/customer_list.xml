@@ -9,28 +9,28 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="net.astechdesign.diningsolutions.todos.TodoListActivity">
+    tools:context="net.astechdesign.diningsolutions.customers.CustomerListActivity">
 
     <!--
-    This layout is a two-pane layout for the Todos
+    This layout is a two-pane layout for the Customers
     master/detail flow.
     
     -->
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/todo_list"
-        android:name="net.astechdesign.diningsolutions.TodoListFragment"
+        android:id="@+id/customer_list"
+        android:name="net.astechdesign.diningsolutions.CustomerListFragment"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="net.astechdesign.diningsolutions.todos.TodoListActivity"
-        tools:listitem="@layout/todo_list_content"
+        tools:context="net.astechdesign.diningsolutions.customers.CustomerListActivity"
+        tools:listitem="@layout/customer_list_content"
         android:layout_width="300dp" />
 
     <FrameLayout
-        android:id="@+id/todo_detail_container"
+        android:id="@+id/customer_detail_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3" />

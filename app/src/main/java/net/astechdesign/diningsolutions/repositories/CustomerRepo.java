@@ -14,11 +14,20 @@ public class CustomerRepo {
 
     public static CustomerRepo repo;
 
-    public static CustomerRepo get(Context context) {
+    public static List<Customer> get(Context context) {
+        init(context);
+        return repo.getmCustomers();
+    }
+
+    public static Customer get(Context context, UUID id) {
+        init(context);
+        return repo.getCustomer(id);
+    }
+
+    private static void init(Context context) {
         if (repo == null) {
             repo = new CustomerRepo(context);
         }
-        return repo;
     }
 
     private List<Customer> mCustomers;

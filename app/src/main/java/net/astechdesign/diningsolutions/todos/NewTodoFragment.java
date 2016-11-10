@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions;
+package net.astechdesign.diningsolutions.todos;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import net.astechdesign.diningsolutions.DatePickerFragment;
+import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.DSDTime;
 

@@ -20,21 +20,7 @@ import net.astechdesign.diningsolutions.repositories.ProductsRepo;
 
 import java.util.List;
 
-/**
- * An activity representing a list of Products. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ProductDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class ProductListActivity extends AppCompatActivity {
-
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +43,10 @@ public class ProductListActivity extends AppCompatActivity {
         View recyclerView = findViewById(R.id.product_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
-
-        if (findViewById(R.id.product_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(ProductsRepo.get()));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(ProductsRepo.get(this)));
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -89,28 +67,15 @@ public class ProductListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id.toString());
-            holder.mContentView.setText(mValues.get(position).name);
+            holder.setItem(mValues.get(position));
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(ProductDetailFragment.ARG_ITEM_ID, holder.mItem.id.toString());
-                        ProductDetailFragment fragment = new ProductDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.product_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ProductDetailActivity.class);
-                        intent.putExtra(ProductDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-
-                        context.startActivity(intent);
-                    }
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, ProductDetailActivity.class);
+                    intent.putExtra(ProductDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                    context.startActivity(intent);
                 }
             });
         }
@@ -121,10 +86,10 @@ public class ProductListActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public Product mItem;
+            private final View mView;
+            private final TextView mIdView;
+            private final TextView mContentView;
+            private Product mItem;
 
             public ViewHolder(View view) {
                 super(view);
@@ -136,6 +101,12 @@ public class ProductListActivity extends AppCompatActivity {
             @Override
             public String toString() {
                 return super.toString() + " '" + mContentView.getText() + "'";
+            }
+
+            public void setItem(Product item) {
+                this.mItem = item;
+                mIdView.setText(item.id.toString());
+                mContentView.setText(item.getName());
             }
         }
     }

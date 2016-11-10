@@ -36,7 +36,7 @@ public class OrderRepo {
                 items.add(new OrderItem((String) orderValues[i++],(Double) orderValues[i++], (Integer) orderValues[i++], (String)orderValues[i++]));
             }
             Order order = new Order(UUID.randomUUID(),
-                    CustomerRepo.get(context).getmCustomers().get(0).id,
+                    CustomerRepo.get(context).get(0).id,
                     new DSDDate((String) orderValues[0]),
                     (String) orderValues[1],
                     items);

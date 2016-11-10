@@ -15,8 +15,11 @@
     <string name="postcode_hint">Enter Postcode</string>
     <string name="new_order">New Order</string>
     <string name="title_todo_list">Todos</string>
+    <string name="title_customer_list">Customers</string>
     <string name="title_todo_detail">Todo Detail</string>
     <string name="new_todo_title">New Todo</string>
     <string name="title_product_list">Products</string>
     <string name="title_product_detail">Product Detail</string>
+    <string name="edit_product_title">Edit Product</string>
+    <string name="new_customer_title">New Customer</string>
 </resources>

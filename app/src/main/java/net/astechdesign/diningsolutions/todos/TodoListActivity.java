@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions;
+package net.astechdesign.diningsolutions.todos;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import net.astechdesign.diningsolutions.customers.CustomerListActivity;
+import net.astechdesign.diningsolutions.DatePickerFragment;
+import net.astechdesign.diningsolutions.ProductActivity;
+import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.DSDTime;
 import net.astechdesign.diningsolutions.model.Todo;
@@ -27,14 +32,6 @@ import net.astechdesign.diningsolutions.repositories.TodoRepo;
 import java.util.Date;
 import java.util.List;
 
-/**
- * An activity representing a list of Todos. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link TodoDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class TodoListActivity extends AppCompatActivity {
 
     private static final String ADD_TODO = "add_todo";
@@ -71,10 +68,6 @@ public class TodoListActivity extends AppCompatActivity {
         setupRecyclerView((RecyclerView) recyclerView);
 
         if (findViewById(R.id.todo_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             mTwoPane = true;
         }
     }
@@ -93,13 +86,22 @@ public class TodoListActivity extends AppCompatActivity {
                 newTodoFragment = new NewTodoFragment();
                 newTodoFragment.show(fm, ADD_TODO);
                 return true;
+            case R.id.menu_item_products:
+                Intent intent = new Intent(this, ProductActivity.class);
+                this.startActivity(intent);
+                return true;
+            case R.id.menu_item_customers:
+                intent = new Intent(this, CustomerListActivity.class);
+                this.startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(TodoRepo.get()));
+        List<Todo> todoList = TodoRepo.get();
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(todoList));
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -120,9 +122,7 @@ public class TodoListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id.toString());
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.setItem(mValues.get(position));
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -152,16 +152,22 @@ public class TodoListActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public Todo mItem;
+            private final View mView;
+            private final TextView mIdView;
+            private final TextView mContentView;
+            private Todo mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
+            }
+
+            public void setItem(Todo item) {
+                this.mItem = item;
+                mIdView.setText(item.id.toString());
+                mContentView.setText(item.content);
             }
 
             @Override

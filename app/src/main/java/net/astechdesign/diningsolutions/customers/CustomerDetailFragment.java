@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions;
+package net.astechdesign.diningsolutions.customers;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,16 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.astechdesign.diningsolutions.model.Product;
-import net.astechdesign.diningsolutions.repositories.ProductsRepo;
+import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.Todo;
+import net.astechdesign.diningsolutions.repositories.CustomerRepo;
+import net.astechdesign.diningsolutions.repositories.TodoRepo;
 
-/**
- * A fragment representing a single Product detail screen.
- * This fragment is either contained in a {@link ProductListActivity}
- * in two-pane mode (on tablets) or a {@link ProductDetailActivity}
- * on handsets.
- */
-public class ProductDetailFragment extends Fragment {
+import java.util.UUID;
+
+public class CustomerDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -28,13 +27,13 @@ public class ProductDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private Product mItem;
+    private Customer mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ProductDetailFragment() {
+    public CustomerDetailFragment() {
     }
 
     @Override
@@ -45,12 +44,13 @@ public class ProductDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = ProductsRepo.get(getArguments().getString(ARG_ITEM_ID));
+            UUID uuid = UUID.randomUUID();
+            mItem = CustomerRepo.get(getActivity(), uuid);
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getName());
+                appBarLayout.setTitle(mItem.name);
             }
         }
     }
@@ -58,11 +58,11 @@ public class ProductDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.product_detail, container, false);
+        View rootView = inflater.inflate(R.layout.customer_detail, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.product_detail)).setText(mItem.getName());
+            ((TextView) rootView.findViewById(R.id.customer_detail)).setText(mItem.name);
         }
 
         return rootView;

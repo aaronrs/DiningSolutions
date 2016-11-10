@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions;
+package net.astechdesign.diningsolutions.todos;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+
+import net.astechdesign.diningsolutions.R;
 
 /**
  * An activity representing a single Todo detail screen. This
