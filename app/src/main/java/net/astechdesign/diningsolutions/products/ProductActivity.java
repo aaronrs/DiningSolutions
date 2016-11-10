@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions;
+package net.astechdesign.diningsolutions.products;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -19,12 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductsRepo;
 
 import java.util.List;
 
-public class ProductActivity extends AppCompatActivity implements EditProductFragment.EditProductListener {
+public class ProductActivity extends AppCompatActivity implements ProductEditFragment.EditProductListener {
 
     public static final String EDIT_PRODUCT = "EDIT_PRODUCT";
     private ProductRecyclerViewAdapter adapter;
@@ -98,7 +99,7 @@ public class ProductActivity extends AppCompatActivity implements EditProductFra
                 @Override
                 public void onClick(View v) {
                     FragmentManager fm = getSupportFragmentManager();
-                    EditProductFragment dialog = new EditProductFragment();
+                    ProductEditFragment dialog = new ProductEditFragment();
                     dialog.setProduct(holder.getItem());
                     dialog.show(fm, EDIT_PRODUCT);
                 }

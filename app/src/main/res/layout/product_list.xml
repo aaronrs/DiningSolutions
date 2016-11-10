@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="net.astechdesign.diningsolutions.ProductListActivity"
+    tools:context="net.astechdesign.diningsolutions.products.ProductListActivity"
     tools:listitem="@layout/product_list_content" />

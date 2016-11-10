@@ -1,6 +1,7 @@
 package net.astechdesign.diningsolutions.customers;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.astechdesign.diningsolutions.ProductActivity;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
@@ -26,16 +26,16 @@ import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomerListActivity extends AppCompatActivity {
+public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
 
     private static final String ADD_CUSTOMER = "add_customer";
-
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
     private boolean mTwoPane;
     private NewCustomerFragment newCustomerFragment;
+    private CustomerEditFragment editCustomerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +55,9 @@ public class CustomerListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FragmentManager fm = getSupportFragmentManager();
+                editCustomerFragment = new CustomerEditFragment();
+                editCustomerFragment.show(fm, ADD_CUSTOMER);
             }
         });
 
@@ -65,6 +66,10 @@ public class CustomerListActivity extends AppCompatActivity {
         setupRecyclerView((RecyclerView) recyclerView);
 
         if (findViewById(R.id.customer_detail_container) != null) {
+            // The detail container view will be present only in the
+            // large-screen layouts (res/values-w900dp).
+            // If this view is present, then the
+            // activity should be in two-pane mode.
             mTwoPane = true;
         }
     }
@@ -83,18 +88,20 @@ public class CustomerListActivity extends AppCompatActivity {
                 newCustomerFragment = new NewCustomerFragment();
                 newCustomerFragment.show(fm, ADD_CUSTOMER);
                 return true;
-            case R.id.menu_item_products:
-                Intent intent = new Intent(this, ProductActivity.class);
-                this.startActivity(intent);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        List<Customer> customers = CustomerRepo.get(this);
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(customers));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(CustomerRepo.get(this)));
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
+        Snackbar.make(null, "Edited Customer " + customer.name, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -107,7 +114,7 @@ public class CustomerListActivity extends AppCompatActivity {
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.customer_list_content, parent, false);
             return new ViewHolder(view);
@@ -115,7 +122,7 @@ public class CustomerListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
+            holder.setItem(mValues.get(position));
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,7 +130,7 @@ public class CustomerListActivity extends AppCompatActivity {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
                         arguments.putSerializable(CustomerDetailFragment.ARG_ITEM_ID, holder.getId());
-                        CustomerDetailFragment fragment = new CustomerDetailFragment();
+                        CustomerDetailFragment fragment = new CustomerDetailFragment ();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.customer_detail_container, fragment)
@@ -145,27 +152,27 @@ public class CustomerListActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            private final View mView;
-            private final TextView mNameView;
-            private final TextView mPhoneView;
-            private Customer mItem;
+            public final View mView;
+            public final TextView mIdView;
+            public final TextView mContentView;
+            public Customer mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mNameView = (TextView) view.findViewById(R.id.name);
-                mPhoneView = (TextView) view.findViewById(R.id.telephone);
-            }
-
-            public void setItem(Customer mItem) {
-                this.mItem = mItem;
-                mNameView.setText(mItem.name);
-                mPhoneView.setText(mItem.phone.number);
+                mIdView = (TextView) view.findViewById(R.id.name);
+                mContentView = (TextView) view.findViewById(R.id.telephone);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mNameView.getText() + "'";
+                return super.toString() + " '" + mContentView.getText() + "'";
+            }
+
+            public void setItem(Customer item) {
+                this.mItem = item;
+                mIdView.setText(item.name);
+                mContentView.setText(item.phone.number);
             }
 
             public UUID getId() {

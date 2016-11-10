@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.todos.TodoListActivity;
 
 public class CustomerDetailActivity extends AppCompatActivity {
 
@@ -70,7 +69,7 @@ public class CustomerDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, TodoListActivity.class));
+            navigateUpTo(new Intent(this, CustomerListActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

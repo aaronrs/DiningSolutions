@@ -11,9 +11,7 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.Todo;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
-import net.astechdesign.diningsolutions.repositories.TodoRepo;
 
 import java.util.UUID;
 
@@ -44,13 +42,12 @@ public class CustomerDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            UUID uuid = UUID.randomUUID();
-            mItem = CustomerRepo.get(getActivity(), uuid);
+            mItem = CustomerRepo.get(getActivity(), (UUID)getArguments().getSerializable(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.name);
+                appBarLayout.setTitle("Customers");
             }
         }
     }

@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.DatePickerFragment;
-import net.astechdesign.diningsolutions.ProductActivity;
+import net.astechdesign.diningsolutions.products.ProductActivity;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;

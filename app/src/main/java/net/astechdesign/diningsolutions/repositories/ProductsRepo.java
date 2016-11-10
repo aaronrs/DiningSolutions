@@ -2,7 +2,6 @@ package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
 
-import net.astechdesign.diningsolutions.ProductListActivity;
 import net.astechdesign.diningsolutions.model.Product;
 
 import java.util.HashMap;
