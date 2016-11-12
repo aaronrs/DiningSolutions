@@ -101,7 +101,6 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
         Snackbar.make(null, "Edited Customer " + customer.name, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -179,5 +178,10 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 return mItem.id;
             }
         }
+    }
+
+    public void showOrders(View view) {
+        Snackbar.make(view, "Show Customer orders", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 }

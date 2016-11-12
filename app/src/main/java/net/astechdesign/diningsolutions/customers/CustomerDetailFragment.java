@@ -16,15 +16,9 @@ import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 import java.util.UUID;
 
 public class CustomerDetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
+
     public static final String ARG_ITEM_ID = "item_id";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
     private Customer mItem;
 
     /**
@@ -39,9 +33,6 @@ public class CustomerDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
             mItem = CustomerRepo.get(getActivity(), (UUID)getArguments().getSerializable(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
@@ -59,7 +50,9 @@ public class CustomerDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.customer_detail)).setText(mItem.name);
+            ((TextView) rootView.findViewById(R.id.customer_detail_name)).setText(mItem.name);
+            ((TextView) rootView.findViewById(R.id.customer_detail_phone)).setText(mItem.phone.number);
+            ((TextView) rootView.findViewById(R.id.customer_detail_email)).setText(mItem.email.address);
         }
 
         return rootView;

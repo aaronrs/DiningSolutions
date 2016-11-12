@@ -13,9 +13,9 @@
             android:label="@string/title_customer_list"
             android:parentActivityName=".todos.TodoListActivity"></activity>
         <activity android:name=".DiningSolutionsActivity" />
-        <activity android:name=".OrderActivity" />
-        <activity android:name=".OrderListActivity" />
-        <activity android:name=".OrderPagerActivity" />
+        <activity android:name=".orders.OrderActivity" />
+        <activity android:name=".orders.OrderListActivity" />
+        <activity android:name=".orders.OrderPagerActivity" />
         <activity
             android:name=".todos.TodoListActivity"
             android:label="@string/title_todo_list">

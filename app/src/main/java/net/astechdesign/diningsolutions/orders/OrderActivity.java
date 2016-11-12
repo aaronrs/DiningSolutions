@@ -1,9 +1,11 @@
-package net.astechdesign.diningsolutions;
+package net.astechdesign.diningsolutions.orders;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+
+import net.astechdesign.diningsolutions.SingleFragmentActivity;
 
 public class OrderActivity extends SingleFragmentActivity {
 
