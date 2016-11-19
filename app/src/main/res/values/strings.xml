@@ -8,6 +8,7 @@
     <string name="customer_current_label">Current customer?</string>
     <string name="date_picker_title">Date</string>
     <string name="time_picker_title">Time</string>
+    <string name="customer_picker_title">Customer</string>
     <string name="house_name_number_hint">Enter House Name / Number</string>
     <string name="street_hint">Enter Street</string>
     <string name="town_hint">Enter Town</string>
@@ -23,4 +24,5 @@
     <string name="edit_product_title">Edit Product</string>
     <string name="new_customer_title">New Customer</string>
     <string name="title_customer_detail">Customer Detail</string>
+    <string name="title_order_list">Orders - </string>
 </resources>

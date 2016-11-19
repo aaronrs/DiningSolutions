@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.orders.OrderListActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.List;
@@ -181,7 +182,8 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     }
 
     public void showOrders(View view) {
-        Snackbar.make(view, "Show Customer orders", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        Intent intent = new Intent(this, OrderListActivity.class);
+        intent.putExtra(OrderListActivity.ARG_ORDER_ID, (UUID)view.getTag());
+        this.startActivity(intent);
     }
 }

@@ -1,7 +1,10 @@
 package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.app.FragmentActivity;
 
+import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.Order;
@@ -16,6 +19,8 @@ import java.util.UUID;
 public class OrderRepo {
 
     public static OrderRepo repo;
+    private Context mContext;
+    private SQLiteDatabase mDatabase;
 
     public static OrderRepo get(Context context) {
         if (repo == null) {
@@ -28,6 +33,11 @@ public class OrderRepo {
     private Map<UUID, Order> mOrderMap;
 
     private OrderRepo(Context context) {
+        mContext = context.getApplicationContext();
+        mDatabase = new DBHelper(context).getWritableDatabase();
+    }
+
+    private OrderRepo(Context context, int x) {
         mOrders = new ArrayList<>();
         mOrderMap = new HashMap<>();
         for (Object[] orderValues : orderList) {
@@ -75,4 +85,8 @@ public class OrderRepo {
             {"2015-06-31", "00002", "Eggs", 1.00, 12, "125","Butter", 0.50, 1, "144","Jam", 1.01, 1, "104"},
             {"2016-10-01", "00003", "Chips", 2.99, 2, "189","Cheese", 1.50, 1, "132","Onions", 2.01, 5, "100"},
     };
+
+    public static Order get(FragmentActivity activity, UUID serializable) {
+        return get(activity).getOrder(serializable);
+    }
 }

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import net.astechdesign.diningsolutions.CustomerPickerFragment;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.products.ProductActivity;
@@ -37,6 +38,7 @@ public class TodoListActivity extends AppCompatActivity {
     private static final String ADD_TODO = "add_todo";
     private static final String DATE_PICKER = "date_picker";
     private static final String TIME_PICKER = "time_picker";
+    private static final String CUSTOMER_PICKER = "customer_picker";
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -166,8 +168,8 @@ public class TodoListActivity extends AppCompatActivity {
 
             public void setItem(Todo item) {
                 this.mItem = item;
-                mIdView.setText(item.id.toString());
-                mContentView.setText(item.content);
+                mIdView.setText(new DSDDate().toString());
+                mContentView.setText("Description");
             }
 
             @Override
@@ -182,9 +184,6 @@ public class TodoListActivity extends AppCompatActivity {
         DatePickerFragment dialog = DatePickerFragment.newInstance(new DSDDate());
         dialog.setTargetFragment(newTodoFragment, DatePickerFragment.REQUEST_DATE);
         dialog.show(fm, DATE_PICKER);
-
-        Toast toast = Toast.makeText(this, "get date picker", Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     public void getTime(View v) {
@@ -192,9 +191,13 @@ public class TodoListActivity extends AppCompatActivity {
         TimePickerFragment dialog = TimePickerFragment.newInstance(new DSDTime(new Date()));
         dialog.setTargetFragment(newTodoFragment, TimePickerFragment.REQUEST_TIME);
         dialog.show(fm, TIME_PICKER);
+    }
 
-        Toast toast = Toast.makeText(this, "get date picker", Toast.LENGTH_SHORT);
-        toast.show();
+    public void getCustomer(View v) {
+        FragmentManager fm = getSupportFragmentManager();
+        CustomerPickerFragment dialog = CustomerPickerFragment.newInstance();
+        dialog.setTargetFragment(newTodoFragment, CustomerPickerFragment.REQUEST_CUSTOMER);
+        dialog.show(fm, CUSTOMER_PICKER);
     }
 
 }

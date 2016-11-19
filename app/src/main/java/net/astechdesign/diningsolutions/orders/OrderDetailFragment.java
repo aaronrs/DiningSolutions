@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions.customers;
+package net.astechdesign.diningsolutions.orders;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,22 +10,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.repositories.CustomerRepo;
+import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
 import java.util.UUID;
 
-public class CustomerDetailFragment extends Fragment {
+public class OrderDetailFragment extends Fragment {
 
     public static final String ARG_ITEM_ID = "item_id";
 
-    private Customer mItem;
+    private Order mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public CustomerDetailFragment() {
+    public OrderDetailFragment() {
     }
 
     @Override
@@ -33,12 +33,12 @@ public class CustomerDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItem = CustomerRepo.get(getActivity(), (UUID)getArguments().getSerializable(ARG_ITEM_ID));
+            mItem = OrderRepo.get(getActivity(), (UUID)getArguments().getSerializable(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle("Customers");
+                appBarLayout.setTitle("Orders");
             }
         }
     }
@@ -46,14 +46,13 @@ public class CustomerDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.customer_detail, container, false);
+        View rootView = inflater.inflate(R.layout.order_detail, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            rootView.findViewById(R.id.customer_order_btn).setTag(mItem.id);
-            ((TextView) rootView.findViewById(R.id.customer_detail_name)).setText(mItem.name);
-            ((TextView) rootView.findViewById(R.id.customer_detail_phone)).setText(mItem.phone.number);
-            ((TextView) rootView.findViewById(R.id.customer_detail_email)).setText(mItem.email.address);
+            ((TextView) rootView.findViewById(R.id.order_detail_name)).setText(mItem.id.toString());
+            ((TextView) rootView.findViewById(R.id.order_detail_phone)).setText(mItem.customerId.toString());
+            ((TextView) rootView.findViewById(R.id.order_detail_email)).setText(mItem.created.toString());
         }
 
         return rootView;
