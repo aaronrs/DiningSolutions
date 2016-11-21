@@ -3,46 +3,44 @@ package net.astechdesign.diningsolutions.database.tables;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.model.DSDDate;
+import net.astechdesign.diningsolutions.model.Order;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import static android.provider.BaseColumns._ID;
 
 public class OrdersTable implements CMSTable {
 
-    public static final String CUSTOMER_NAME = "customer_name";
+    public static final String TABLE_NAME = "orders";
+
+    public static final String ID = "id";
+
+    public static final String CUSTOMER_ID = "customer_name";
     public static final String ORDER_DATE = "order_date";
     public static final String INVOICE_NO = "invoice_no";
-    public static final String PRODUCT_NAME = "product_name";
-    public static final String PRODUCT_BATCH = "batch";
-    public static final String PRODUCT_QUANTITY = "quantity";
-    public static final String PRODUCT_PRICE = "price";
-    public static final String DELIVERY_DATE = "delivery_date";
 
     @Override
     public String getTableName() {
-        return "orders";
+        return TABLE_NAME;
     }
 
     @Override
     public void create(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + getTableName() + " (" +
+        String orderTable = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                CUSTOMER_NAME + " INTEGER, " +
+                ID + " TEXT, " +
+                CUSTOMER_ID + " INTEGER, " +
                 ORDER_DATE + " DATE, " +
                 INVOICE_NO + " TEXT, " +
-                PRODUCT_NAME + " TEXT, " +
-                PRODUCT_BATCH + " TEXT, " +
-                PRODUCT_QUANTITY + " NUMBER, " +
-                PRODUCT_PRICE + " NUMBER, " +
-                DELIVERY_DATE + " DATE" +
                 ")";
         try {
-            db.execSQL(query);
+            db.execSQL(orderTable);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        initialise(db);
     }
 
     @Override
@@ -50,27 +48,20 @@ public class OrdersTable implements CMSTable {
 
     }
 
-    private void initialise(SQLiteDatabase db) {
-        db.insert(getTableName(), null, getInsertValues("Tom Thumb", new Date(),"inv01", "Product X", "batch", 1, 10f, new Date()));
-        db.insert(getTableName(), null,  getInsertValues("Tom", new Date(), "inv01", "prod01", "batch01", 1, 20.0f, new Date()));
-    }
-
-    public ContentValues getInsertValues(String customer, Date orderDate, String invoice, String product, String batch, int quantity, float price, Date deliveryDate) {
+    public ContentValues getInsertValues(UUID id, UUID customerId, DSDDate orderDate, String invoice) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DB_DATE_FORMAT);
 
         ContentValues values = new ContentValues();
-        values.put(CUSTOMER_NAME, customer);
+        values.put(ID, id.toString());
+        values.put(CUSTOMER_ID, customerId.toString());
         values.put(ORDER_DATE, dateFormat.format(orderDate));
         values.put(INVOICE_NO, invoice);
-        values.put(PRODUCT_NAME, product);
-        values.put(PRODUCT_BATCH, batch);
-        values.put(PRODUCT_QUANTITY, quantity);
-        values.put(PRODUCT_PRICE, price);
-        values.put(DELIVERY_DATE, dateFormat.format(deliveryDate));
         return values;
     }
 
-    public void createOrder(SQLiteDatabase db, String customer, Date orderDate, String invoice, String product, String batch, int quantity, float price, Date deliveryDate) {
-        db.insert(getTableName(), null, getInsertValues(customer, orderDate, invoice, product, batch, quantity, price, deliveryDate));
+    public void addOrder(SQLiteDatabase db, Order order) {
+        db.beginTransaction();
+        db.insert(getTableName(), null, getInsertValues(order.id, order.customerId, order.created, order.invoiceNumber));
+        new OrderItemsTable().addOrderItems(db, order);
     }
 }

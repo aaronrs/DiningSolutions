@@ -1,23 +1,21 @@
 package net.astechdesign.diningsolutions.model;
 
+import java.util.UUID;
+
 public class OrderItem {
+    public final UUID id;
     public final String name;
     public final double price;
     public final int quantity;
     public final String batch;
+    public final DSDDate deliveryDate;
 
-    public OrderItem(String name, double price, int quantity, String batch) {
+    public OrderItem(UUID id, String name, double price, int quantity, String batch, DSDDate deliveryDate) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.batch = batch;
-    }
-
-    public double getTotal() {
-        return 0;
-    }
-
-    public static OrderItem create(String name, double price, int quantity, String batch) {
-        return new OrderItem(name, price, quantity, batch);
+        this.deliveryDate = deliveryDate;
     }
 }

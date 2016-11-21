@@ -9,8 +9,8 @@ public class Order {
     public UUID id;
     public UUID customerId;
     public final DSDDate created;
-    private String invoiceNumber;
     public final List<OrderItem> orderItems;
+    public String invoiceNumber;
 
     public Order(UUID id, UUID customerId, DSDDate created, String invoiceNumber, List<OrderItem> orderItems) {
         this.id = id;

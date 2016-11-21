@@ -1,12 +1,14 @@
 package net.astechdesign.diningsolutions.repositories;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.FragmentActivity;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
+import net.astechdesign.diningsolutions.database.tables.OrdersTable;
 import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
@@ -19,8 +21,10 @@ import java.util.UUID;
 public class OrderRepo {
 
     public static OrderRepo repo;
+
     private Context mContext;
     private SQLiteDatabase mDatabase;
+    private OrdersTable ordersTable;
 
     public static OrderRepo get(Context context) {
         if (repo == null) {
@@ -29,64 +33,62 @@ public class OrderRepo {
         return repo;
     }
 
-    private List<Order> mOrders;
-    private Map<UUID, Order> mOrderMap;
-
     private OrderRepo(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new DBHelper(context).getWritableDatabase();
-    }
-
-    private OrderRepo(Context context, int x) {
-        mOrders = new ArrayList<>();
-        mOrderMap = new HashMap<>();
-        for (Object[] orderValues : orderList) {
-            List<OrderItem> items = new ArrayList<>();
-            for (int i=2; i < 3;) {
-                items.add(new OrderItem((String) orderValues[i++],(Double) orderValues[i++], (Integer) orderValues[i++], (String)orderValues[i++]));
-            }
-            Order order = new Order(UUID.randomUUID(),
-                    CustomerRepo.get(context).get(0).id,
-                    new DSDDate((String) orderValues[0]),
-                    (String) orderValues[1],
-                    items);
-            mOrders.add(order);
-            mOrderMap.put(order.id, order);
-        }
-//
-//        OrderItem item1 = new OrderItem("Ham", 12.99, 1, "123");
-//        OrderItem item2 = new OrderItem("Cheese", 17.50, 1, "124");
-//        OrderItem item3 = new OrderItem("Onions", 22.44, 2, "100");
-//
-//        for (int i=0; i <10; i++) {
-//            List<OrderItem> items = new ArrayList<>();
-//            items.add(item1);
-//            items.add(item2);
-//            items.add(item3);
-//            Order order = new Order(UUID.randomUUID(), CustomerRepo.get(context).getmCustomers().get(0).id, new DSDDate("2015-01-01"), "000123", items);
-//        }
+        ordersTable = new OrdersTable();
     }
 
     public List<Order> getmOrders() {
+//        mDatabase.rawQueryWithFactory();
+        List<Order> mOrders = new ArrayList<>();
         return mOrders;
     }
 
     public void addOrder(Order order) {
-        mOrders.add(order);
-        mOrderMap.put(order.id, order);
+        for (OrderItem item : order.orderItems) {
+            ContentValues values = getOrderContentValues(order, item);
+            mDatabase.insert(ordersTable.getTableName(), null, values);
+        }
+    }
+
+    private Cursor queryOrders(String whereClause, String[] whereArgs) {
+        return mDatabase.query(ordersTable.getTableName(), null, whereClause, whereArgs, null, null, null);
+    }
+
+    private Cursor queryOrderItems(UUID orderId) {
+        return mDatabase.query(ordersTable.getTableName(), null, OrdersTable.ORDER_ID + "= ?" , new String[]{orderId.toString()}, null, null, null);
+    }
+
+    private ContentValues getOrderContentValues(Order order, OrderItem item) {
+        ContentValues values = new ContentValues();
+        values.put(OrdersTable.ID, order.id.toString());
+        values.put(OrdersTable.INVOICE_NO, order.invoiceNumber);
+        values.put(OrdersTable.CUSTOMER_ID, order.customerId.toString());
+        values.put(OrdersTable.ORDER_DATE, order.created.toString());
+        values.put(OrdersTable.DELIVERY_DATE, order.created.toString());
+        values.put(OrdersTable.PRODUCT_NAME, item.name);
+        values.put(OrdersTable.PRODUCT_BATCH, item.batch);
+        values.put(OrdersTable.PRODUCT_PRICE, item.price);
+        values.put(OrdersTable.PRODUCT_QUANTITY, item.quantity);
+        return values;
     }
 
     public Order getOrder(UUID id) {
-        return mOrderMap.get(id);
+        Cursor cursor = mDatabase.rawQuery("", new String[]{});
+        return null;
     }
 
-    Object[][] orderList = {
-            {"2015-01-01", "00001", "Ham", 1.99, 1, "123","Cheese", 1.50, 1, "124","Onions", 2.01, 2, "100"},
-            {"2015-06-31", "00002", "Eggs", 1.00, 12, "125","Butter", 0.50, 1, "144","Jam", 1.01, 1, "104"},
-            {"2016-10-01", "00003", "Chips", 2.99, 2, "189","Cheese", 1.50, 1, "132","Onions", 2.01, 5, "100"},
-    };
+    private List<OrderItem> getOrderItems(UUID id) {
+        Cursor cursor = mDatabase.rawQuery("", new String[]{});
+        return null;
+    }
 
     public static Order get(FragmentActivity activity, UUID serializable) {
         return get(activity).getOrder(serializable);
+    }
+
+    public static List<OrderItem> getItems(UUID id) {
+        return repo.getOrderItems(id);
     }
 }

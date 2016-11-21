@@ -2,16 +2,7 @@ package net.astechdesign.diningsolutions.database.tables;
 
 import android.provider.BaseColumns;
 
-import static net.astechdesign.dsdcms.database.tables.InvoicesTable.*;
-import static net.astechdesign.dsdcms.database.tables.InvoicesTable.CUSTOMER_NAME;
-import static net.astechdesign.dsdcms.database.tables.InvoicesTable.DELIVERY_DATE;
-import static net.astechdesign.dsdcms.database.tables.InvoicesTable.INVOICE_NUMBER;
-import static net.astechdesign.dsdcms.database.tables.InvoicesTable.ORDER_DATE;
-import static net.astechdesign.dsdcms.database.tables.InvoicesTable.PRODUCT_BATCH;
-import static net.astechdesign.dsdcms.database.tables.InvoicesTable.PRODUCT_NAME;
-import static net.astechdesign.dsdcms.database.tables.InvoicesTable.PRODUCT_PRICE;
-import static net.astechdesign.dsdcms.database.tables.InvoicesTable.PRODUCT_QUANTITY;
-import static net.astechdesign.dsdcms.database.tables.InvoicesTable.TABLE_NAME;
+import static net.astechdesign.diningsolutions.database.tables.InvoicesTable.*;
 
 public class InvoicesQueries {
 
