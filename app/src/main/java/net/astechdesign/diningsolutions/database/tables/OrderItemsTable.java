@@ -25,11 +25,6 @@ public class OrderItemsTable implements CMSTable {
     public static final String DELIVERY_DATE = "delivery_date";
 
     @Override
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
-    @Override
     public void create(SQLiteDatabase db) {
         String orderItemTable = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -66,13 +61,7 @@ public class OrderItemsTable implements CMSTable {
         return values;
     }
 
-    public void addOrderItems(SQLiteDatabase db, Order order) {
-        for (OrderItem item : order.orderItems) {
-            addOrderItem(db, order, item);
-        }
-    }
-
-    public void addOrderItem(SQLiteDatabase db, Order order, OrderItem item) {
-        db.insert(getTableName(), null, getInsertValues(order.id, item.id, item.name, item.batch, item.quantity, item.price, item.deliveryDate));
+    public void addOrderItem(SQLiteDatabase db, UUID orderId, OrderItem item) {
+        db.insert(TABLE_NAME, null, getInsertValues(orderId, item.id, item.name, item.batch, item.quantity, item.price, item.deliveryDate));
     }
 }

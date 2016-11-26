@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.model.OrderItem;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,10 +22,10 @@ public class OrdersTable implements CMSTable {
     public static final String CUSTOMER_ID = "customer_name";
     public static final String ORDER_DATE = "order_date";
     public static final String INVOICE_NO = "invoice_no";
+    private final OrderItemsTable orderItemsTable;
 
-    @Override
-    public String getTableName() {
-        return TABLE_NAME;
+    public OrdersTable() {
+        orderItemsTable = new OrderItemsTable();
     }
 
     @Override
@@ -48,20 +49,24 @@ public class OrdersTable implements CMSTable {
 
     }
 
-    public ContentValues getInsertValues(UUID id, UUID customerId, DSDDate orderDate, String invoice) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DB_DATE_FORMAT);
-
+    public ContentValues getInsertValues(Order order) {
         ContentValues values = new ContentValues();
-        values.put(ID, id.toString());
-        values.put(CUSTOMER_ID, customerId.toString());
-        values.put(ORDER_DATE, dateFormat.format(orderDate));
-        values.put(INVOICE_NO, invoice);
+        values.put(OrdersTable.ID, order.id.toString());
+        values.put(OrdersTable.INVOICE_NO, order.invoiceNumber);
+        values.put(OrdersTable.CUSTOMER_ID, order.customerId.toString());
+        values.put(OrdersTable.ORDER_DATE, order.created.toString());
         return values;
     }
 
     public void addOrder(SQLiteDatabase db, Order order) {
         db.beginTransaction();
-        db.insert(getTableName(), null, getInsertValues(order.id, order.customerId, order.created, order.invoiceNumber));
-        new OrderItemsTable().addOrderItems(db, order);
+        db.insert(TABLE_NAME, null, getInsertValues(order));
+        for (OrderItem item : order.orderItems) {
+            orderItemsTable.addOrderItem(db, order.id, item);
+        }
+    }
+
+    public Order getOrder(UUID id) {
+        return null;
     }
 }

@@ -107,7 +107,7 @@ public class ProductListActivity extends AppCompatActivity {
             public void setItem(Product item) {
                 this.mItem = item;
                 mIdView.setText(item.id.toString());
-                mContentView.setText(item.getName());
+                mContentView.setText(item.name);
             }
         }
     }

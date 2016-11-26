@@ -30,13 +30,8 @@ public class InvoicesTable implements CMSTable {
     }
 
     @Override
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
-    @Override
     public void create(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + getTableName() + " (" +
+        String query = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 INVOICE_NUMBER + " INTEGER, " +
                 CUSTOMER_NAME + " INTEGER, " +
@@ -58,7 +53,7 @@ public class InvoicesTable implements CMSTable {
             BufferedReader br = new BufferedReader(new InputStreamReader(input));
             String line;
             while ((line = br.readLine()) != null) {
-                db.insert(getTableName(), null, getInsertValues(line));
+                db.insert(TABLE_NAME, null, getInsertValues(line));
             }
         } catch (Exception e) {
             e.printStackTrace();

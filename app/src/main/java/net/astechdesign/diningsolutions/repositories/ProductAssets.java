@@ -17,7 +17,7 @@ public class ProductAssets {
 
     public static List<Product> getProducts(Context context) {
         AssetManager assets = context.getAssets();
-        InputStream is = null;
+        InputStream is;
         try {
             is = assets.open("db/products.csv");
         } catch (IOException e) {
@@ -26,14 +26,15 @@ public class ProductAssets {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
         List<Product> productList = new ArrayList<>();
-        String previous = "";
+        List<String> productNames = new ArrayList<>();
         String line;
         try {
             while ((line = br.readLine()) != null) {
                 String[] productInfo = line.split("\\|");
-                if (! previous.equals(productInfo[2])) {
-                    productList.add(new Product(UUID.randomUUID(), productInfo[1], productInfo[2], new Double(productInfo[3])));
-                    previous = productInfo[2];
+                String name = productInfo[2];
+                if (!productNames.contains(name)) {
+                    productNames.add(name);
+                    productList.add(new Product(UUID.randomUUID(), name, productInfo[1], new Double(productInfo[3]), null));
                 }
             }
         } catch (Exception e) {

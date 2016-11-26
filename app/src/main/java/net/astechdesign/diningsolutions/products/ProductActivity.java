@@ -29,6 +29,7 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
 
     public static final String EDIT_PRODUCT = "EDIT_PRODUCT";
     private ProductRecyclerViewAdapter adapter;
+    private View mRecyclerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,23 +45,14 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        View recyclerView = findViewById(R.id.product_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        mRecyclerView = findViewById(R.id.product_list);
+        assert mRecyclerView != null;
+        setupRecyclerView((RecyclerView) mRecyclerView);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView(@NonNull View recyclerView) {
         adapter = new ProductRecyclerViewAdapter(ProductsRepo.get(this));
-        recyclerView.setAdapter(adapter);
+        ((RecyclerView) recyclerView).setAdapter(adapter);
     }
 
     @Override
@@ -72,7 +64,8 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
     @Override
     public void onDialogPositiveClick(DialogInterface dialog, Product product) {
         adapter.notifyDataSetChanged();
-        System.out.println();
+        ProductsRepo.update(this, product);
+        setupRecyclerView(mRecyclerView);
     }
 
     public class ProductRecyclerViewAdapter
@@ -131,8 +124,8 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
 
             public void setItem(Product item) {
                 this.mItem = item;
-                mNameView.setText(item.getName());
-                mPriceView.setText(Double.toString(item.getPrice()));
+                mNameView.setText(item.name);
+                mPriceView.setText(Double.toString(item.price));
             }
 
             public Product getItem() {

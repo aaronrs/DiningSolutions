@@ -17,9 +17,8 @@ public class OrdersCursorWrapper extends CursorWrapper {
         super(cursor);
     }
 
-    public Order getOrder() {
+    public Order getOrder(List<OrderItem> orderItems) {
         UUID id = UUID.fromString(getString(getColumnIndex(OrdersTable.ID)));
-        List<OrderItem> orderItems = OrderRepo.getItems(id);
         UUID customerId = UUID.fromString(getString(getColumnIndex(OrdersTable.CUSTOMER_ID)));
         DSDDate orderDate = new DSDDate(getString(getColumnIndex(OrdersTable.ORDER_DATE)));
         String invoiceNumber = getString(getColumnIndex(OrdersTable.INVOICE_NO));

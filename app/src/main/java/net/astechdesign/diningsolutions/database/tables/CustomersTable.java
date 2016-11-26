@@ -17,11 +17,6 @@ public class CustomersTable implements CMSTable {
     public static final String CUSTOMER_PHONE = "phone";
 
     @Override
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
-    @Override
     public void create(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

@@ -36,8 +36,8 @@ public class ProductEditFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_product, null);
         mNameText = (TextView) view.findViewById(R.id.product_name);
         mPriceText = (TextView) view.findViewById(R.id.product_price);
-        mNameText.setText(product.getName());
-        mPriceText.setText(new Double(product.getPrice()).toString());
+        mNameText.setText(product.name);
+        mPriceText.setText(new Double(product.price).toString());
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(R.string.edit_product_title)
@@ -45,8 +45,12 @@ public class ProductEditFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        product.setName(mNameText.getText().toString());
-                        product.setPrice(mPriceText.getText().toString());
+
+                        product = new Product(product.id,
+                                mNameText.getText().toString(),
+                                product.description,
+                                Double.parseDouble(mPriceText.getText().toString()),
+                                product.barcode);
                         mListener.onDialogPositiveClick(dialog, product);
                     }
                 })

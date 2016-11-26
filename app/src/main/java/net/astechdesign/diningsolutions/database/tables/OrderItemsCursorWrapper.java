@@ -6,6 +6,8 @@ import android.database.CursorWrapper;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
+import java.util.UUID;
+
 public class OrderItemsCursorWrapper extends CursorWrapper {
 
     public OrderItemsCursorWrapper(Cursor cursor) {
@@ -13,11 +15,12 @@ public class OrderItemsCursorWrapper extends CursorWrapper {
     }
 
     public OrderItem getOrderItem() {
-        String name = getString(getColumnIndex(OrdersTable.PRODUCT_NAME));
-        double price = getDouble(getColumnIndex(OrdersTable.PRODUCT_PRICE));
-        int quantity = getInt(getColumnIndex(OrdersTable.PRODUCT_QUANTITY));
-        String batch = getString(getColumnIndex(OrdersTable.PRODUCT_BATCH));
-        DSDDate deliveryDate = new DSDDate(getString(getColumnIndex(OrdersTable.DELIVERY_DATE)));
-        return new OrderItem(name, price, quantity, batch, deliveryDate);
+        UUID id = UUID.fromString(getString(getColumnIndex(OrderItemsTable.ID)));
+        String name = getString(getColumnIndex(OrderItemsTable.PRODUCT_NAME));
+        double price = getDouble(getColumnIndex(OrderItemsTable.PRODUCT_PRICE));
+        int quantity = getInt(getColumnIndex(OrderItemsTable.PRODUCT_QUANTITY));
+        String batch = getString(getColumnIndex(OrderItemsTable.PRODUCT_BATCH));
+        DSDDate deliveryDate = new DSDDate(getString(getColumnIndex(OrderItemsTable.DELIVERY_DATE)));
+        return new OrderItem(id, name, price, quantity, batch, deliveryDate);
     }
 }

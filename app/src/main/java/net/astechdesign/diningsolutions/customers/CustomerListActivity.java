@@ -22,6 +22,7 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.orders.OrderListActivity;
+import net.astechdesign.diningsolutions.products.ProductActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.List;
@@ -88,6 +89,10 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 FragmentManager fm = getSupportFragmentManager();
                 newCustomerFragment = new NewCustomerFragment();
                 newCustomerFragment.show(fm, ADD_CUSTOMER);
+                return true;
+            case R.id.menu_item_products:
+                Intent intent = new Intent(this, ProductActivity.class);
+                this.startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

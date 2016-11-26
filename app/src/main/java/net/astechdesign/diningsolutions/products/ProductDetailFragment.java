@@ -51,7 +51,7 @@ public class ProductDetailFragment extends Fragment {
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getName());
+                appBarLayout.setTitle(mItem.name);
             }
         }
     }
@@ -63,7 +63,7 @@ public class ProductDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.product_detail)).setText(mItem.getName());
+            ((TextView) rootView.findViewById(R.id.product_detail)).setText(mItem.name);
         }
 
         return rootView;
