@@ -32,4 +32,10 @@
         android:id="@+id/product_price"
         android:hint="Price" />
 
+    <CheckBox
+        android:text="Delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/delete_checkBox" />
+
 </LinearLayout>

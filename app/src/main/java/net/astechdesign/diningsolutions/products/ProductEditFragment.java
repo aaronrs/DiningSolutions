@@ -10,13 +10,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.DSDTime;
 import net.astechdesign.diningsolutions.model.Product;
-import net.astechdesign.diningsolutions.repositories.ProductsRepo;
 
 
 public class ProductEditFragment extends DialogFragment {
@@ -33,7 +31,7 @@ public class ProductEditFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_product, null);
+        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_product, null);
         mNameText = (TextView) view.findViewById(R.id.product_name);
         mPriceText = (TextView) view.findViewById(R.id.product_price);
         mNameText.setText(product.name);
@@ -46,12 +44,14 @@ public class ProductEditFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        product = new Product(product.id,
+                        boolean deleted = ((CheckBox) view.findViewById(R.id.delete_checkBox)).isChecked();
+                        Product newProduct = new Product(product.id,
                                 mNameText.getText().toString(),
                                 product.description,
                                 Double.parseDouble(mPriceText.getText().toString()),
-                                product.barcode);
-                        mListener.onDialogPositiveClick(dialog, product);
+                                product.barcode,
+                                deleted ? 1 : 0);
+                        mListener.onDialogPositiveClick(dialog, newProduct);
                     }
                 })
                 .create();

@@ -29,17 +29,18 @@ public class ProductsRepo {
     }
 
     public static List<Product> get(Context context) {
-        if (instance == null) {
-            instance = new ProductsRepo(context);
-        }
-        return instance.get();
+        return getInstance(context).get();
     }
 
-    public static void update(Context context, Product product) {
+    public static void addOrUpdate(Context context, Product product) {
+        getInstance(context).addOrUpdate(product);
+    }
+
+    private static ProductsRepo getInstance(Context context) {
         if (instance == null) {
             instance = new ProductsRepo(context);
         }
-        instance.update(product);
+        return instance;
     }
 
     private List<Product> get() {
@@ -51,14 +52,14 @@ public class ProductsRepo {
         return productList;
     }
 
-    private void update(Product product) {
-        productsTable.update(mDatabase, product);
+    private void addOrUpdate(Product product) {
+        productsTable.addOrUpdate(mDatabase, product);
     }
 
     private void initDb(Context context) {
         List<Product> productList = ProductAssets.getProducts(context);
         for (Product product : productList) {
-            productsTable.add(mDatabase, product);
+            productsTable.addOrUpdate(mDatabase, product);
         }
     }
 }
