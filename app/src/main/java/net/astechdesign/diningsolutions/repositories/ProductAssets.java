@@ -30,10 +30,10 @@ public class ProductAssets {
         try {
             while ((line = br.readLine()) != null) {
                 String[] productInfo = line.split("\\|");
-                String name = productInfo[2];
+                String name = productInfo[0];
                 if (!productNames.contains(name)) {
                     productNames.add(name);
-                    productList.add(new Product(null, name, productInfo[1], new Double(productInfo[3]), null, 0));
+                    productList.add(new Product(null, name, "", new Double(productInfo[1]), null, 0));
                 }
             }
         } catch (Exception e) {

@@ -6,13 +6,13 @@ import java.util.UUID;
 
 public class Customer {
     public final UUID id;
-    public final Date created;
+    public final DSDDate created;
     public final String name;
     public final Address address;
     public final Email email;
     public final Phone phone;
 
-    public Customer(UUID id, Date created, String name, Address address, Email email, Phone phone) {
+    public Customer(UUID id, DSDDate created, String name, Address address, Email email, Phone phone) {
         this.id = id;
         this.created = created;
         this.name = name;
@@ -34,6 +34,6 @@ public class Customer {
         Address address = new Address(houseNumber, houseName, line1, town, county, postcode);
         Email email = new Email(emailAddress);
         Phone phone = new Phone(phoneNumber);
-        return new Customer(UUID.randomUUID(), new Date(), name, address, email, phone);
+        return new Customer(UUID.randomUUID(), new DSDDate(), name, address, email, phone);
     }
 }

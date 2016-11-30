@@ -45,7 +45,7 @@ public class ProductsRepo {
 
     private List<Product> get() {
         List<Product> productList = productsTable.get(mDatabase);
-        if (productList.isEmpty()) {
+        if (productList == null || productList.isEmpty()) {
             initDb(mContext);
             productList = productsTable.get(mDatabase);
         }

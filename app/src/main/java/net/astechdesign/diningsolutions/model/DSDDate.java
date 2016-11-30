@@ -41,4 +41,9 @@ public class DSDDate implements Serializable {
     public String toString() {
         return dateFormatter.format(date);
     }
+
+    public static DSDDate fileCreate(String created) {
+        Date date = dateFormatter.parseFile(created);
+        return new DSDDate();
+    }
 }

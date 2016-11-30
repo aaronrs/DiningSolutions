@@ -127,6 +127,7 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
             private final View mView;
             private final TextView mNameView;
             private final TextView mPriceView;
+            private final TextView mBarcodeView;
             private Product mItem;
 
             public ViewHolder(View view) {
@@ -134,6 +135,7 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
                 mView = view;
                 mNameView = (TextView) view.findViewById(R.id.product_name);
                 mPriceView = (TextView) view.findViewById(R.id.product_price);
+                mBarcodeView = (TextView) view.findViewById(R.id.product_barcode);
             }
 
             @Override
@@ -145,6 +147,7 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
                 this.mItem = item;
                 mNameView.setText(item.name);
                 mPriceView.setText(Double.toString(item.price));
+                mBarcodeView.setText(item.barcode);
             }
 
             public Product getItem() {

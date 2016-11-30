@@ -8,6 +8,7 @@ public class DSDDateFormatter {
     private static DSDDateFormatter instance;
 
     private SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat fileDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private SimpleDateFormat outputDateFormat = new SimpleDateFormat("EEE dd MMM yyyy");
     private SimpleDateFormat outputTimeFormat = new SimpleDateFormat("HH:mm");
 
@@ -32,5 +33,14 @@ public class DSDDateFormatter {
 
     public String formatTime(Date date) {
         return outputTimeFormat.format(date);
+    }
+
+    public Date parseFile(String created) {
+        try {
+            return fileDateFormat.parse(created);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }

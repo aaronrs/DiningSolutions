@@ -3,6 +3,10 @@ package net.astechdesign.diningsolutions.database.tables;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.model.Customer;
+
+import java.util.List;
+
 import static android.provider.BaseColumns._ID;
 
 public class CustomersTable implements CMSTable {
@@ -57,5 +61,17 @@ public class CustomersTable implements CMSTable {
         values.put(CUSTOMER_EMAIL, email);
         values.put(CUSTOMER_PHONE, phone);
         return values;
+    }
+
+    public List<Customer> get() {
+        return null;
+    }
+
+    public List<Customer> get(SQLiteDatabase mDatabase) {
+        return null;
+    }
+
+    public void addOrUpdate(SQLiteDatabase mDatabase, Customer customer) {
+
     }
 }

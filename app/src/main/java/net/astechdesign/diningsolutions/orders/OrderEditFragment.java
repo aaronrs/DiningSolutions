@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Phone;
 
 import java.util.Date;
@@ -44,7 +45,7 @@ public class OrderEditFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Customer newCustomer = new Customer(OrderEditFragment.this.customer.id, new Date(), mNameText.getText().toString(), null, null, new Phone(mPriceText.getText().toString()));
+                        Customer newCustomer = new Customer(OrderEditFragment.this.customer.id, new DSDDate(), mNameText.getText().toString(), null, null, new Phone(mPriceText.getText().toString()));
                         mListener.onDialogPositiveClick(dialog, newCustomer);
                     }
                 })

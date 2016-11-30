@@ -35,7 +35,7 @@ public class OrdersTable implements CMSTable {
                 ID + " TEXT, " +
                 CUSTOMER_ID + " INTEGER, " +
                 ORDER_DATE + " DATE, " +
-                INVOICE_NO + " TEXT, " +
+                INVOICE_NO + " TEXT " +
                 ")";
         try {
             db.execSQL(orderTable);
