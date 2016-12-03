@@ -1,6 +1,8 @@
 package net.astechdesign.diningsolutions.model;
 
-public class Phone {
+import java.io.Serializable;
+
+public class Phone implements Serializable {
 
     public final String number;
 

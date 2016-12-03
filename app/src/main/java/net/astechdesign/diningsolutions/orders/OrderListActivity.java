@@ -36,7 +36,7 @@ import java.util.UUID;
 public class OrderListActivity extends AppCompatActivity {
 
     private static final String ADD_ORDER = "add_order";
-    public static final String ARG_ORDER_ID = "customer_id";
+    public static final String ARG_CUSTOMER = "customer";
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -55,7 +55,7 @@ public class OrderListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
 
-        Customer customer = (Customer) getIntent().getSerializableExtra(ARG_ORDER_ID);
+        Customer customer = (Customer) getIntent().getSerializableExtra(ARG_CUSTOMER);
         customer = customer == null ? CustomerRepo.get(this).get(0) : customer;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

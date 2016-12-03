@@ -21,7 +21,7 @@ public class DSDDate implements Serializable {
     }
 
     public DSDDate(String dateString) {
-        this(dateFormatter.parse(dateString));
+        this(dateFormatter.dbParse(dateString));
     }
 
     public DSDDate(Date date) {
@@ -45,5 +45,9 @@ public class DSDDate implements Serializable {
     public static DSDDate fileCreate(String created) {
         Date date = dateFormatter.parseFile(created);
         return new DSDDate();
+    }
+
+    public String dbFormat() {
+        return dateFormatter.dbFormat(date);
     }
 }

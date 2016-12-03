@@ -19,10 +19,15 @@ import net.astechdesign.diningsolutions.model.Phone;
 
 public class CustomerEditFragment extends DialogFragment {
 
+    public static final String ARG_CUSTOMER = "customer";
     private TextView mNameText;
     private TextView mPriceText;
-    private Customer customer;
     private CustomerEditFragment.CustomerEditListener mListener;
+    private Customer mCurrentCustomer;
+
+    public void setCustomer(Customer mCurrentCustomer) {
+        this.mCurrentCustomer = mCurrentCustomer;
+    }
 
     public interface CustomerEditListener {
         void onDialogPositiveClick(DialogInterface dialog, Customer customer);
@@ -31,6 +36,8 @@ public class CustomerEditFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        final Customer customer = mCurrentCustomer;
+//        final Customer customer = (Customer) savedInstanceState.getSerializable(ARG_CUSTOMER);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_product, null);
         mNameText = (TextView) view.findViewById(R.id.product_name);
         mPriceText = (TextView) view.findViewById(R.id.product_price);
@@ -44,7 +51,7 @@ public class CustomerEditFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Customer newCustomer = new Customer(
-                                CustomerEditFragment.this.customer.id,
+                                customer.id,
                                 mNameText.getText().toString(),
                                 null,
                                 mPriceText.getText().toString(),
@@ -73,9 +80,5 @@ public class CustomerEditFragment extends DialogFragment {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 }

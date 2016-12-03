@@ -37,7 +37,8 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
      */
     private boolean mTwoPane;
     private NewCustomerFragment newCustomerFragment;
-    private CustomerEditFragment editCustomerFragment;
+    private CustomerEditFragment customerEditFragment;
+    private Customer mCurrentCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,12 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getSupportFragmentManager();
-                editCustomerFragment = new CustomerEditFragment();
-                editCustomerFragment.show(fm, ADD_CUSTOMER);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(CustomerEditFragment.ARG_CUSTOMER, mCurrentCustomer);
+                customerEditFragment = new CustomerEditFragment();
+                customerEditFragment.setArguments(bundle);
+                customerEditFragment.setCustomer(mCurrentCustomer);
+                customerEditFragment.show(fm, ADD_CUSTOMER);
             }
         });
 
@@ -134,7 +139,8 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putSerializable(CustomerDetailFragment.ARG_CUSTOMER, holder.mItem);
+                        mCurrentCustomer = holder.mItem;
+                        arguments.putSerializable(CustomerDetailFragment.ARG_CUSTOMER, mCurrentCustomer);
                         CustomerDetailFragment fragment = new CustomerDetailFragment ();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -188,7 +194,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
 
     public void showOrders(View view) {
         Intent intent = new Intent(this, OrderListActivity.class);
-        intent.putExtra(OrderListActivity.ARG_ORDER_ID, (UUID)view.getTag());
+        intent.putExtra(OrderListActivity.ARG_CUSTOMER, mCurrentCustomer);
         this.startActivity(intent);
     }
 }

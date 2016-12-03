@@ -1,6 +1,8 @@
 package net.astechdesign.diningsolutions.model;
 
-public class Email {
+import java.io.Serializable;
+
+public class Email implements Serializable {
     public final String address;
 
     public Email(String address) {

@@ -57,7 +57,7 @@ public class CustomerTable implements CMSTable {
         values.put(CUSTOMER_EMAIL, customer.email.address);
         values.put(CUSTOMER_PHONE, customer.phone.number);
         values.put(CUSTOMER_CURRENT, customer.current);
-        values.put(CUSTOMER_CREATED, customer.created.toString());
+        values.put(CUSTOMER_CREATED, customer.created.dbFormat());
         values.put(CUSTOMER_REFERRAL, customer.referral);
         return values;
     }
@@ -75,6 +75,20 @@ public class CustomerTable implements CMSTable {
     }
 
     public void addOrUpdate(SQLiteDatabase mDatabase, Customer customer) {
-
+        if (customer.id == null) {
+            add(mDatabase, customer);
+        } else {
+            update(mDatabase, customer);
+        }
     }
+
+    private void add(SQLiteDatabase mDatabase, Customer customer) {
+        ContentValues insertValues = getInsertValues(UUID.randomUUID(), customer);
+        mDatabase.insert(TABLE_NAME, null, insertValues);
+    }
+
+    private void update(SQLiteDatabase mDatabase, Customer customer) {
+        mDatabase.update(TABLE_NAME, getInsertValues(customer), ID + " = ?", new String[]{customer.id.toString()});
+    }
+
 }

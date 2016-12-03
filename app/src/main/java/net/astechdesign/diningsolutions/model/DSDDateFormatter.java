@@ -12,7 +12,7 @@ public class DSDDateFormatter {
     private SimpleDateFormat outputDateFormat = new SimpleDateFormat("EEE dd MMM yyyy");
     private SimpleDateFormat outputTimeFormat = new SimpleDateFormat("HH:mm");
 
-    public Date parse(String dateString) {
+    public Date dbParse(String dateString) {
         try {
             return dbDateFormat.parse(dateString);
         } catch (ParseException e) {
@@ -42,5 +42,9 @@ public class DSDDateFormatter {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    public String dbFormat(Date date) {
+        return dbDateFormat.format(date);
     }
 }

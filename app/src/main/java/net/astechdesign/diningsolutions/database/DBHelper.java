@@ -34,7 +34,6 @@ public class DBHelper extends SQLiteOpenHelper {
         tables.add(productTable);
         tables.add(addressTable);
         tables.add(customerTable);
-//        resetDB();
     }
 
     @Override

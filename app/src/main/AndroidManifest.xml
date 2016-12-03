@@ -17,39 +17,43 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".orders.OrderListActivity"
-            android:parentActivityName=".customers.CustomerListActivity">
-        </activity>
-        <activity
-            android:name=".todos.TodoListActivity"
-            android:label="@string/title_todo_list">
-        </activity>
-        <activity
-            android:name=".todos.TodoDetailActivity"
-            android:label="@string/title_todo_detail"
-            android:parentActivityName=".todos.TodoListActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.astechdesign.diningsolutions.todos.TodoListActivity" />
-        </activity>
         <activity
             android:name=".products.ProductActivity"
             android:label="@string/title_product_list"
             android:parentActivityName=".todos.TodoListActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".products.ProductListActivity"
-            android:label="@string/title_product_list"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".products.ProductDetailActivity"
-            android:label="@string/title_product_detail"
-            android:parentActivityName=".products.ProductListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.astechdesign.diningsolutions.products.ProductListActivity" />
-        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity android:name=".orders.OrderListActivity"
+            android:parentActivityName=".customers.CustomerListActivity">
+        </activity>
+        <!--
+                <activity
+                    android:name=".todos.TodoListActivity"
+                    android:label="@string/title_todo_list">
+                </activity>
+                <activity
+                    android:name=".todos.TodoDetailActivity"
+                    android:label="@string/title_todo_detail"
+                    android:parentActivityName=".todos.TodoListActivity">
+                    <meta-data
+                        android:name="android.support.PARENT_ACTIVITY"
+                        android:value="net.astechdesign.diningsolutions.todos.TodoListActivity" />
+                </activity>
+                <activity
+                    android:name=".products.ProductListActivity"
+                    android:label="@string/title_product_list"
+                    android:theme="@style/AppTheme.NoActionBar" />
+                <activity
+                    android:name=".products.ProductDetailActivity"
+                    android:label="@string/title_product_detail"
+                    android:parentActivityName=".products.ProductListActivity"
+                    android:theme="@style/AppTheme.NoActionBar">
+                    <meta-data
+                        android:name="android.support.PARENT_ACTIVITY"
+                        android:value="net.astechdesign.diningsolutions.products.ProductListActivity" />
+                </activity>
+        -->
+        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
             android:name="com.google.android.gms.version"
