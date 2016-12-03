@@ -2,27 +2,22 @@ package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.provider.MediaStore;
 
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Email;
 import net.astechdesign.diningsolutions.model.Phone;
-import net.astechdesign.diningsolutions.model.Product;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class CustomerAssets {
-
-    // FullName|Organisation|Property|Street|Locality|Town|County|Postcode|SaleDate|NumBox
 
     public static List<Customer> getCustomers(Context context) {
         AssetManager assets = context.getAssets();
@@ -36,7 +31,6 @@ public class CustomerAssets {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
         Pattern pattern = Pattern.compile("^\\d{1,3} .*");
-        List<String> nameList = Arrays.asList(names);
 
         List<String> peeps = new ArrayList<>();
         List<Customer> customerList = new ArrayList<>();
@@ -67,25 +61,12 @@ public class CustomerAssets {
                 }
                 peeps.add(name + postcode);
 
-//                    System.out.println("#" + line);
-//                    System.out.println("-" + name + "|" +
-//                            email + "|" +
-//                            house + "|" +
-//                            line1 + "|" +
-//                            line2 + "|" +
-//                            town + "|" +
-//                            county + "|" +
-//                            postcode + "|" +
-//                            created);
-
-                Address address = new Address(house, line1, line2, town, county, postcode);
-                customerList.add(new Customer(null, DSDDate.fileCreate(created), name, address, new Email(email), new Phone("")));
+                Address address = new Address(null, house, line1, line2, town, county, postcode);
+                customerList.add(new Customer(null, name, email, "", true, DSDDate.fileCreate(created), "", address));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return customerList;
     }
-
-    static String[] names = {"Phillips", "Teernez", "Dyer", "Gresham", "Greenwood"};
 }

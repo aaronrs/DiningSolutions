@@ -134,7 +134,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putSerializable(CustomerDetailFragment.ARG_ITEM_ID, holder.getId());
+                        arguments.putSerializable(CustomerDetailFragment.ARG_CUSTOMER, holder.mItem);
                         CustomerDetailFragment fragment = new CustomerDetailFragment ();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -143,7 +143,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, CustomerDetailActivity.class);
-                        intent.putExtra(CustomerDetailFragment.ARG_ITEM_ID, holder.getId());
+                        intent.putExtra(CustomerDetailFragment.ARG_CUSTOMER, holder.getId());
 
                         context.startActivity(intent);
                     }

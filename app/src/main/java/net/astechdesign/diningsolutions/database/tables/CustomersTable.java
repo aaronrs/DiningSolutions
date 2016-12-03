@@ -1,38 +1,45 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static android.provider.BaseColumns._ID;
+import java.util.UUID;
 
 public class CustomersTable implements CMSTable {
 
     private static final String TABLE_NAME = "customers";
 
-    public static final String CONTACT_ID = "contact_id";
+    public static final String ID = "id";
     public static final String CUSTOMER_NAME = "name";
-    public static final String CUSTOMER_ADDRESS = "address";
-    public static final String CUSTOMER_POSTCODE = "postcode";
     public static final String CUSTOMER_EMAIL = "email";
     public static final String CUSTOMER_PHONE = "phone";
+    public static final String CUSTOMER_CURRENT = "current";
+    public static final String CUSTOMER_CREATED = "created";
+    public static final String CUSTOMER_REFERRAL = "referral";
+    private AddressTable mAddressTable;
+
+    public CustomersTable(AddressTable addressTable) {
+        mAddressTable = addressTable;
+    }
 
     @Override
     public void create(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                CONTACT_ID + " INTEGER, " +
+                ID + " INTEGER, " +
                 CUSTOMER_NAME + " INTEGER, " +
-                CUSTOMER_ADDRESS + " INTEGER, " +
-                CUSTOMER_POSTCODE + " INTEGER, " +
-                CUSTOMER_EMAIL + " INTEGER, " +
-                CUSTOMER_PHONE + " INTEGER" +
+                CUSTOMER_EMAIL + " TEXT, " +
+                CUSTOMER_PHONE + " TEXT, " +
+                CUSTOMER_CURRENT + " INTEGER, " +
+                CUSTOMER_CREATED + " TEXT, " +
+                CUSTOMER_REFERRAL + " TEXT " +
                 ")";
         db.execSQL(query);
-        initialise(db);
     }
 
     @Override
@@ -40,35 +47,32 @@ public class CustomersTable implements CMSTable {
 
     }
 
-    private void initialise(SQLiteDatabase db) {
-        for (int i=1; i < 100; i++) {
-            db.insert(TABLE_NAME, null,
-                    getInsertValues(i,
-                    String.format("Person %03d", i),
-                    String.format("%d Street, Town", i),
-                    String.format("AA%d %dAA", i,i),
-                    String.format("person%03d@gmail.com", i,i),
-                    String.format("07700000%03d", i)));
-        }
+    private static ContentValues getInsertValues(Customer customer) {
+        return getInsertValues(customer.id, customer);
     }
 
-    private ContentValues getInsertValues(int contactId, String name, String address, String postcode, String email, String phone) {
+    private static ContentValues getInsertValues(UUID contactId, Customer customer) {
         ContentValues values = new ContentValues();
-        values.put(CONTACT_ID, contactId);
-        values.put(CUSTOMER_NAME, name);
-        values.put(CUSTOMER_ADDRESS, address);
-        values.put(CUSTOMER_POSTCODE, postcode);
-        values.put(CUSTOMER_EMAIL, email);
-        values.put(CUSTOMER_PHONE, phone);
+        values.put(ID, contactId.toString());
+        values.put(CUSTOMER_NAME, customer.name);
+        values.put(CUSTOMER_EMAIL, customer.email.address);
+        values.put(CUSTOMER_PHONE, customer.phone.number);
+        values.put(CUSTOMER_CURRENT, customer.current);
+        values.put(CUSTOMER_CREATED, customer.created.toString());
+        values.put(CUSTOMER_REFERRAL, customer.referral);
         return values;
     }
 
-    public List<Customer> get() {
-        return null;
-    }
-
     public List<Customer> get(SQLiteDatabase mDatabase) {
-        return null;
+        List<Customer> customerList = new ArrayList<>();
+        Cursor cursor = mDatabase.query(TABLE_NAME, null, null, null, null, null, CUSTOMER_NAME);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            CustomersCursorWrapper customersCursorWrapper = new CustomersCursorWrapper(cursor);
+            customerList.add(customersCursorWrapper.getCustomer());
+            cursor.moveToNext();
+        }
+        return customerList;
     }
 
     public void addOrUpdate(SQLiteDatabase mDatabase, Customer customer) {

@@ -55,8 +55,7 @@ public class OrderListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
 
-        UUID customerId = (UUID) getIntent().getSerializableExtra(ARG_ORDER_ID);
-        Customer customer = CustomerRepo.get(this, customerId);
+        Customer customer = (Customer) getIntent().getSerializableExtra(ARG_ORDER_ID);
         customer = customer == null ? CustomerRepo.get(this).get(0) : customer;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

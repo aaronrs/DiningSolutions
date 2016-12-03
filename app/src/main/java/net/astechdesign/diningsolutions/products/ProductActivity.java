@@ -146,7 +146,7 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
             public void setItem(Product item) {
                 this.mItem = item;
                 mNameView.setText(item.name);
-                mPriceView.setText(Double.toString(item.price));
+                mPriceView.setText("£" + Double.toString(item.price));
                 mBarcodeView.setText(item.barcode);
             }
 

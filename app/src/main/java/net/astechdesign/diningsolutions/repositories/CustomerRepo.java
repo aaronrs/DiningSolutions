@@ -4,12 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
+import net.astechdesign.diningsolutions.database.tables.AddressTable;
 import net.astechdesign.diningsolutions.database.tables.CustomersTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Product;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -21,22 +20,23 @@ public class CustomerRepo {
     private final Context mContext;
     private final SQLiteDatabase mDatabase;
     private final CustomersTable customersTable;
-
-    private List<Customer> mCustomers;
-    private Map<UUID, Customer> mCustomerMap;
+    private final AddressTable addressTable;
+    private final DBHelper dbHelper;
 
     private CustomerRepo(Context context) {
         this.mContext = context.getApplicationContext();
-        mDatabase = new DBHelper(context).getWritableDatabase();
-        customersTable = new CustomersTable();
+        dbHelper = new DBHelper(context);
+        mDatabase = dbHelper.getWritableDatabase();
+        addressTable = dbHelper.getAddressTable();
+        customersTable = dbHelper.getCustomersTable();
     }
 
     public static List<Customer> get(Context context) {
-        return getInstance(context).getCustomers();
+        return getInstance(context).get();
     }
 
-    public static Customer get(Context context, UUID id) {
-        return getInstance(context).getCustomer(id);
+    public static void addOrUpdate(Context context, Customer customer) {
+        getInstance(context).addOrUpdate(customer);
     }
 
     private static CustomerRepo getInstance(Context context) {
@@ -46,19 +46,18 @@ public class CustomerRepo {
         return instance;
     }
 
-    public List<Customer> getCustomers() {
-        List<Customer> customers = customersTable.get();
-        if (customers == null || customers.isEmpty()) {
+    public List<Customer> get() {
+        List<Customer> customerList = customersTable.get(mDatabase);
+        if (customerList == null || customerList.isEmpty()) {
             initDb(mContext);
-            customers = customersTable.get(mDatabase);
+            customerList = customersTable.get(mDatabase);
         }
-        return customers;
+        return customerList;
     }
 
-    public Customer getCustomer(UUID id) {
-        return mCustomerMap.get(id);
+    private void addOrUpdate(Customer customer) {
+        customersTable.addOrUpdate(mDatabase, customer);
     }
-
 
     private void initDb(Context context) {
         List<Customer> customerList = CustomerAssets.getCustomers(context);
@@ -66,7 +65,4 @@ public class CustomerRepo {
             customersTable.addOrUpdate(mDatabase, customer);
         }
     }
-
-    private String[][] testCustomers = {
-    };
 }

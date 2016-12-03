@@ -48,11 +48,11 @@ public class ProductsTable implements CMSTable {
 
     }
 
-    private static ContentValues getInsertValues(Product product) {
+    private ContentValues getInsertValues(Product product) {
         return getInsertValues(product.id, product);
     }
 
-    private static ContentValues getInsertValues(UUID id, Product product) {
+    private ContentValues getInsertValues(UUID id, Product product) {
         ContentValues values = new ContentValues();
         values.put(ID, id.toString());
         values.put(PRODUCT_NAME, product.name);
@@ -62,17 +62,6 @@ public class ProductsTable implements CMSTable {
         values.put(PRODUCT_DELETED, product.isDeleted() ? 1 : 0);
         return values;
     }
-
-    public String getProductsFilterQuery(String filter) {
-        String like = " LIKE '" + filter + "%' OR " + ProductsTable.PRODUCT_NAME + "  LIKE '% " + filter + "%'";
-        return String.format(PRODUCTS_FILTER_QUERY, like);
-    }
-
-    public final String PRODUCTS_FILTER_QUERY =
-            "SELECT " + BaseColumns._ID + ", " + PRODUCT_NAME
-                    + " FROM " + TABLE_NAME
-                    + " WHERE " + PRODUCT_NAME + "%s"
-                    + " ORDER BY " + PRODUCT_NAME;
 
     public List<Product> get(SQLiteDatabase mDatabase) {
         List<Product> productList = new ArrayList<>();
