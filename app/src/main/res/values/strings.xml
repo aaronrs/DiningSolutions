@@ -25,4 +25,5 @@
     <string name="new_customer_title">New Customer</string>
     <string name="title_customer_detail">Customer Detail</string>
     <string name="title_order_list">Orders - </string>
+    <string name="edit_customer_title">Edit Customer</string>
 </resources>
