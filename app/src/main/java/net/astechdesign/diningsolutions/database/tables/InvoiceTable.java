@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 
 import static android.provider.BaseColumns._ID;
 
-public class InvoicesTable implements CMSTable {
+public class InvoiceTable implements CMSTable {
 
     public static final String TABLE_NAME = "invoices";
     public static final String INVOICE_NUMBER = "invoice_no";
@@ -25,7 +25,7 @@ public class InvoicesTable implements CMSTable {
 
     private final AssetManager assetManager;
 
-    public InvoicesTable(Context context) {
+    public InvoiceTable(Context context) {
         assetManager = context.getAssets();
     }
 

@@ -4,14 +4,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomersTable implements CMSTable {
+public class CustomerTable implements CMSTable {
 
     private static final String TABLE_NAME = "customers";
 
@@ -24,7 +23,7 @@ public class CustomersTable implements CMSTable {
     public static final String CUSTOMER_REFERRAL = "referral";
     private AddressTable mAddressTable;
 
-    public CustomersTable(AddressTable addressTable) {
+    public CustomerTable(AddressTable addressTable) {
         mAddressTable = addressTable;
     }
 
@@ -68,8 +67,8 @@ public class CustomersTable implements CMSTable {
         Cursor cursor = mDatabase.query(TABLE_NAME, null, null, null, null, null, CUSTOMER_NAME);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            CustomersCursorWrapper customersCursorWrapper = new CustomersCursorWrapper(cursor);
-            customerList.add(customersCursorWrapper.getCustomer());
+            CustomerCursorWrapper customerCursorWrapper = new CustomerCursorWrapper(cursor);
+            customerList.add(customerCursorWrapper.getCustomer());
             cursor.moveToNext();
         }
         return customerList;

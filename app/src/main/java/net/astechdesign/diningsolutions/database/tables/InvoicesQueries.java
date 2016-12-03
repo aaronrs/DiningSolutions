@@ -2,7 +2,7 @@ package net.astechdesign.diningsolutions.database.tables;
 
 import android.provider.BaseColumns;
 
-import static net.astechdesign.diningsolutions.database.tables.InvoicesTable.*;
+import static net.astechdesign.diningsolutions.database.tables.InvoiceTable.*;
 
 public class InvoicesQueries {
 

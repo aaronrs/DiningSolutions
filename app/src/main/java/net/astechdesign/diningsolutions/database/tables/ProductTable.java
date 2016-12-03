@@ -1,25 +1,16 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
 
 import net.astechdesign.diningsolutions.model.Product;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static android.provider.BaseColumns._ID;
-
-public class ProductsTable implements CMSTable {
+public class ProductTable implements CMSTable {
 
     private static final String TABLE_NAME = "products";
 
@@ -68,8 +59,8 @@ public class ProductsTable implements CMSTable {
         Cursor cursor = mDatabase.query(TABLE_NAME, null, PRODUCT_DELETED + " = 0", null, null, null, PRODUCT_NAME);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            ProductsCursorWrapper productsCursorWrapper = new ProductsCursorWrapper(cursor);
-            productList.add(productsCursorWrapper.getProduct());
+            ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
+            productList.add(productCursorWrapper.getProduct());
             cursor.moveToNext();
         }
         return productList;

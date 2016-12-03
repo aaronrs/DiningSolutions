@@ -5,13 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.AddressTable;
-import net.astechdesign.diningsolutions.database.tables.CustomersTable;
+import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.Product;
 
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class CustomerRepo {
 
@@ -19,7 +16,7 @@ public class CustomerRepo {
 
     private final Context mContext;
     private final SQLiteDatabase mDatabase;
-    private final CustomersTable customersTable;
+    private final CustomerTable customerTable;
     private final AddressTable addressTable;
     private final DBHelper dbHelper;
 
@@ -28,7 +25,7 @@ public class CustomerRepo {
         dbHelper = new DBHelper(context);
         mDatabase = dbHelper.getWritableDatabase();
         addressTable = dbHelper.getAddressTable();
-        customersTable = dbHelper.getCustomersTable();
+        customerTable = dbHelper.getCustomerTable();
     }
 
     public static List<Customer> get(Context context) {
@@ -47,22 +44,22 @@ public class CustomerRepo {
     }
 
     public List<Customer> get() {
-        List<Customer> customerList = customersTable.get(mDatabase);
+        List<Customer> customerList = customerTable.get(mDatabase);
         if (customerList == null || customerList.isEmpty()) {
             initDb(mContext);
-            customerList = customersTable.get(mDatabase);
+            customerList = customerTable.get(mDatabase);
         }
         return customerList;
     }
 
     private void addOrUpdate(Customer customer) {
-        customersTable.addOrUpdate(mDatabase, customer);
+        customerTable.addOrUpdate(mDatabase, customer);
     }
 
     private void initDb(Context context) {
         List<Customer> customerList = CustomerAssets.getCustomers(context);
         for (Customer customer: customerList) {
-            customersTable.addOrUpdate(mDatabase, customer);
+            customerTable.addOrUpdate(mDatabase, customer);
         }
     }
 }

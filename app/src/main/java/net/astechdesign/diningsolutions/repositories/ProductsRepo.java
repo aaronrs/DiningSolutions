@@ -4,9 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
-import net.astechdesign.diningsolutions.database.tables.ProductsTable;
+import net.astechdesign.diningsolutions.database.tables.ProductTable;
 import net.astechdesign.diningsolutions.model.Product;
-import net.astechdesign.diningsolutions.products.ProductActivity;
 
 import java.util.List;
 
@@ -16,12 +15,12 @@ public class ProductsRepo {
 
     private final Context mContext;
     private final SQLiteDatabase mDatabase;
-    private final ProductsTable productsTable;
+    private final ProductTable productTable;
 
     private ProductsRepo(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new DBHelper(context).getWritableDatabase();
-        productsTable = new ProductsTable();
+        productTable = new ProductTable();
     }
 
     public static Product get(String string) {
@@ -44,22 +43,22 @@ public class ProductsRepo {
     }
 
     private List<Product> get() {
-        List<Product> productList = productsTable.get(mDatabase);
+        List<Product> productList = productTable.get(mDatabase);
         if (productList == null || productList.isEmpty()) {
             initDb(mContext);
-            productList = productsTable.get(mDatabase);
+            productList = productTable.get(mDatabase);
         }
         return productList;
     }
 
     private void addOrUpdate(Product product) {
-        productsTable.addOrUpdate(mDatabase, product);
+        productTable.addOrUpdate(mDatabase, product);
     }
 
     private void initDb(Context context) {
         List<Product> productList = ProductAssets.getProducts(context);
         for (Product product : productList) {
-            productsTable.addOrUpdate(mDatabase, product);
+            productTable.addOrUpdate(mDatabase, product);
         }
     }
 }

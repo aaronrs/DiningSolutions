@@ -1,15 +1,14 @@
 package net.astechdesign.diningsolutions.database;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import net.astechdesign.diningsolutions.database.tables.AddressTable;
 import net.astechdesign.diningsolutions.database.tables.CMSTable;
-import net.astechdesign.diningsolutions.database.tables.CustomersTable;
-import net.astechdesign.diningsolutions.database.tables.OrdersTable;
-import net.astechdesign.diningsolutions.database.tables.ProductsTable;
+import net.astechdesign.diningsolutions.database.tables.CustomerTable;
+import net.astechdesign.diningsolutions.database.tables.OrderTable;
+import net.astechdesign.diningsolutions.database.tables.ProductTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,20 +19,19 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "orders";
 
     private final List<CMSTable> tables = new ArrayList<>();
-    private final OrdersTable ordersTable;
-    private final ProductsTable productsTable;
+    private final OrderTable orderTable;
+    private final ProductTable productTable;
     private final AddressTable addressTable;
-    private final CustomersTable customerTable;
-    private CustomersTable customersTable;
+    private final CustomerTable customerTable;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        ordersTable = new OrdersTable();
-        productsTable = new ProductsTable();
+        orderTable = new OrderTable();
+        productTable = new ProductTable();
         addressTable = new AddressTable();
-        customerTable = new CustomersTable(addressTable);
-        tables.add(ordersTable);
-        tables.add(productsTable);
+        customerTable = new CustomerTable(addressTable);
+        tables.add(orderTable);
+        tables.add(productTable);
         tables.add(addressTable);
         tables.add(customerTable);
 //        resetDB();
@@ -57,7 +55,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return addressTable;
     }
 
-    public CustomersTable getCustomersTable() {
-        return customersTable;
+    public CustomerTable getCustomerTable() {
+        return customerTable;
     }
 }

@@ -5,8 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.FragmentActivity;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
-import net.astechdesign.diningsolutions.database.tables.OrderItemsTable;
-import net.astechdesign.diningsolutions.database.tables.OrdersTable;
+import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
+import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.model.Order;
 
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ public class OrderRepo {
     private Context mContext;
 
     private SQLiteDatabase mDatabase;
-    private OrdersTable ordersTable;
-    private final OrderItemsTable orderItemsTable;
+    private OrderTable orderTable;
+    private final OrderItemTable orderItemTable;
 
     public static OrderRepo get(Context context) {
         if (repo == null) {
@@ -32,8 +32,8 @@ public class OrderRepo {
     private OrderRepo(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new DBHelper(context).getWritableDatabase();
-        ordersTable = new OrdersTable();
-        orderItemsTable = new OrderItemsTable();
+        orderTable = new OrderTable();
+        orderItemTable = new OrderItemTable();
     }
 
     public List<Order> getmOrders() {
@@ -43,11 +43,11 @@ public class OrderRepo {
     }
 
     public void addOrder(Order order) {
-        ordersTable.addOrder(mDatabase, order);
+        orderTable.addOrder(mDatabase, order);
     }
 
     public Order getOrder(UUID id) {
-        return ordersTable.getOrder(id);
+        return orderTable.getOrder(id);
     }
 
     public static Order get(FragmentActivity activity, UUID serializable) {

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import static android.provider.BaseColumns._ID;
 
-public class OrderItemsTable implements CMSTable {
+public class OrderItemTable implements CMSTable {
 
     public static final String TABLE_NAME = "orderItems";
 

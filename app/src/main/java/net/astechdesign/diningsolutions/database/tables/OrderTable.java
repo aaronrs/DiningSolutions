@@ -3,17 +3,14 @@ package net.astechdesign.diningsolutions.database.tables;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import static android.provider.BaseColumns._ID;
 
-public class OrdersTable implements CMSTable {
+public class OrderTable implements CMSTable {
 
     public static final String TABLE_NAME = "orders";
 
@@ -22,10 +19,10 @@ public class OrdersTable implements CMSTable {
     public static final String CUSTOMER_ID = "customer_name";
     public static final String ORDER_DATE = "order_date";
     public static final String INVOICE_NO = "invoice_no";
-    private final OrderItemsTable orderItemsTable;
+    private final OrderItemTable orderItemTable;
 
-    public OrdersTable() {
-        orderItemsTable = new OrderItemsTable();
+    public OrderTable() {
+        orderItemTable = new OrderItemTable();
     }
 
     @Override
@@ -51,10 +48,10 @@ public class OrdersTable implements CMSTable {
 
     public ContentValues getInsertValues(Order order) {
         ContentValues values = new ContentValues();
-        values.put(OrdersTable.ID, order.id.toString());
-        values.put(OrdersTable.INVOICE_NO, order.invoiceNumber);
-        values.put(OrdersTable.CUSTOMER_ID, order.customerId.toString());
-        values.put(OrdersTable.ORDER_DATE, order.created.toString());
+        values.put(OrderTable.ID, order.id.toString());
+        values.put(OrderTable.INVOICE_NO, order.invoiceNumber);
+        values.put(OrderTable.CUSTOMER_ID, order.customerId.toString());
+        values.put(OrderTable.ORDER_DATE, order.created.toString());
         return values;
     }
 
@@ -62,7 +59,7 @@ public class OrdersTable implements CMSTable {
         db.beginTransaction();
         db.insert(TABLE_NAME, null, getInsertValues(order));
         for (OrderItem item : order.orderItems) {
-            orderItemsTable.addOrderItem(db, order.id, item);
+            orderItemTable.addOrderItem(db, order.id, item);
         }
     }
 
