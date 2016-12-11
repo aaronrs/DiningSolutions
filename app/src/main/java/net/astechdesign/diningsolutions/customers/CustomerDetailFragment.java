@@ -10,10 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.repositories.CustomerRepo;
-
-import java.util.UUID;
 
 public class CustomerDetailFragment extends Fragment {
 
@@ -48,14 +46,27 @@ public class CustomerDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.customer_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
         if (mItem != null) {
             rootView.findViewById(R.id.customer_order_btn).setTag(mItem.id);
-            ((TextView) rootView.findViewById(R.id.customer_detail_name)).setText(mItem.name);
-            ((TextView) rootView.findViewById(R.id.customer_detail_phone)).setText(mItem.phone.number);
-            ((TextView) rootView.findViewById(R.id.customer_detail_email)).setText(mItem.email.address);
+            setText(rootView, R.id.customer_name, mItem.name);
+            setText(rootView, R.id.customer_email, mItem.email.address);
+            setText(rootView, R.id.customer_phone, mItem.phone.number);
+            Address address = mItem.address;
+            if (address != null) {
+                setText(rootView, R.id.address_name, address.name);
+                setText(rootView, R.id.address_line1, address.line1);
+                setText(rootView, R.id.address_line2, address.line2);
+                setText(rootView, R.id.address_town, address.town);
+                setText(rootView, R.id.address_county, address.county);
+                setText(rootView, R.id.address_postcode, address.postcode);
+            }
         }
 
         return rootView;
+    }
+
+    private void setText(View rootView, int id, String value) {
+        ((TextView) rootView.findViewById(id)).setText(value);
+
     }
 }

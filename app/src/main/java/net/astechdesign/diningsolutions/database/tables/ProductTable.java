@@ -3,6 +3,7 @@ package net.astechdesign.diningsolutions.database.tables;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.style.TtsSpan;
 
 import net.astechdesign.diningsolutions.model.Product;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ProductTable implements CMSTable {
+public class ProductTable extends CMSTable<Product> {
 
     private static final String TABLE_NAME = "products";
 
@@ -39,11 +40,7 @@ public class ProductTable implements CMSTable {
 
     }
 
-    private ContentValues getInsertValues(Product product) {
-        return getInsertValues(product.id, product);
-    }
-
-    private ContentValues getInsertValues(UUID id, Product product) {
+    protected ContentValues getInsertValues(UUID id, Product product) {
         ContentValues values = new ContentValues();
         values.put(ID, id.toString());
         values.put(PRODUCT_NAME, product.name);
@@ -52,6 +49,11 @@ public class ProductTable implements CMSTable {
         values.put(PRODUCT_BARCODE, product.barcode);
         values.put(PRODUCT_DELETED, product.isDeleted() ? 1 : 0);
         return values;
+    }
+
+    @Override
+    protected String getTableName() {
+        return TABLE_NAME;
     }
 
     public List<Product> get(SQLiteDatabase mDatabase) {
@@ -66,20 +68,4 @@ public class ProductTable implements CMSTable {
         return productList;
     }
 
-    public void addOrUpdate(SQLiteDatabase mDatabase, Product product) {
-        if (product.id == null) {
-           add(mDatabase, product);
-        } else {
-            update(mDatabase, product);
-        }
-    }
-
-    private void add(SQLiteDatabase mDatabase, Product product) {
-        ContentValues insertValues = getInsertValues(UUID.randomUUID(), product);
-        mDatabase.insert(TABLE_NAME, null, insertValues);
-    }
-
-    private void update(SQLiteDatabase mDatabase, Product product) {
-        mDatabase.update(TABLE_NAME, getInsertValues(product), ID + " = ?", new String[]{product.id.toString()});
-    }
 }

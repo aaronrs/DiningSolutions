@@ -26,11 +26,14 @@
         <activity android:name=".orders.OrderListActivity"
             android:parentActivityName=".customers.CustomerListActivity">
         </activity>
+        <activity android:name=".customers.CustomerDetailActivity"
+            android:parentActivityName=".customers.CustomerListActivity">
+        </activity>
+        <activity
+            android:name=".todos.TodoListActivity"
+            android:label="@string/title_todo_list">
+        </activity>
         <!--
-                <activity
-                    android:name=".todos.TodoListActivity"
-                    android:label="@string/title_todo_list">
-                </activity>
                 <activity
                     android:name=".todos.TodoDetailActivity"
                     android:label="@string/title_todo_detail"

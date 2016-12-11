@@ -17,14 +17,12 @@ public class CustomerRepo {
     private final Context mContext;
     private final SQLiteDatabase mDatabase;
     private final CustomerTable customerTable;
-    private final AddressTable addressTable;
     private final DBHelper dbHelper;
 
     private CustomerRepo(Context context) {
         this.mContext = context.getApplicationContext();
         dbHelper = new DBHelper(context);
         mDatabase = dbHelper.getWritableDatabase();
-        addressTable = dbHelper.getAddressTable();
         customerTable = dbHelper.getCustomerTable();
     }
 

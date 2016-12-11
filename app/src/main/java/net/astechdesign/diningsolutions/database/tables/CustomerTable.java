@@ -4,15 +4,16 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomerTable implements CMSTable {
+public class CustomerTable extends CMSTable<Customer> {
 
-    private static final String TABLE_NAME = "customers";
+    static final String TABLE_NAME = "customers";
 
     public static final String ID = "id";
     public static final String CUSTOMER_NAME = "name";
@@ -21,11 +22,12 @@ public class CustomerTable implements CMSTable {
     public static final String CUSTOMER_CURRENT = "current";
     public static final String CUSTOMER_CREATED = "created";
     public static final String CUSTOMER_REFERRAL = "referral";
-    private AddressTable mAddressTable;
-
-    public CustomerTable(AddressTable addressTable) {
-        mAddressTable = addressTable;
-    }
+    public static final String ADDRESS_NAME = "house_name";
+    public static final String ADDRESS_LINE1 = "line1";
+    public static final String ADDRESS_LINE2 = "line2";
+    public static final String ADDRESS_TOWN = "town";
+    public static final String ADDRESS_COUNTY = "county";
+    public static final String ADDRESS_POSTCODE = "postcode";
 
     @Override
     public void create(SQLiteDatabase db) {
@@ -36,7 +38,13 @@ public class CustomerTable implements CMSTable {
                 CUSTOMER_PHONE + " TEXT, " +
                 CUSTOMER_CURRENT + " INTEGER, " +
                 CUSTOMER_CREATED + " TEXT, " +
-                CUSTOMER_REFERRAL + " TEXT " +
+                CUSTOMER_REFERRAL + " TEXT, " +
+                ADDRESS_NAME + " TEXT, " +
+                ADDRESS_LINE1 + " TEXT, " +
+                ADDRESS_LINE2 + " TEXT, " +
+                ADDRESS_TOWN + " TEXT, " +
+                ADDRESS_COUNTY + " TEXT, " +
+                ADDRESS_POSTCODE + " TEXT " +
                 ")";
         db.execSQL(query);
     }
@@ -46,11 +54,7 @@ public class CustomerTable implements CMSTable {
 
     }
 
-    private static ContentValues getInsertValues(Customer customer) {
-        return getInsertValues(customer.id, customer);
-    }
-
-    private static ContentValues getInsertValues(UUID contactId, Customer customer) {
+    protected ContentValues getInsertValues(UUID contactId, Customer customer) {
         ContentValues values = new ContentValues();
         values.put(ID, contactId.toString());
         values.put(CUSTOMER_NAME, customer.name);
@@ -59,6 +63,13 @@ public class CustomerTable implements CMSTable {
         values.put(CUSTOMER_CURRENT, customer.current);
         values.put(CUSTOMER_CREATED, customer.created.dbFormat());
         values.put(CUSTOMER_REFERRAL, customer.referral);
+        Address address = customer.address;
+        values.put(ADDRESS_NAME, address.name);
+        values.put(ADDRESS_LINE1, address.line1);
+        values.put(ADDRESS_LINE2, address.line2);
+        values.put(ADDRESS_TOWN, address.town);
+        values.put(ADDRESS_COUNTY, address.county);
+        values.put(ADDRESS_POSTCODE, address.postcode);
         return values;
     }
 
@@ -68,7 +79,8 @@ public class CustomerTable implements CMSTable {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             CustomerCursorWrapper customerCursorWrapper = new CustomerCursorWrapper(cursor);
-            customerList.add(customerCursorWrapper.getCustomer());
+            Customer customer = customerCursorWrapper.getCustomer();
+            customerList.add(customer);
             cursor.moveToNext();
         }
         return customerList;
@@ -83,12 +95,18 @@ public class CustomerTable implements CMSTable {
     }
 
     private void add(SQLiteDatabase mDatabase, Customer customer) {
-        ContentValues insertValues = getInsertValues(UUID.randomUUID(), customer);
+        UUID customerId = UUID.randomUUID();
+        ContentValues insertValues = getInsertValues(customerId, customer);
         mDatabase.insert(TABLE_NAME, null, insertValues);
     }
 
     private void update(SQLiteDatabase mDatabase, Customer customer) {
         mDatabase.update(TABLE_NAME, getInsertValues(customer), ID + " = ?", new String[]{customer.id.toString()});
+    }
+
+    @Override
+    protected String getTableName() {
+        return TABLE_NAME;
     }
 
 }

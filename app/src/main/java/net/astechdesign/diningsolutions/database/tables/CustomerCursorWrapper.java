@@ -3,6 +3,7 @@ package net.astechdesign.diningsolutions.database.tables;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
+import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 
@@ -15,6 +16,15 @@ public class CustomerCursorWrapper extends CursorWrapper {
     }
 
     public Customer getCustomer() {
+        UUID addressId = UUID.fromString(getString(getColumnIndex(AddressTable.ID)));
+        String houseName = getString(getColumnIndex(AddressTable.ADDRESS_NAME));
+        String line1 = getString(getColumnIndex(AddressTable.ADDRESS_LINE1));
+        String line2 = getString(getColumnIndex(AddressTable.ADDRESS_LINE2));
+        String town = getString(getColumnIndex(AddressTable.ADDRESS_TOWN));
+        String county = getString(getColumnIndex(AddressTable.ADDRESS_COUNTY));
+        String postcode = getString(getColumnIndex(AddressTable.ADDRESS_POSTCODE));
+        Address address = new Address(addressId, houseName, line1, line2, town, county, postcode);
+
         UUID id = UUID.fromString(getString(getColumnIndex(CustomerTable.ID)));
         String name = getString(getColumnIndex(CustomerTable.CUSTOMER_NAME));
         String email = getString(getColumnIndex(CustomerTable.CUSTOMER_EMAIL));
@@ -22,6 +32,6 @@ public class CustomerCursorWrapper extends CursorWrapper {
         boolean current = getInt(getColumnIndex(CustomerTable.CUSTOMER_CURRENT)) == 0;
         DSDDate created = new DSDDate(getString(getColumnIndex(CustomerTable.CUSTOMER_CREATED)));
         String referral = getString(getColumnIndex(CustomerTable.CUSTOMER_REFERRAL));
-        return new Customer(id, name, email, phone, current, created, referral, null);
+        return new Customer(id, name, email, phone, current, created, referral, address);
     }
 }

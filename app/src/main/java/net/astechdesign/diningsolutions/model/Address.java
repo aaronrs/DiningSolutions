@@ -3,7 +3,7 @@ package net.astechdesign.diningsolutions.model;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class Address implements Serializable {
+public class Address extends Model implements Serializable {
 
     public final UUID id;
     public final String name;
@@ -21,5 +21,10 @@ public class Address implements Serializable {
         this.town = town;
         this.county = county;
         this.postcode = postcode;
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 }

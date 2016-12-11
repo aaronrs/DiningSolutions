@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import static android.provider.BaseColumns._ID;
 
-public class OrderTable implements CMSTable {
+public class OrderTable extends CMSTable<Order> {
 
     public static final String TABLE_NAME = "orders";
 
@@ -46,7 +46,7 @@ public class OrderTable implements CMSTable {
 
     }
 
-    public ContentValues getInsertValues(Order order) {
+    public ContentValues getInsertValues(UUID id, Order order) {
         ContentValues values = new ContentValues();
         values.put(OrderTable.ID, order.id.toString());
         values.put(OrderTable.INVOICE_NO, order.invoiceNumber);
@@ -55,11 +55,16 @@ public class OrderTable implements CMSTable {
         return values;
     }
 
+    @Override
+    protected String getTableName() {
+        return null;
+    }
+
     public void addOrder(SQLiteDatabase db, Order order) {
         db.beginTransaction();
         db.insert(TABLE_NAME, null, getInsertValues(order));
         for (OrderItem item : order.orderItems) {
-            orderItemTable.addOrderItem(db, order.id, item);
+//            orderItemTable.addOrderItem(db, order.id, item);
         }
     }
 

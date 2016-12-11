@@ -39,6 +39,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     private NewCustomerFragment newCustomerFragment;
     private CustomerEditFragment customerEditFragment;
     private Customer mCurrentCustomer;
+    private View mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +69,9 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             }
         });
 
-        View recyclerView = findViewById(R.id.customer_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        mRecyclerView = findViewById(R.id.customer_list);
+        assert mRecyclerView != null;
+        setupRecyclerView((RecyclerView) mRecyclerView);
 
         if (findViewById(R.id.customer_detail_container) != null) {
             // The detail container view will be present only in the
@@ -104,14 +105,17 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
         }
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(CustomerRepo.get(this)));
-    }
-
     @Override
     public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
-        Snackbar.make(null, "Edited Customer " + customer.name, Snackbar.LENGTH_LONG)
+        CustomerRepo.addOrUpdate(this, customer);
+        setupRecyclerView((RecyclerView) mRecyclerView);
+
+        Snackbar.make(findViewById(R.id.coordinatorLayout), "Edited Customer " + customer.name, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+    }
+
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(CustomerRepo.get(this)));
     }
 
     public class SimpleItemRecyclerViewAdapter

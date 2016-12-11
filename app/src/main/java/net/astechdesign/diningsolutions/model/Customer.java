@@ -4,7 +4,7 @@ package net.astechdesign.diningsolutions.model;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class Customer implements Serializable {
+public class Customer extends Model implements Serializable {
 
     public final UUID id;
     public final String name;
@@ -35,5 +35,10 @@ public class Customer implements Serializable {
         this.created = created;
         this.referral = referral;
         this.address = address;
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 }

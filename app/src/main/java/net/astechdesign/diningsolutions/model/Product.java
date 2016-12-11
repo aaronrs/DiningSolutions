@@ -2,7 +2,7 @@ package net.astechdesign.diningsolutions.model;
 
 import java.util.UUID;
 
-public class Product {
+public class Product extends Model {
 
     public final UUID id;
     public final String name;
@@ -22,5 +22,10 @@ public class Product {
 
     public boolean isDeleted() {
         return deleted == 1;
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 }

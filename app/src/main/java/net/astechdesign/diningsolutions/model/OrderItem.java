@@ -2,7 +2,7 @@ package net.astechdesign.diningsolutions.model;
 
 import java.util.UUID;
 
-public class OrderItem {
+public class OrderItem extends Model {
     public final UUID id;
     public final String name;
     public final double price;
@@ -17,5 +17,10 @@ public class OrderItem {
         this.quantity = quantity;
         this.batch = batch;
         this.deliveryDate = deliveryDate;
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 }

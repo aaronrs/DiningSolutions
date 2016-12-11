@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class Order {
+public class Order extends Model {
     public UUID id;
     public UUID customerId;
     public final DSDDate created;
@@ -38,5 +38,10 @@ public class Order {
             cost += item.price * item.quantity;
         }
         return cost;
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 }

@@ -5,19 +5,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Address;
-import net.astechdesign.diningsolutions.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class AddressTable implements CMSTable {
+public class AddressTable extends CMSTable<Address> {
 
-    private static final String TABLE_NAME = "address";
+    static final String TABLE_NAME = "address";
 
     public static final String ID = "id";
     public static final String CUSTOMER_ID = "customer_id";
-    public static final String ADDRESS_NAME = "name";
+    public static final String ADDRESS_NAME = "house_name";
     public static final String ADDRESS_LINE1 = "line1";
     public static final String ADDRESS_LINE2 = "line2";
     public static final String ADDRESS_TOWN = "town";
@@ -44,14 +43,15 @@ public class AddressTable implements CMSTable {
 
     }
 
-    private ContentValues getInsertValues(UUID customerId, Address address) {
-        return getInsertValues(address.id, customerId, address);
+    @Override
+    protected String getTableName() {
+        return TABLE_NAME;
     }
 
-    private ContentValues getInsertValues(UUID id, UUID customerId, Address address) {
+    @Override
+    protected ContentValues getInsertValues(UUID id, Address address) {
         ContentValues values = new ContentValues();
         values.put(ID, id.toString());
-        values.put(CUSTOMER_ID, customerId.toString());
         values.put(ADDRESS_NAME, address.name);
         values.put(ADDRESS_LINE1, address.line1);
         values.put(ADDRESS_LINE2, address.line2);
@@ -88,12 +88,12 @@ public class AddressTable implements CMSTable {
         }
     }
 
-    private void add(SQLiteDatabase mDatabase, UUID customerId, Address address) {
+    public void add(SQLiteDatabase mDatabase, UUID customerId, Address address) {
         ContentValues insertValues = getInsertValues(customerId, address);
         mDatabase.insert(TABLE_NAME, null, insertValues);
     }
 
-    private void update(SQLiteDatabase mDatabase, UUID customerId, Address address) {
+    public void update(SQLiteDatabase mDatabase, UUID customerId, Address address) {
         mDatabase.update(TABLE_NAME, getInsertValues(customerId, address), ID + " = ?", new String[]{address.id.toString()});
     }
 }

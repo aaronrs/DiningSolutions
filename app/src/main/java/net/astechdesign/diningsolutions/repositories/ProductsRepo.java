@@ -16,11 +16,13 @@ public class ProductsRepo {
     private final Context mContext;
     private final SQLiteDatabase mDatabase;
     private final ProductTable productTable;
+    private final DBHelper dbHelper;
 
     private ProductsRepo(Context context) {
         mContext = context.getApplicationContext();
-        mDatabase = new DBHelper(context).getWritableDatabase();
-        productTable = new ProductTable();
+        dbHelper = new DBHelper(context);
+        mDatabase = dbHelper.getWritableDatabase();
+        productTable = dbHelper.getProductTable();
     }
 
     public static Product get(String string) {
