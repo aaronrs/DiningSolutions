@@ -3,9 +3,13 @@ package net.astechdesign.diningsolutions.database.tables;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import static android.provider.BaseColumns._ID;
@@ -68,7 +72,18 @@ public class OrderTable extends CMSTable<Order> {
         }
     }
 
-    public Order getOrder(UUID id) {
-        return null;
+    public List<Order> getOrders(UUID customerId) {
+        List<Order> orders = new ArrayList<>();
+        orders.add(new Order(UUID.randomUUID(),
+                customerId,
+                new DSDDate(),
+                "123",
+                Collections.<OrderItem>emptyList()));
+        orders.add(new Order(UUID.randomUUID(),
+                customerId,
+                new DSDDate(),
+                "123",
+                Collections.<OrderItem>emptyList()));
+        return orders;
     }
 }

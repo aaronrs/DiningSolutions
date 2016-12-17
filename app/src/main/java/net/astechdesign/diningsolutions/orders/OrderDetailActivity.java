@@ -11,8 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
-import net.astechdesign.diningsolutions.orders.OrderListActivity;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
@@ -51,8 +49,8 @@ public class OrderDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(OrderDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(OrderDetailFragment.ARG_ITEM_ID));
+            arguments.putString(OrderDetailFragment.ARG_ORDER,
+                    getIntent().getStringExtra(OrderDetailFragment.ARG_ORDER));
             OrderDetailFragment fragment = new OrderDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

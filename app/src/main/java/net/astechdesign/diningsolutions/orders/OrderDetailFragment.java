@@ -2,8 +2,10 @@ package net.astechdesign.diningsolutions.orders;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,7 @@ import java.util.UUID;
 
 public class OrderDetailFragment extends Fragment {
 
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_ORDER = "order";
 
     private Order mItem;
 
@@ -32,8 +34,8 @@ public class OrderDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItem = OrderRepo.get(getActivity(), (UUID)getArguments().getSerializable(ARG_ITEM_ID));
+        if (getArguments().containsKey(ARG_ORDER)) {
+            mItem = (Order)getArguments().getSerializable(ARG_ORDER);
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
@@ -48,13 +50,25 @@ public class OrderDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.order_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
+        View recyclerView = rootView.findViewById(R.id.product_list);
+        assert recyclerView != null;
+        setupRecyclerView((RecyclerView) recyclerView);
+
+
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.order_detail_name)).setText(mItem.id.toString());
-            ((TextView) rootView.findViewById(R.id.order_detail_phone)).setText(mItem.customerId.toString());
-            ((TextView) rootView.findViewById(R.id.order_detail_email)).setText(mItem.created.toString());
+            setFields(rootView, R.id.order_detail_name, mItem.id.toString());
+            setFields(rootView, R.id.order_detail_phone, mItem.customerId.toString());
+            setFields(rootView, R.id.order_detail_email, mItem.created.toString());
         }
 
         return rootView;
+    }
+
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+//        recyclerView.setAdapter(new OrderListActivity.SimpleItemRecyclerViewAdapter(OrderRepo.get(this).getmOrders()));
+    }
+
+    private void setFields(View rootView, int id, String text) {
+        ((TextView) rootView.findViewById(id)).setText(text);
     }
 }

@@ -24,12 +24,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        orderTable = new OrderTable();
         productTable = new ProductTable();
         customerTable = new CustomerTable();
-        tables.add(orderTable);
+        orderTable = new OrderTable();
         tables.add(productTable);
         tables.add(customerTable);
+        tables.add(orderTable);
     }
 
     @Override

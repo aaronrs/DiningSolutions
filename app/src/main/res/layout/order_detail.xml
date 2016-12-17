@@ -1,31 +1,148 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/order_detail_name"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:padding="16dp" />
-    <TextView
-        android:id="@+id/order_detail_phone"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp" />
-    <TextView
-        android:id="@+id/order_detail_email"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:orientation="horizontal"
+        android:layout_width="match_parent">
 
-    <ListView
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="@dimen/detail_labels"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="16dp"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/order_detail_name"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:text="Aaron &amp; Anita Southwell" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/product_list" />
+        android:orientation="horizontal">
+
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="@dimen/detail_labels"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="16dp"
+            android:text="Address" />
+
+        <TextView
+            android:id="@+id/order_detail_phone"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="@dimen/detail_labels"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="16dp"
+            android:text="Email" />
+
+        <TextView
+            android:id="@+id/order_detail_email"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/back" >
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                style="?android:attr/textAppearanceMedium"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Produce Purchased" />
+
+            <TextView
+                style="?android:attr/textAppearanceMedium"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Batch No."
+                android:layout_width="150dp" />
+
+            <TextView
+                style="?android:attr/textAppearanceMedium"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Price"
+                android:layout_width="150dp" />
+
+            <TextView
+                style="?android:attr/textAppearanceMedium"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Quantity"
+                android:layout_width="100dp" />
+
+            <TextView
+                style="?android:attr/textAppearanceMedium"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Cost"
+                android:layout_width="150dp" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <include layout="@layout/product_list" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                style="?android:attr/textAppearanceMedium"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="16dp"
+                android:text="Total"
+                android:layout_width="750dp" />
+
+            <TextView
+                android:id="@+id/order_detail_total"
+                style="?android:attr/textAppearanceMedium"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:padding="16dp" />
+
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

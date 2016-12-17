@@ -46,11 +46,11 @@ public class OrderRepo {
         orderTable.addOrder(mDatabase, order);
     }
 
-    public Order getOrder(UUID id) {
-        return orderTable.getOrder(id);
+    public List<Order> getOrders(UUID customerId) {
+        return orderTable.getOrders(customerId);
     }
 
-    public static Order get(FragmentActivity activity, UUID serializable) {
-        return get(activity).getOrder(serializable);
+    public static List<Order> get(FragmentActivity activity, UUID customerId) {
+        return get(activity).getOrders(customerId);
     }
 }
