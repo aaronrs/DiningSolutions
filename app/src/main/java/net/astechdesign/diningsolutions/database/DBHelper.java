@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import net.astechdesign.diningsolutions.database.tables.CMSTable;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
+import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.database.tables.ProductTable;
 
@@ -16,20 +17,30 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "orders";
+    private static DBHelper instance;
 
     private final List<CMSTable<?>> tables = new ArrayList<>();
     private final OrderTable orderTable;
     private final ProductTable productTable;
     private final CustomerTable customerTable;
+    private final OrderItemTable orderItemTable;
 
-    public DBHelper(Context context) {
+    public static DBHelper getDBHelper(Context context) {
+        if (instance == null) {
+            instance = new DBHelper(context);
+        }
+        return instance;
+    }
+    private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         productTable = new ProductTable();
-        customerTable = new CustomerTable();
-        orderTable = new OrderTable();
+        orderItemTable = new OrderItemTable();
+        orderTable = new OrderTable(orderItemTable);
+        customerTable = new CustomerTable(orderTable);
         tables.add(productTable);
         tables.add(customerTable);
         tables.add(orderTable);
+        tables.add(orderItemTable);
     }
 
     @Override
@@ -52,5 +63,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public ProductTable getProductTable() {
         return productTable;
+    }
+
+    public OrderTable getOrderTable() {
+        return null;
     }
 }

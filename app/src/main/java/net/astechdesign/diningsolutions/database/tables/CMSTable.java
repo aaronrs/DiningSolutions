@@ -5,21 +5,32 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Model;
 
+import java.util.List;
 import java.util.UUID;
 
 public abstract class CMSTable<T extends Model> {
 
-    String DB_DATE_FORMAT = "yyyy-MM-dd";
-    String DB_TIME_FORMAT = "HH:mm:ss";
+    public static final String ID = "id";
 
-    public abstract void create(SQLiteDatabase db);
-    public abstract void upgrade(SQLiteDatabase db, int oldVersion, int newVersion);
+    private final String tableName;
+    private final java.lang.String createTable;
 
-    ContentValues getInsertValues(T model) {
-        return getInsertValues(model.getId(), model);
+    protected CMSTable(String tableName, String createTable) {
+        this.tableName = tableName;
+        this.createTable = createTable;
     }
 
-    protected abstract ContentValues getInsertValues(UUID id, T model);
+    public void create(SQLiteDatabase db) {
+        try {
+            db.execSQL(createTable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public abstract void upgrade(SQLiteDatabase db, int oldVersion, int newVersion);
+
+    protected abstract ContentValues getInsertValues(T model);
 
     public void addOrUpdate(SQLiteDatabase mDatabase, T model) {
         if (model.getId() == null) {
@@ -30,14 +41,20 @@ public abstract class CMSTable<T extends Model> {
     }
 
     private void add(SQLiteDatabase mDatabase, T model) {
-        ContentValues insertValues = getInsertValues(UUID.randomUUID(), model);
-        mDatabase.insert(getTableName(), null, insertValues);
+        ContentValues insertValues = getInsertValues(model);
+        insertValues.put("id", UUID.randomUUID().toString());
+        mDatabase.insert(tableName, null, insertValues);
+        addOrUpdateChild(mDatabase, model);
     }
 
     private void update(SQLiteDatabase mDatabase, T model) {
-        mDatabase.update(getTableName(), getInsertValues(model), "id = ?", new String[]{model.getId().toString()});
+        ContentValues insertValues = getInsertValues(model);
+        insertValues.put("id", model.getId().toString());
+        mDatabase.update(tableName, insertValues, "id = ?", new String[]{model.getId().toString()});
+        addOrUpdateChild(mDatabase, model);
     }
 
-    protected abstract String getTableName();
-
+    protected void addOrUpdateChild(SQLiteDatabase mDatabase, T model) {
+        List<Model> children = model.getChildren();
+    }
 }

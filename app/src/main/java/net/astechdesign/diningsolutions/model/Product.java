@@ -1,5 +1,6 @@
 package net.astechdesign.diningsolutions.model;
 
+import java.util.List;
 import java.util.UUID;
 
 public class Product extends Model {
@@ -27,5 +28,10 @@ public class Product extends Model {
     @Override
     public UUID getId() {
         return id;
+    }
+
+    @Override
+    public List getChildren() {
+        return null;
     }
 }

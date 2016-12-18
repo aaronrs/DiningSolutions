@@ -1,6 +1,8 @@
 package net.astechdesign.diningsolutions.model;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class Address extends Model implements Serializable {
@@ -26,5 +28,10 @@ public class Address extends Model implements Serializable {
     @Override
     public UUID getId() {
         return id;
+    }
+
+    @Override
+    public List<Model> getChildren() {
+        return Collections.emptyList();
     }
 }

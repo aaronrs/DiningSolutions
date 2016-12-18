@@ -1,7 +1,10 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 public class DbQuery {
-    public static final String CUSTOMER_LIST = "" +
-            " SELECT * from " + CustomerTable.TABLE_NAME + ", " + AddressTable.TABLE_NAME +
-            " WHERE " + CustomerTable.TABLE_NAME + "." + CustomerTable.ID + " = " + AddressTable.TABLE_NAME + "." + AddressTable.CUSTOMER_ID;
+
+    private static String query = "SELECT * from %s WHERE %s = ?";
+
+    public static String ORDER_LIST = String.format(query, OrderTable.TABLE_NAME, "customer_id");
+
+    public static String ORDER_ITEM_LIST = String.format(query, OrderItemTable.TABLE_NAME, "order_id");
 }

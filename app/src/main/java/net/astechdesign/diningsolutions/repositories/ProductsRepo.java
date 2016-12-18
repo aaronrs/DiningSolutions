@@ -20,7 +20,7 @@ public class ProductsRepo {
 
     private ProductsRepo(Context context) {
         mContext = context.getApplicationContext();
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getDBHelper(context);
         mDatabase = dbHelper.getWritableDatabase();
         productTable = dbHelper.getProductTable();
     }

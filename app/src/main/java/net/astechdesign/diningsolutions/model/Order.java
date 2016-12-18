@@ -44,4 +44,9 @@ public class Order extends Model {
     public UUID getId() {
         return id;
     }
+
+    @Override
+    public List<OrderItem> getChildren() {
+        return orderItems;
+    }
 }

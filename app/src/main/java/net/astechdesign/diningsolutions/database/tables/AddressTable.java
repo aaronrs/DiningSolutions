@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Address;
+import net.astechdesign.diningsolutions.model.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,8 @@ import java.util.UUID;
 
 public class AddressTable extends CMSTable<Address> {
 
-    static final String TABLE_NAME = "address";
+    private static String TABLE_NAME = "address";
 
-    public static final String ID = "id";
     public static final String CUSTOMER_ID = "customer_id";
     public static final String ADDRESS_NAME = "house_name";
     public static final String ADDRESS_LINE1 = "line1";
@@ -23,19 +23,19 @@ public class AddressTable extends CMSTable<Address> {
     public static final String ADDRESS_COUNTY = "county";
     public static final String ADDRESS_POSTCODE = "postcode";
 
-    @Override
-    public void create(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_NAME + " (" +
-                ID + " TEXT, " +
-                CUSTOMER_ID + " TEXT, " +
-                ADDRESS_NAME + " TEXT, " +
-                ADDRESS_LINE1 + " TEXT, " +
-                ADDRESS_LINE2 + " TEXT, " +
-                ADDRESS_TOWN + " TEXT, " +
-                ADDRESS_COUNTY + " TEXT, " +
-                ADDRESS_POSTCODE + " TEXT " +
-                ")";
-        db.execSQL(query);
+    private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+            ID + " TEXT, " +
+            CUSTOMER_ID + " TEXT, " +
+            ADDRESS_NAME + " TEXT, " +
+            ADDRESS_LINE1 + " TEXT, " +
+            ADDRESS_LINE2 + " TEXT, " +
+            ADDRESS_TOWN + " TEXT, " +
+            ADDRESS_COUNTY + " TEXT, " +
+            ADDRESS_POSTCODE + " TEXT " +
+            ")";
+
+    protected AddressTable() {
+        super(TABLE_NAME, CREATE_TABLE);
     }
 
     @Override
@@ -44,14 +44,8 @@ public class AddressTable extends CMSTable<Address> {
     }
 
     @Override
-    protected String getTableName() {
-        return TABLE_NAME;
-    }
-
-    @Override
-    protected ContentValues getInsertValues(UUID id, Address address) {
+    protected ContentValues getInsertValues(Address address) {
         ContentValues values = new ContentValues();
-        values.put(ID, id.toString());
         values.put(ADDRESS_NAME, address.name);
         values.put(ADDRESS_LINE1, address.line1);
         values.put(ADDRESS_LINE2, address.line2);
@@ -80,20 +74,12 @@ public class AddressTable extends CMSTable<Address> {
         return addressCursorWrapper.getAddress();
     }
 
-    public void addOrUpdate(SQLiteDatabase mDatabase, UUID customerId, Address address) {
-        if (address.id == null) {
-           add(mDatabase, customerId, address);
-        } else {
-            update(mDatabase, customerId, address);
-        }
-    }
-
-    public void add(SQLiteDatabase mDatabase, UUID customerId, Address address) {
-        ContentValues insertValues = getInsertValues(customerId, address);
+    public void add(SQLiteDatabase mDatabase, Address address) {
+        ContentValues insertValues = getInsertValues(address);
         mDatabase.insert(TABLE_NAME, null, insertValues);
     }
 
     public void update(SQLiteDatabase mDatabase, UUID customerId, Address address) {
-        mDatabase.update(TABLE_NAME, getInsertValues(customerId, address), ID + " = ?", new String[]{address.id.toString()});
+        mDatabase.update(TABLE_NAME, getInsertValues(address), ID + " = ?", new String[]{address.id.toString()});
     }
 }

@@ -100,7 +100,7 @@ public class OrderListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(OrderRepo.get(this).getOrders(customer.getId())));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(OrderRepo.get(this).getOrders(customer)));
     }
 
     public class SimpleItemRecyclerViewAdapter

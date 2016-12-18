@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
-import net.astechdesign.diningsolutions.database.tables.AddressTable;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
 
@@ -21,7 +20,7 @@ public class CustomerRepo {
 
     private CustomerRepo(Context context) {
         this.mContext = context.getApplicationContext();
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getDBHelper(context);
         mDatabase = dbHelper.getWritableDatabase();
         customerTable = dbHelper.getCustomerTable();
     }

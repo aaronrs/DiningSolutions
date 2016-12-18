@@ -1,19 +1,20 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
-import java.text.SimpleDateFormat;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderItemTable extends CMSTable<OrderItem> {
 
     public static final String TABLE_NAME = "orderItems";
 
-    public static final String ID = "id";
     public static final String ORDER_ID = "order_id";
     public static final String PRODUCT_NAME = "product_name";
     public static final String PRODUCT_BATCH = "batch";
@@ -21,23 +22,19 @@ public class OrderItemTable extends CMSTable<OrderItem> {
     public static final String PRODUCT_PRICE = "price";
     public static final String DELIVERY_DATE = "delivery_date";
 
-    @Override
-    public void create(SQLiteDatabase db) {
-        String orderItemTable = "CREATE TABLE " + TABLE_NAME + " (" +
-                BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ID + " TEXT, " +
-                ORDER_ID + " TEXT, " +
-                PRODUCT_NAME + " TEXT, " +
-                PRODUCT_BATCH + " TEXT, " +
-                PRODUCT_QUANTITY + " NUMBER, " +
-                PRODUCT_PRICE + " NUMBER, " +
-                DELIVERY_DATE + " DATE" +
-                ")";
-        try {
-            db.execSQL(orderItemTable);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+            BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            ID + " TEXT, " +
+            ORDER_ID + " TEXT, " +
+            PRODUCT_NAME + " TEXT, " +
+            PRODUCT_BATCH + " TEXT, " +
+            PRODUCT_QUANTITY + " NUMBER, " +
+            PRODUCT_PRICE + " NUMBER, " +
+            DELIVERY_DATE + " DATE" +
+            ")";
+
+    public OrderItemTable() {
+        super(TABLE_NAME, CREATE_TABLE);
     }
 
     @Override
@@ -45,20 +42,30 @@ public class OrderItemTable extends CMSTable<OrderItem> {
 
     }
 
-    @Override
-    protected String getTableName() {
-        return TABLE_NAME;
+    protected ContentValues getInsertValues(OrderItem item) {
+        ContentValues values = new ContentValues();
+        values.put(ID, item.getId().toString());
+        values.put(ORDER_ID, item.orderId.toString());
+        values.put(PRODUCT_NAME, item.name);
+        values.put(PRODUCT_BATCH, item.batch);
+        values.put(PRODUCT_QUANTITY, item.price);
+        values.put(PRODUCT_PRICE, item.quantity);
+        values.put(DELIVERY_DATE, item.deliveryDate.dbFormat());
+        return values;
     }
 
-    protected ContentValues getInsertValues(UUID id, OrderItem orderItem) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DB_DATE_FORMAT);
+    @Override
+    protected void addOrUpdateChild(SQLiteDatabase mDatabase, OrderItem model) {
+    }
 
-        ContentValues values = new ContentValues();
-        values.put(ORDER_ID, id.toString());
-        values.put(PRODUCT_NAME, orderItem.name);
-        values.put(PRODUCT_BATCH, orderItem.batch);
-        values.put(PRODUCT_QUANTITY, orderItem.price);
-        values.put(PRODUCT_PRICE, orderItem.quantity);
-        return values;
+    public List<OrderItem> getOrderItems(SQLiteDatabase mDatabase, Order order) {
+        List<OrderItem> orderItems = new ArrayList<>();
+        Cursor orderItemCursor = mDatabase.rawQuery(DbQuery.ORDER_ITEM_LIST, new String[]{order.getId().toString()});
+        orderItemCursor.moveToFirst();
+        while (!orderItemCursor.isAfterLast()) {
+            OrderItemCursorWrapper cursorWrapper = new OrderItemCursorWrapper(orderItemCursor);
+            orderItems.add(cursorWrapper.getOrderItem());
+        }
+        return orderItems;
     }
 }

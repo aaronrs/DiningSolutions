@@ -15,7 +15,6 @@ public class CustomerTable extends CMSTable<Customer> {
 
     static final String TABLE_NAME = "customers";
 
-    public static final String ID = "id";
     public static final String CUSTOMER_NAME = "name";
     public static final String CUSTOMER_EMAIL = "email";
     public static final String CUSTOMER_PHONE = "phone";
@@ -29,24 +28,24 @@ public class CustomerTable extends CMSTable<Customer> {
     public static final String ADDRESS_COUNTY = "county";
     public static final String ADDRESS_POSTCODE = "postcode";
 
-    @Override
-    public void create(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_NAME + " (" +
-                ID + " INTEGER, " +
-                CUSTOMER_NAME + " INTEGER, " +
-                CUSTOMER_EMAIL + " TEXT, " +
-                CUSTOMER_PHONE + " TEXT, " +
-                CUSTOMER_CURRENT + " INTEGER, " +
-                CUSTOMER_CREATED + " TEXT, " +
-                CUSTOMER_REFERRAL + " TEXT, " +
-                ADDRESS_NAME + " TEXT, " +
-                ADDRESS_LINE1 + " TEXT, " +
-                ADDRESS_LINE2 + " TEXT, " +
-                ADDRESS_TOWN + " TEXT, " +
-                ADDRESS_COUNTY + " TEXT, " +
-                ADDRESS_POSTCODE + " TEXT " +
-                ")";
-        db.execSQL(query);
+    private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+            ID + " INTEGER, " +
+            CUSTOMER_NAME + " INTEGER, " +
+            CUSTOMER_EMAIL + " TEXT, " +
+            CUSTOMER_PHONE + " TEXT, " +
+            CUSTOMER_CURRENT + " INTEGER, " +
+            CUSTOMER_CREATED + " TEXT, " +
+            CUSTOMER_REFERRAL + " TEXT, " +
+            ADDRESS_NAME + " TEXT, " +
+            ADDRESS_LINE1 + " TEXT, " +
+            ADDRESS_LINE2 + " TEXT, " +
+            ADDRESS_TOWN + " TEXT, " +
+            ADDRESS_COUNTY + " TEXT, " +
+            ADDRESS_POSTCODE + " TEXT " +
+            ")";
+
+    public CustomerTable(OrderTable orderTable) {
+        super(TABLE_NAME, CREATE_TABLE);
     }
 
     @Override
@@ -54,9 +53,10 @@ public class CustomerTable extends CMSTable<Customer> {
 
     }
 
-    protected ContentValues getInsertValues(UUID contactId, Customer customer) {
+    protected ContentValues getInsertValues(Customer customer) {
+        UUID customerId = customer.getId() == null ? UUID.randomUUID() : customer.getId();
         ContentValues values = new ContentValues();
-        values.put(ID, contactId.toString());
+        values.put(ID, customerId.toString());
         values.put(CUSTOMER_NAME, customer.name);
         values.put(CUSTOMER_EMAIL, customer.email.address);
         values.put(CUSTOMER_PHONE, customer.phone.number);
@@ -95,8 +95,7 @@ public class CustomerTable extends CMSTable<Customer> {
     }
 
     private void add(SQLiteDatabase mDatabase, Customer customer) {
-        UUID customerId = UUID.randomUUID();
-        ContentValues insertValues = getInsertValues(customerId, customer);
+        ContentValues insertValues = getInsertValues(customer);
         mDatabase.insert(TABLE_NAME, null, insertValues);
     }
 
@@ -105,8 +104,6 @@ public class CustomerTable extends CMSTable<Customer> {
     }
 
     @Override
-    protected String getTableName() {
-        return TABLE_NAME;
+    protected void addOrUpdateChild(SQLiteDatabase mDatabase, Customer model) {
     }
-
 }

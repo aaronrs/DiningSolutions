@@ -2,6 +2,7 @@ package net.astechdesign.diningsolutions.model;
 
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 public class Customer extends Model implements Serializable {
@@ -14,6 +15,7 @@ public class Customer extends Model implements Serializable {
     public final DSDDate created;
     public final String referral;
     public final Address address;
+    public List<Order> orderList;
 
     public Customer(UUID id, String name, Email email, Phone phone, boolean current, DSDDate created, String referral, Address address) {
         this.id = id;
@@ -40,5 +42,10 @@ public class Customer extends Model implements Serializable {
     @Override
     public UUID getId() {
         return id;
+    }
+
+    @Override
+    public List<Order> getChildren() {
+        return orderList;
     }
 }
