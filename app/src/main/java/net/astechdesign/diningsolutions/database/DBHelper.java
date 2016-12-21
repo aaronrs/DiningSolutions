@@ -66,6 +66,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public OrderTable getOrderTable() {
-        return null;
+        return orderTable;
     }
 }

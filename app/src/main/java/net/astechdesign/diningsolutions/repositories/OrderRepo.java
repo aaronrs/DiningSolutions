@@ -36,7 +36,11 @@ public class OrderRepo {
     }
 
     public List<Order> getOrders(Customer customer) {
-        return orderTable.getOrders(mDatabase, customer);
+        List<Order> orders = orderTable.getOrders(mDatabase, customer);
+        if (orders.isEmpty()) {
+            initDb(mContext);
+        }
+        return orders;
     }
 
     public static List<Order> get(FragmentActivity activity, Customer customer) {

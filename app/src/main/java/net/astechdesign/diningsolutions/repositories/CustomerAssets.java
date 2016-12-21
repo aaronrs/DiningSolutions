@@ -56,9 +56,9 @@ public class CustomerAssets {
                 String postcode = customerInfo[7].trim();
                 String created = customerInfo[8].trim();
 
-//                if (!name.startsWith("Southwell") || peeps.contains(name + postcode)) {
-//                    continue;
-//                }
+                if (!name.startsWith("Southwell") || peeps.contains(name + postcode)) {
+                    continue;
+                }
                 peeps.add(name + postcode);
 
                 Address address = new Address(null, house, line1, line2, town, county, postcode);

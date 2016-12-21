@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import net.astechdesign.diningsolutions.model.DSDDate;
+import net.astechdesign.diningsolutions.model.DSDDateFormatter;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 

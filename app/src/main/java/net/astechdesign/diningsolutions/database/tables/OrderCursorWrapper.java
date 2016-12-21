@@ -16,13 +16,13 @@ public class OrderCursorWrapper extends CursorWrapper {
         super(cursor);
     }
 
-    public Order getOrder(List<OrderItem> orderItems) {
+    public Order getOrder() {
         UUID id = UUID.fromString(getString(getColumnIndex(OrderTable.ID)));
         UUID customerId = UUID.fromString(getString(getColumnIndex(OrderTable.CUSTOMER_ID)));
         DSDDate orderDate = new DSDDate(getString(getColumnIndex(OrderTable.ORDER_DATE)));
         String invoiceNumber = getString(getColumnIndex(OrderTable.INVOICE_NO));
 
-        Order order = new Order(id, customerId, orderDate, invoiceNumber, orderItems);
+        Order order = new Order(id, customerId, orderDate, invoiceNumber, null);
         return order;
     }
 }
