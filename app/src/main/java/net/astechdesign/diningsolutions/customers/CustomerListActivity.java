@@ -60,10 +60,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getSupportFragmentManager();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(CustomerEditFragment.ARG_CUSTOMER, mCurrentCustomer);
                 customerEditFragment = new CustomerEditFragment();
-                customerEditFragment.setArguments(bundle);
                 customerEditFragment.setCustomer(mCurrentCustomer);
                 customerEditFragment.show(fm, ADD_CUSTOMER);
             }
@@ -109,6 +106,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
         CustomerRepo.addOrUpdate(this, customer);
         setupRecyclerView((RecyclerView) mRecyclerView);
+        showCustomerDetails(customer);
 
         Snackbar.make(findViewById(R.id.coordinatorLayout), "Edited Customer " + customer.name, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
@@ -142,19 +140,11 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        mCurrentCustomer = holder.mItem;
-                        arguments.putSerializable(CustomerDetailFragment.ARG_CUSTOMER, mCurrentCustomer);
-                        CustomerDetailFragment fragment = new CustomerDetailFragment ();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.customer_detail_container, fragment)
-                                .commit();
+                        showCustomerDetails(holder.mItem);
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, CustomerDetailActivity.class);
                         intent.putExtra(CustomerDetailFragment.ARG_CUSTOMER, holder.getId());
-
                         context.startActivity(intent);
                     }
                 }
@@ -168,32 +158,43 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
+            public final TextView mNameView;
+            public final TextView mPhoneView;
             public Customer mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.name);
-                mContentView = (TextView) view.findViewById(R.id.telephone);
+                mNameView = (TextView) view.findViewById(R.id.name);
+                mPhoneView = (TextView) view.findViewById(R.id.telephone);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mPhoneView.getText() + "'";
             }
 
             public void setItem(Customer item) {
                 this.mItem = item;
-                mIdView.setText(item.name);
-                mContentView.setText(item.phone.number);
+                mNameView.setText(item.name);
+                mPhoneView.setText(item.phone.number);
             }
 
             public UUID getId() {
                 return mItem.id;
             }
         }
+    }
+
+    private void showCustomerDetails(Customer customer) {
+        Bundle arguments = new Bundle();
+        mCurrentCustomer = customer;
+        arguments.putSerializable(CustomerDetailFragment.ARG_CUSTOMER, mCurrentCustomer);
+        CustomerDetailFragment fragment = new CustomerDetailFragment ();
+        fragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.customer_detail_container, fragment)
+                .commit();
     }
 
     public void showOrders(View view) {

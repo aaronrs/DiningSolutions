@@ -20,7 +20,6 @@ import net.astechdesign.diningsolutions.model.Phone;
 
 public class CustomerEditFragment extends DialogFragment {
 
-    public static final String ARG_CUSTOMER = "customer";
     private CustomerEditFragment.CustomerEditListener mListener;
     private Customer mCurrentCustomer;
     private TextView mNameText;
@@ -45,7 +44,6 @@ public class CustomerEditFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Customer customer = mCurrentCustomer;
-//        final Customer customer = (Customer) savedInstanceState.getSerializable(ARG_CUSTOMER);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_customer, null);
         mNameText = (TextView) view.findViewById(R.id.customer_name);
         mEmailText = (TextView) view.findViewById(R.id.customer_email);

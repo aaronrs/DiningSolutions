@@ -16,10 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-import net.astechdesign.diningsolutions.CustomerPickerFragment;
+import net.astechdesign.diningsolutions.customers.CustomerPickerFragment;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.products.ProductActivity;

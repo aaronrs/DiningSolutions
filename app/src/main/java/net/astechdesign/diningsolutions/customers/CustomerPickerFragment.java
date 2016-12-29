@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions;
+package net.astechdesign.diningsolutions.customers;
 
 
 import android.app.Activity;
@@ -10,9 +10,8 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TimePicker;
 
-import net.astechdesign.diningsolutions.model.DSDTime;
+import net.astechdesign.diningsolutions.R;
 
 public class CustomerPickerFragment extends DialogFragment {
 
