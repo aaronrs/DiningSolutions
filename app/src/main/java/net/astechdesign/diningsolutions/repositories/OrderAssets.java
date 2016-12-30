@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class OrderAssets {
 
-    public static List<Order> getOrders(Context context, UUID customerId) {
+    public static List<Order> getOrders(Context context, int customerId) {
         AssetManager assets = context.getAssets();
         InputStream is;
         try {
@@ -47,13 +47,12 @@ public class OrderAssets {
         List<Order> orderList = new ArrayList<>();
         int invoice = 1234;
         for (String key : orderMap.keySet()) {
-            List<OrderItem> items = new ArrayList<>();
-            DSDDate deliveryDate = null;
+            DSDDate deliveryDate = new DSDDate(orderMap.get(key).get(0)[1]);
+            Order order = new Order(-1, customerId, deliveryDate, "" + invoice);
             for (String[] orderInfo : orderMap.get(key)) {
-                deliveryDate = new DSDDate(orderInfo[1]);
-                items.add(new OrderItem(UUID.randomUUID(), null, orderInfo[0], 0, Integer.parseInt(orderInfo[4]), orderInfo[4], deliveryDate));
+                order.addItem(new OrderItem(-1, -1, orderInfo[0], 0, Integer.parseInt(orderInfo[4]), orderInfo[4], deliveryDate));
             }
-            orderList.add(new Order(null, customerId, deliveryDate, "" + invoice, items));
+            orderList.add(order);
             invoice++;
         }
 

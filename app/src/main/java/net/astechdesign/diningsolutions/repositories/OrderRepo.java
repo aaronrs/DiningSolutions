@@ -2,33 +2,24 @@ package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.app.FragmentActivity;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
-import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
 
 import java.util.List;
-import java.util.UUID;
 
-public class OrderRepo {
+public class OrderRepo extends Repo {
 
-    public static OrderRepo repo;
+    private static OrderRepo instance;
+
     private Context mContext;
 
     private SQLiteDatabase mDatabase;
     private OrderTable orderTable;
 
-    public static OrderRepo get(Context context) {
-        if (repo == null) {
-            repo = new OrderRepo(context);
-        }
-        return repo;
-    }
-
-    private OrderRepo(Context context) {
+    public OrderRepo(Context context) {
         mContext = context.getApplicationContext();
         DBHelper dbHelper = DBHelper.getDBHelper(context);
         mDatabase = dbHelper.getWritableDatabase();
@@ -43,9 +34,17 @@ public class OrderRepo {
         return orders;
     }
 
-    public static List<Order> get(FragmentActivity activity, Customer customer) {
-        return get(activity).getOrders(customer);
+    public static List<Order> get(Context context, Customer customer) {
+        return getInstance(context).getOrders(customer);
     }
+
+    private static OrderRepo getInstance(Context context) {
+        if (instance == null) {
+            instance = new OrderRepo(context);
+        }
+        return instance;
+    }
+
     private void initDb(Context context) {
         List<Order> productList = OrderAssets.getOrders(context, CustomerRepo.get(context).get(0).id);
         for (Order order : productList) {

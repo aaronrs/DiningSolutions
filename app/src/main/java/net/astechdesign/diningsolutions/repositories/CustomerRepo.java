@@ -18,7 +18,7 @@ public class CustomerRepo {
     private final CustomerTable customerTable;
     private final DBHelper dbHelper;
 
-    private CustomerRepo(Context context) {
+    public CustomerRepo(Context context) {
         this.mContext = context.getApplicationContext();
         dbHelper = DBHelper.getDBHelper(context);
         mDatabase = dbHelper.getWritableDatabase();

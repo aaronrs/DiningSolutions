@@ -17,8 +17,8 @@ public class OrderItemCursorWrapper extends CursorWrapper {
     }
 
     public OrderItem getOrderItem() {
-        UUID id = UUID.fromString(getString(getColumnIndex(OrderItemTable.ID)));
-        UUID orderId = UUID.fromString(getString(getColumnIndex(OrderItemTable.ORDER_ID)));
+        int id = getInt(getColumnIndex(OrderItemTable._ID));
+        int orderId = getInt(getColumnIndex(OrderItemTable.ORDER_ID));
         String itemName = getString(getColumnIndex(OrderItemTable.PRODUCT_NAME));
         String itemBatch = getString(getColumnIndex(OrderItemTable.PRODUCT_BATCH));
         int itemQuantity = getInt(getColumnIndex(OrderItemTable.PRODUCT_QUANTITY));

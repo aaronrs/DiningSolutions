@@ -1,13 +1,7 @@
 package net.astechdesign.diningsolutions.model;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+public class Address extends Model {
 
-public class Address extends Model implements Serializable {
-
-    public final UUID id;
     public final String name;
     public final String line1;
     public final String line2;
@@ -15,23 +9,13 @@ public class Address extends Model implements Serializable {
     public final String county;
     public final String postcode;
 
-    public Address(UUID id, String name, String line1, String line2, String town, String county, String postcode) {
-        this.id = id;
+    public Address(int id, String name, String line1, String line2, String town, String county, String postcode) {
+        super(id);
         this.name = name;
         this.line1 = line1;
         this.line2 = line2;
         this.town = town;
         this.county = county;
         this.postcode = postcode;
-    }
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-    @Override
-    public List<Model> getChildren() {
-        return Collections.emptyList();
     }
 }

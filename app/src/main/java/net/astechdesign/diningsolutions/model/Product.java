@@ -1,18 +1,16 @@
 package net.astechdesign.diningsolutions.model;
 
-import java.util.List;
-import java.util.UUID;
-
 public class Product extends Model {
 
-    public final UUID id;
+    public final int id;
     public final String name;
     public final String description;
     public final double price;
     public final String barcode;
     private final int deleted;
 
-    public Product(UUID id, String name, String description, double price, String barcode, int deleted) {
+    public Product(int id, String name, String description, double price, String barcode, int deleted) {
+        super(id);
         this.id = id;
         this.name = name;
         this.description = description;
@@ -23,15 +21,5 @@ public class Product extends Model {
 
     public boolean isDeleted() {
         return deleted == 1;
-    }
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-    @Override
-    public List getChildren() {
-        return null;
     }
 }

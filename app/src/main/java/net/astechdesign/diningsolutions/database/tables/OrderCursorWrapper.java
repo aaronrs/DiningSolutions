@@ -17,12 +17,12 @@ public class OrderCursorWrapper extends CursorWrapper {
     }
 
     public Order getOrder() {
-        UUID id = UUID.fromString(getString(getColumnIndex(OrderTable.ID)));
-        UUID customerId = UUID.fromString(getString(getColumnIndex(OrderTable.CUSTOMER_ID)));
+        int id = getInt(getColumnIndex(OrderTable._ID));
+        int customerId = getInt(getColumnIndex(OrderTable.CUSTOMER_ID));
         DSDDate orderDate = new DSDDate(getString(getColumnIndex(OrderTable.ORDER_DATE)));
         String invoiceNumber = getString(getColumnIndex(OrderTable.INVOICE_NO));
 
-        Order order = new Order(id, customerId, orderDate, invoiceNumber, null);
+        Order order = new Order(id, customerId, orderDate, invoiceNumber);
         return order;
     }
 }

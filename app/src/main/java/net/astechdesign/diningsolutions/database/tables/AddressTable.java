@@ -24,7 +24,7 @@ public class AddressTable extends CMSTable<Address> {
     public static final String ADDRESS_POSTCODE = "postcode";
 
     private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            ID + " TEXT, " +
+            _ID + " INTEGER PRIMARY KEY," +
             CUSTOMER_ID + " TEXT, " +
             ADDRESS_NAME + " TEXT, " +
             ADDRESS_LINE1 + " TEXT, " +
@@ -80,6 +80,6 @@ public class AddressTable extends CMSTable<Address> {
     }
 
     public void update(SQLiteDatabase mDatabase, UUID customerId, Address address) {
-        mDatabase.update(TABLE_NAME, getInsertValues(address), ID + " = ?", new String[]{address.id.toString()});
+        mDatabase.update(TABLE_NAME, getInsertValues(address), _ID + " = ?", new String[]{Integer.toString(address.id)});
     }
 }

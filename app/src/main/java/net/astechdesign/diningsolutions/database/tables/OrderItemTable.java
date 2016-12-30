@@ -3,7 +3,6 @@ package net.astechdesign.diningsolutions.database.tables;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
 
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
@@ -23,8 +22,7 @@ public class OrderItemTable extends CMSTable<OrderItem> {
     public static final String DELIVERY_DATE = "delivery_date";
 
     private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            ID + " TEXT, " +
+            _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             ORDER_ID + " TEXT, " +
             PRODUCT_NAME + " TEXT, " +
             PRODUCT_BATCH + " TEXT, " +
@@ -44,8 +42,7 @@ public class OrderItemTable extends CMSTable<OrderItem> {
 
     protected ContentValues getInsertValues(OrderItem item) {
         ContentValues values = new ContentValues();
-        values.put(ID, item.getId().toString());
-        values.put(ORDER_ID, item.orderId.toString());
+        values.put(ORDER_ID, item.orderId);
         values.put(PRODUCT_NAME, item.name);
         values.put(PRODUCT_BATCH, item.batch);
         values.put(PRODUCT_QUANTITY, item.price);
@@ -54,13 +51,9 @@ public class OrderItemTable extends CMSTable<OrderItem> {
         return values;
     }
 
-    @Override
-    protected void addOrUpdateChild(SQLiteDatabase mDatabase, OrderItem model) {
-    }
-
     public List<OrderItem> getOrderItems(SQLiteDatabase mDatabase, Order order) {
         List<OrderItem> orderItems = new ArrayList<>();
-        Cursor orderItemCursor = mDatabase.rawQuery(DbQuery.ORDER_ITEM_LIST, new String[]{order.getId().toString()});
+        Cursor orderItemCursor = mDatabase.rawQuery(DbQuery.getSelectWhere(TABLE_NAME, ORDER_ID), new String[]{Integer.toString(order.getId())});
         orderItemCursor.moveToFirst();
         while (!orderItemCursor.isAfterLast()) {
             OrderItemCursorWrapper cursorWrapper = new OrderItemCursorWrapper(orderItemCursor);

@@ -15,7 +15,7 @@ public class AddressCursorWrapper extends CursorWrapper {
     }
 
     public Address getAddress() {
-        UUID id = UUID.fromString(getString(getColumnIndex(AddressTable.ID)));
+        int id = getInt(getColumnIndex(AddressTable._ID));
         String name = getString(getColumnIndex(AddressTable.ADDRESS_NAME));
         String line1 = getString(getColumnIndex(AddressTable.ADDRESS_LINE1));
         String line2 = getString(getColumnIndex(AddressTable.ADDRESS_LINE2));

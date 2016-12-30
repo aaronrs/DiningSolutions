@@ -1,12 +1,16 @@
 package net.astechdesign.diningsolutions.model;
 
-import java.util.List;
-import java.util.UUID;
+import java.io.Serializable;
 
-public abstract class Model {
+public abstract class Model implements Serializable {
 
-    public abstract UUID getId();
+    public final int id;
 
-    public abstract List getChildren();
+    protected Model(int id) {
+        this.id = id;
+    }
 
+    public int getId() {
+        return id;
+    }
 }

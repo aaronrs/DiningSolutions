@@ -4,7 +4,11 @@ public class DbQuery {
 
     private static String query = "SELECT * from %s WHERE %s = ?";
 
-    public static String ORDER_LIST = "SELECT * from " + OrderTable.TABLE_NAME; //String.format(query, OrderTable.TABLE_NAME, "customer_id");
+    public static String SELECT_WHERE = "SELECT * from ? WHERE ? = ?";
 
     public static String ORDER_ITEM_LIST = String.format(query, OrderItemTable.TABLE_NAME, "order_id");
+
+    public static String getSelectWhere(String table, String idColumn) {
+        return String.format(query, table, idColumn);
+    }
 }

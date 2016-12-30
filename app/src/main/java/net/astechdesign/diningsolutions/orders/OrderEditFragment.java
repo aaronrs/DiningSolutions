@@ -43,7 +43,7 @@ public class OrderEditFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Customer newCustomer = null;
+                        Customer newCustomer = customer;
                         mListener.onDialogPositiveClick(dialog, newCustomer);
                     }
                 })

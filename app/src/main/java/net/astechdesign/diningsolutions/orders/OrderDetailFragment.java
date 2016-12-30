@@ -56,8 +56,8 @@ public class OrderDetailFragment extends Fragment {
 
 
         if (mItem != null) {
-            setFields(rootView, R.id.order_detail_name, mItem.id.toString());
-            setFields(rootView, R.id.order_detail_phone, mItem.customerId.toString());
+            setFields(rootView, R.id.order_detail_name, Integer.toString(mItem.id));
+            setFields(rootView, R.id.order_detail_phone, Integer.toString(mItem.customerId));
             setFields(rootView, R.id.order_detail_email, mItem.created.toString());
         }
 

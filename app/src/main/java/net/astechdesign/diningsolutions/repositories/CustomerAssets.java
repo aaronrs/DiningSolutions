@@ -61,8 +61,8 @@ public class CustomerAssets {
                 }
                 peeps.add(name + postcode);
 
-                Address address = new Address(null, house, line1, line2, town, county, postcode);
-                customerList.add(new Customer(null, name, email, "", true, DSDDate.fileCreate(created), "", address));
+                Address address = new Address(-1, house, line1, line2, town, county, postcode);
+                customerList.add(new Customer(-1, name, email, "", true, DSDDate.fileCreate(created), "", address));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

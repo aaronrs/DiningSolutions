@@ -5,15 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.Model;
 import net.astechdesign.diningsolutions.model.Order;
-import net.astechdesign.diningsolutions.model.OrderItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
-import static android.provider.BaseColumns._ID;
 
 public class OrderTable extends CMSTable<Order> {
 
@@ -23,29 +18,25 @@ public class OrderTable extends CMSTable<Order> {
     public static final String ORDER_DATE = "order_date";
     public static final String INVOICE_NO = "invoice_no";
 
-    private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+    private static String CREATE_TABLE = "" +
+            "CREATE TABLE " + TABLE_NAME + " (" +
             _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            ID + " TEXT, " +
             CUSTOMER_ID + " INTEGER, " +
             ORDER_DATE + " DATE, " +
             INVOICE_NO + " TEXT " +
             ")";
 
-    private final OrderItemTable orderItemTable;
-
-    public OrderTable(OrderItemTable orderItemTable) {
+    public OrderTable() {
         super(TABLE_NAME, CREATE_TABLE);
-        this.orderItemTable = orderItemTable;
     }
 
     @Override
     public void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 
     public ContentValues getInsertValues(Order order) {
         ContentValues values = new ContentValues();
-        values.put(OrderTable.CUSTOMER_ID, order.customerId.toString());
+        values.put(OrderTable.CUSTOMER_ID, order.customerId);
         values.put(OrderTable.INVOICE_NO, order.invoiceNumber);
         values.put(OrderTable.ORDER_DATE, order.created.dbFormat());
         return values;
@@ -53,11 +44,12 @@ public class OrderTable extends CMSTable<Order> {
 
     public List<Order> getOrders(SQLiteDatabase mDatabase, Customer customer) {
         List<Order> orders = new ArrayList<>();
-        Cursor orderCursor = mDatabase.rawQuery(DbQuery.ORDER_LIST, null );//new String[]{customer.getId().toString()});
+        Cursor orderCursor = mDatabase.rawQuery(DbQuery.getSelectWhere(TABLE_NAME, CUSTOMER_ID), new String[]{Integer.toString(customer.getId())});
         orderCursor.moveToFirst();
         while (!orderCursor.isAfterLast()) {
             OrderCursorWrapper cursorWrapper = new OrderCursorWrapper(orderCursor);
             orders.add(cursorWrapper.getOrder());
+            orderCursor.moveToNext();
         }
         return orders;
     }

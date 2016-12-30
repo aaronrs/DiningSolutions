@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Product;
-import net.astechdesign.diningsolutions.repositories.ProductsRepo;
+import net.astechdesign.diningsolutions.repositories.ProductRepo;
 
 /**
  * A fragment representing a single Product detail screen.
  * This fragment is either contained in a {@link ProductListActivity}
- * in two-pane mode (on tablets) or a {@link ProductDetailActivity}
+ * in two-pane mode (on tablets) or a {@link ProductListActivity}
  * on handsets.
  */
 public class ProductDetailFragment extends Fragment {
@@ -42,11 +42,12 @@ public class ProductDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ProductRepo productRepo = new ProductRepo(getContext());
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = ProductsRepo.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = productRepo.get(getArguments().getInt(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);

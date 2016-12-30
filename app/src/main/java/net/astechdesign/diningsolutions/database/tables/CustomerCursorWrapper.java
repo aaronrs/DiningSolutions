@@ -16,7 +16,7 @@ public class CustomerCursorWrapper extends CursorWrapper {
     }
 
     public Customer getCustomer() {
-        UUID addressId = UUID.fromString(getString(getColumnIndex(AddressTable.ID)));
+        int addressId = getInt(getColumnIndex(AddressTable._ID));
         String houseName = getString(getColumnIndex(AddressTable.ADDRESS_NAME));
         String line1 = getString(getColumnIndex(AddressTable.ADDRESS_LINE1));
         String line2 = getString(getColumnIndex(AddressTable.ADDRESS_LINE2));
@@ -25,7 +25,7 @@ public class CustomerCursorWrapper extends CursorWrapper {
         String postcode = getString(getColumnIndex(AddressTable.ADDRESS_POSTCODE));
         Address address = new Address(addressId, houseName, line1, line2, town, county, postcode);
 
-        UUID id = UUID.fromString(getString(getColumnIndex(CustomerTable.ID)));
+        int id = getInt(getColumnIndex(CustomerTable._ID));
         String name = getString(getColumnIndex(CustomerTable.CUSTOMER_NAME));
         String email = getString(getColumnIndex(CustomerTable.CUSTOMER_EMAIL));
         String phone = getString(getColumnIndex(CustomerTable.CUSTOMER_PHONE));

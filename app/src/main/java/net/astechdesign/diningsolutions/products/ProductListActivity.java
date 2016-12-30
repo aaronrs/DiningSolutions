@@ -20,23 +20,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.model.Product;
-import net.astechdesign.diningsolutions.repositories.ProductsRepo;
+import net.astechdesign.diningsolutions.repositories.ProductRepo;
 
 import java.util.List;
 
-public class ProductActivity extends AppCompatActivity implements ProductEditFragment.EditProductListener {
+public class ProductListActivity extends AppCompatActivity implements ProductEditFragment.EditProductListener {
 
     public static final String EDIT_PRODUCT = "EDIT_PRODUCT";
     private static final String ADD_PRODUCT = "add_product";
     private ProductRecyclerViewAdapter adapter;
     private View mRecyclerView;
     private ProductEditFragment newProductFragment;
+    private ProductRepo productRepo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
+
+        productRepo = new ProductRepo(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -49,11 +53,11 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
 
         mRecyclerView = findViewById(R.id.product_list);
         assert mRecyclerView != null;
-        setupRecyclerView((RecyclerView) mRecyclerView);
+        setupRecyclerView(mRecyclerView);
     }
 
     private void setupRecyclerView(@NonNull View recyclerView) {
-        adapter = new ProductRecyclerViewAdapter(ProductsRepo.get(this));
+        adapter = new ProductRecyclerViewAdapter(productRepo.get());
         ((RecyclerView) recyclerView).setAdapter(adapter);
     }
 
@@ -69,7 +73,7 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
             case R.id.menu_item_new_product:
                 FragmentManager fm = getSupportFragmentManager();
                 newProductFragment = new ProductEditFragment();
-                newProductFragment.setProduct(new Product(null, "", "", 0.00, "", 0));
+                newProductFragment.setProduct(new Product(-1, "", "", 0.00, "", 0));
                 newProductFragment.show(fm, ADD_PRODUCT);
                 return true;
             default:
@@ -79,7 +83,7 @@ public class ProductActivity extends AppCompatActivity implements ProductEditFra
 
     @Override
     public void onDialogPositiveClick(DialogInterface dialog, Product product) {
-        ProductsRepo.addOrUpdate(this, product);
+        productRepo.addOrUpdate(product);
         if (product.isDeleted()) {
             Toast.makeText(this, "Product deleted: " + product.name, Toast.LENGTH_SHORT).show();
         }

@@ -29,7 +29,7 @@ public class CustomerTable extends CMSTable<Customer> {
     public static final String ADDRESS_POSTCODE = "postcode";
 
     private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            ID + " INTEGER, " +
+            _ID + " INTEGER PRIMARY KEY," +
             CUSTOMER_NAME + " INTEGER, " +
             CUSTOMER_EMAIL + " TEXT, " +
             CUSTOMER_PHONE + " TEXT, " +
@@ -44,7 +44,7 @@ public class CustomerTable extends CMSTable<Customer> {
             ADDRESS_POSTCODE + " TEXT " +
             ")";
 
-    public CustomerTable(OrderTable orderTable) {
+    public CustomerTable() {
         super(TABLE_NAME, CREATE_TABLE);
     }
 
@@ -54,9 +54,7 @@ public class CustomerTable extends CMSTable<Customer> {
     }
 
     protected ContentValues getInsertValues(Customer customer) {
-        UUID customerId = customer.getId() == null ? UUID.randomUUID() : customer.getId();
         ContentValues values = new ContentValues();
-        values.put(ID, customerId.toString());
         values.put(CUSTOMER_NAME, customer.name);
         values.put(CUSTOMER_EMAIL, customer.email.address);
         values.put(CUSTOMER_PHONE, customer.phone.number);
@@ -87,7 +85,7 @@ public class CustomerTable extends CMSTable<Customer> {
     }
 
     public void addOrUpdate(SQLiteDatabase mDatabase, Customer customer) {
-        if (customer.id == null) {
+        if (customer.id == -1) {
             add(mDatabase, customer);
         } else {
             update(mDatabase, customer);
@@ -100,10 +98,6 @@ public class CustomerTable extends CMSTable<Customer> {
     }
 
     private void update(SQLiteDatabase mDatabase, Customer customer) {
-        mDatabase.update(TABLE_NAME, getInsertValues(customer), ID + " = ?", new String[]{customer.id.toString()});
-    }
-
-    @Override
-    protected void addOrUpdateChild(SQLiteDatabase mDatabase, Customer model) {
+        mDatabase.update(TABLE_NAME, getInsertValues(customer), _ID + " = ?", new String[]{Integer.toString(customer.id)});
     }
 }

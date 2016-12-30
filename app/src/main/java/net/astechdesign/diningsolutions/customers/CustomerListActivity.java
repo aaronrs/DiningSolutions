@@ -22,11 +22,10 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.orders.OrderListActivity;
-import net.astechdesign.diningsolutions.products.ProductActivity;
+import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.List;
-import java.util.UUID;
 
 public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
 
@@ -40,10 +39,12 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     private CustomerEditFragment customerEditFragment;
     private Customer mCurrentCustomer;
     private View mRecyclerView;
+    private CustomerRepo customerRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        customerRepo = new CustomerRepo(this);
         setContentView(R.layout.activity_customer_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -94,7 +95,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 newCustomerFragment.show(fm, ADD_CUSTOMER);
                 return true;
             case R.id.menu_item_products:
-                Intent intent = new Intent(this, ProductActivity.class);
+                Intent intent = new Intent(this, ProductListActivity.class);
                 this.startActivity(intent);
                 return true;
             default:
@@ -113,7 +114,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(CustomerRepo.get(this)));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(customerRepo.get()));
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -180,7 +181,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 mPhoneView.setText(item.phone.number);
             }
 
-            public UUID getId() {
+            public int getId() {
                 return mItem.id;
             }
         }

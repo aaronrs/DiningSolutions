@@ -9,6 +9,7 @@ import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.database.tables.ProductTable;
+import net.astechdesign.diningsolutions.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +32,13 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return instance;
     }
+
     private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         productTable = new ProductTable();
         orderItemTable = new OrderItemTable();
-        orderTable = new OrderTable(orderItemTable);
-        customerTable = new CustomerTable(orderTable);
+        orderTable = new OrderTable();
+        customerTable = new CustomerTable();
         tables.add(productTable);
         tables.add(customerTable);
         tables.add(orderTable);
@@ -67,5 +69,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public OrderTable getOrderTable() {
         return orderTable;
+    }
+
+    public List<Product> getProducts() {
+        return null;
     }
 }

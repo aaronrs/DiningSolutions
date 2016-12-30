@@ -21,7 +21,7 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.customers.CustomerPickerFragment;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.DatePickerFragment;
-import net.astechdesign.diningsolutions.products.ProductActivity;
+import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;
@@ -88,7 +88,7 @@ public class TodoListActivity extends AppCompatActivity {
                 newTodoFragment.show(fm, ADD_TODO);
                 return true;
             case R.id.menu_item_products:
-                Intent intent = new Intent(this, ProductActivity.class);
+                Intent intent = new Intent(this, ProductListActivity.class);
                 this.startActivity(intent);
                 return true;
             case R.id.menu_item_customers:

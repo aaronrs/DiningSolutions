@@ -20,6 +20,7 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
@@ -39,14 +40,19 @@ public class OrderListActivity extends AppCompatActivity {
     private NewOrderFragment newOrderFragment;
     private OrderEditFragment editOrderFragment;
     private Customer customer;
+    private OrderRepo orderRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        orderRepo = new OrderRepo(this);
         setContentView(R.layout.activity_order_list);
 
         customer = (Customer) getIntent().getSerializableExtra(ARG_CUSTOMER);
         customer = customer == null ? CustomerRepo.get(this).get(0) : customer;
+
+        TextView name = (TextView) findViewById(R.id.customer_name);
+        name.setText(customer.name);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,6 +68,7 @@ public class OrderListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 FragmentManager fm = getSupportFragmentManager();
                 editOrderFragment = new OrderEditFragment();
+                editOrderFragment.setCustomer(customer);
                 editOrderFragment.show(fm, ADD_ORDER);
             }
         });
@@ -95,7 +102,7 @@ public class OrderListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(OrderRepo.get(this).getOrders(customer)));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(orderRepo.getOrders(customer)));
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -123,7 +130,7 @@ public class OrderListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putSerializable(OrderDetailFragment.ARG_ORDER, holder.getId());
+                        arguments.putSerializable(OrderDetailFragment.ARG_ORDER, holder.mItem);
                         OrderDetailFragment fragment = new OrderDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -148,28 +155,25 @@ public class OrderListActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mIdView;
-            public final TextView mContentView;
             public Order mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.name);
-                mContentView = (TextView) view.findViewById(R.id.telephone);
+                mIdView = (TextView) view.findViewById(R.id.order_delivery_date);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mIdView.getText() + "'";
             }
 
             public void setItem(Order item) {
                 this.mItem = item;
-                mIdView.setText(item.created.toString());
-                mContentView.setText("delivered");
+                mIdView.setText(item.created == null ? new DSDDate().toString() : item.created.toString());
             }
 
-            public UUID getId() {
+            public int getId() {
                 return mItem.id;
             }
         }

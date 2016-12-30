@@ -21,7 +21,7 @@ public class ProductTable extends CMSTable<Product> {
     public static final String PRODUCT_DELETED = "deleted";
 
     private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            ID + " TEXT, " +
+            _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PRODUCT_NAME + " TEXT, " +
             PRODUCT_DESCRIPTION + " TEXT, " +
             PRODUCT_PRICE + " NUMBER, " +
@@ -49,10 +49,6 @@ public class ProductTable extends CMSTable<Product> {
         return values;
     }
 
-    @Override
-    protected void addOrUpdateChild(SQLiteDatabase mDatabase, Product model) {
-    }
-
     public List<Product> get(SQLiteDatabase mDatabase) {
         List<Product> productList = new ArrayList<>();
         Cursor cursor = mDatabase.query(TABLE_NAME, null, PRODUCT_DELETED + " = 0", null, null, null, PRODUCT_NAME);
@@ -65,4 +61,10 @@ public class ProductTable extends CMSTable<Product> {
         return productList;
     }
 
+    public Product get(SQLiteDatabase mDatabase, int id) {
+        Cursor cursor = mDatabase.query(TABLE_NAME, null, _ID + " = ? " + PRODUCT_DELETED + " = 0", id(id), null, null, PRODUCT_NAME);
+        cursor.moveToFirst();
+        ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
+        return productCursorWrapper.getProduct();
+    }
 }
