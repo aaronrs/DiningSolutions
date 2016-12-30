@@ -30,12 +30,10 @@ import java.util.List;
 public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
 
     private static final String ADD_CUSTOMER = "add_customer";
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
+    private static final String EDIT_CUSTOMER = "edit_customer";
+
     private boolean mTwoPane;
-    private NewCustomerFragment newCustomerFragment;
+    private CustomerEditFragment newCustomerFragment;
     private CustomerEditFragment customerEditFragment;
     private Customer mCurrentCustomer;
     private View mRecyclerView;
@@ -63,7 +61,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 FragmentManager fm = getSupportFragmentManager();
                 customerEditFragment = new CustomerEditFragment();
                 customerEditFragment.setCustomer(mCurrentCustomer);
-                customerEditFragment.show(fm, ADD_CUSTOMER);
+                customerEditFragment.show(fm, EDIT_CUSTOMER);
             }
         });
 
@@ -91,7 +89,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
         switch (item.getItemId()) {
             case R.id.menu_item_new_customer:
                 FragmentManager fm = getSupportFragmentManager();
-                newCustomerFragment = new NewCustomerFragment();
+                newCustomerFragment = new CustomerEditFragment();
                 newCustomerFragment.show(fm, ADD_CUSTOMER);
                 return true;
             case R.id.menu_item_products:

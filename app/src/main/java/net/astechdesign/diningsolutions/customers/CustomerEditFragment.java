@@ -55,17 +55,19 @@ public class CustomerEditFragment extends DialogFragment {
         mAddressCountyText = (TextView) view.findViewById(R.id.address_county);
         mAddressPostcodeText = (TextView) view.findViewById(R.id.address_postcode);
 
-        mNameText.setText(customer.name);
-        mEmailText.setText(customer.email.address);
-        mPhoneText.setText(customer.phone.number);
-        Address address = customer.address;
-        if (address != null) {
-            mAddressNameText.setText(address.name);
-            mAddressLine1Text.setText(address.line1);
-            mAddressLine2Text.setText(address.line2);
-            mAddressTownText.setText(address.town);
-            mAddressCountyText.setText(address.county);
-            mAddressPostcodeText.setText(address.postcode);
+        if (mCurrentCustomer != null) {
+            mNameText.setText(customer.name);
+            mEmailText.setText(customer.email.address);
+            mPhoneText.setText(customer.phone.number);
+            Address address = customer.address;
+            if (address != null) {
+                mAddressNameText.setText(address.name);
+                mAddressLine1Text.setText(address.line1);
+                mAddressLine2Text.setText(address.line2);
+                mAddressTownText.setText(address.town);
+                mAddressCountyText.setText(address.county);
+                mAddressPostcodeText.setText(address.postcode);
+            }
         }
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
@@ -75,21 +77,21 @@ public class CustomerEditFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Address address = new Address(
-                                customer.address.id,
-                                mAddressNameText.getText().toString(),
-                                mAddressLine1Text.getText().toString(),
-                                mAddressLine2Text.getText().toString(),
-                                mAddressTownText.getText().toString(),
-                                mAddressCountyText.getText().toString(),
-                                mAddressPostcodeText.getText().toString()
+                                customer == null ? -1 : customer.address.id,
+                                getText(mAddressNameText),
+                                getText(mAddressLine1Text),
+                                getText(mAddressLine2Text),
+                                getText(mAddressTownText),
+                                getText(mAddressCountyText),
+                                getText(mAddressPostcodeText)
                                 );
                         Customer newCustomer = new Customer(
-                                customer.id,
-                                mNameText.getText().toString(),
-                                mEmailText.getText().toString(),
-                                mPhoneText.getText().toString(),
+                                customer == null ? -1 : customer.id,
+                                getText(mNameText),
+                                getText(mEmailText),
+                                getText(mPhoneText),
                                 true,
-                                customer.created,
+                                customer == null ? new DSDDate() : customer.created,
                                 "",
                                 address
                                 );
@@ -97,6 +99,11 @@ public class CustomerEditFragment extends DialogFragment {
                     }
                 })
                 .create();
+    }
+
+    private String getText(TextView view) {
+        if (view.getText() == null) return "";
+        return view.getText().toString();
     }
 
     @Override
