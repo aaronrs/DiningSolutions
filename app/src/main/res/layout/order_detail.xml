@@ -81,7 +81,7 @@
             android:layout_height="match_parent">
             <TextView
                 style="?android:attr/textAppearanceMedium"
-                android:layout_width="350dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="Produce Purchased" />
@@ -91,14 +91,14 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="Batch No."
-                android:layout_width="150dp" />
+                android:layout_width="120dp" />
 
             <TextView
                 style="?android:attr/textAppearanceMedium"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="Price"
-                android:layout_width="150dp" />
+                android:layout_width="120dp" />
 
             <TextView
                 style="?android:attr/textAppearanceMedium"
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="Cost"
-                android:layout_width="150dp" />
+                android:layout_width="120dp" />
 
         </LinearLayout>
 
@@ -121,7 +121,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <include layout="@layout/product_list" />
+            <include layout="@layout/product_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </FrameLayout>
 
         <LinearLayout
@@ -134,7 +136,7 @@
                 android:gravity="right"
                 android:padding="16dp"
                 android:text="Total"
-                android:layout_width="750dp" />
+                android:layout_width="640dp" />
 
             <TextView
                 android:id="@+id/order_detail_total"
