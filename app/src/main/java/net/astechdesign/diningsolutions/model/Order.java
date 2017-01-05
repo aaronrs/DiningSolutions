@@ -6,9 +6,9 @@ import java.util.List;
 public class Order extends Model {
 
     public int customerId;
+    public String invoiceNumber;
     public final DSDDate created;
     public List<OrderItem> orderItems;
-    public String invoiceNumber;
 
     public Order(int id, int customerId, DSDDate created, String invoiceNumber) {
         super(id);
@@ -39,4 +39,6 @@ public class Order extends Model {
         }
         orderItems.add(orderItem);
     }
+
+
 }

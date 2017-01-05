@@ -54,4 +54,15 @@ public class OrderTable extends CMSTable<Order> {
         return orders;
     }
 
+    public List<Order> getOrders(SQLiteDatabase mDatabase) {
+        List<Order> orders = new ArrayList<>();
+        Cursor orderCursor = mDatabase.query(TABLE_NAME, null, null, null, null, null, ORDER_DATE);
+        orderCursor.moveToFirst();
+        while (!orderCursor.isAfterLast()) {
+            OrderCursorWrapper cursorWrapper = new OrderCursorWrapper(orderCursor);
+            orders.add(cursorWrapper.getOrder());
+            orderCursor.moveToNext();
+        }
+        return orders;
+    }
 }

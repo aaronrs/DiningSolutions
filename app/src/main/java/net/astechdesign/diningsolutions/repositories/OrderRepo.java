@@ -26,10 +26,20 @@ public class OrderRepo extends Repo {
         orderTable = dbHelper.getOrderTable();
     }
 
+    public List<Order> getOrders() {
+        List<Order> orders = orderTable.getOrders(mDatabase);
+        if (orders.isEmpty()) {
+            initDb(mContext);
+            orders = orderTable.getOrders(mDatabase);
+        }
+        return orders;
+    }
+
     public List<Order> getOrders(Customer customer) {
         List<Order> orders = orderTable.getOrders(mDatabase, customer);
         if (orders.isEmpty()) {
             initDb(mContext);
+            orders = orderTable.getOrders(mDatabase, customer);
         }
         return orders;
     }

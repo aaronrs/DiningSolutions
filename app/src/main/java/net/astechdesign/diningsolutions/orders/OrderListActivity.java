@@ -176,7 +176,8 @@ public class OrderListActivity extends AppCompatActivity {
     private void showOrderDetails(Order order) {
         Bundle arguments = new Bundle();
         mCurrentOrder = order;
-        arguments.putSerializable(OrderDetailFragment.ARG_ORDER, order);
+        arguments.putSerializable(OrderDetailFragment.CUSTOMER, mCustomer);
+        arguments.putSerializable(OrderDetailFragment.ORDER, order);
         OrderDetailFragment fragment = new OrderDetailFragment();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()

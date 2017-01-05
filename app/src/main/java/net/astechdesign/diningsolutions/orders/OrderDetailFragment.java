@@ -12,16 +12,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
-import net.astechdesign.diningsolutions.repositories.OrderRepo;
-
-import java.util.UUID;
 
 public class OrderDetailFragment extends Fragment {
 
-    public static final String ARG_ORDER = "order";
+    public static final String ADD_ORDER = "add_order";
+    public static final String CUSTOMER = "customer";
+    public static final String ORDER = "order";
 
-    private Order mItem;
+    private Customer mCustomer;
+    private Order mOrder;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -33,15 +34,14 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments().containsKey(ARG_ORDER)) {
-            mItem = (Order)getArguments().getSerializable(ARG_ORDER);
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle("Orders");
-            }
+        mCustomer = (Customer)getArguments().getSerializable(CUSTOMER);
+        if (getArguments().containsKey(ORDER)) {
+            mOrder = (Order) getArguments().getSerializable(ORDER);
+        }
+        Activity activity = this.getActivity();
+        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+        if (appBarLayout != null) {
+            appBarLayout.setTitle("Orders");
         }
     }
 
@@ -55,10 +55,10 @@ public class OrderDetailFragment extends Fragment {
         setupRecyclerView((RecyclerView) recyclerView);
 
 
-        if (mItem != null) {
-            setFields(rootView, R.id.order_detail_name, Integer.toString(mItem.id));
-            setFields(rootView, R.id.order_detail_phone, Integer.toString(mItem.customerId));
-            setFields(rootView, R.id.order_detail_email, mItem.created.toString());
+        if (mOrder != null) {
+            setFields(rootView, R.id.order_detail_name, Integer.toString(mOrder.id));
+            setFields(rootView, R.id.order_detail_phone, Integer.toString(mOrder.customerId));
+            setFields(rootView, R.id.order_detail_email, mOrder.created.toString());
         }
 
         return rootView;

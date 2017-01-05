@@ -1,7 +1,9 @@
 package net.astechdesign.diningsolutions.orders;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -23,13 +25,33 @@ import android.content.res.Resources.Theme;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
+import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.products.ProductListActivity;
+import net.astechdesign.diningsolutions.repositories.OrderRepo;
+
+import java.util.List;
+
+import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
+import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
+import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ADD_ORDER;
 
 public class OrderActivity extends AppCompatActivity {
+
+    private Customer mCustomer;
+    private OrderRepo mOrderRepo;
+    private List<Order> mOrders;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
+
+        mOrderRepo = new OrderRepo(this);
+
+        mCustomer = new Customer(-1, "Name", "email", "phone", true, new DSDDate(), "", null);
+//        mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -37,22 +59,23 @@ public class OrderActivity extends AppCompatActivity {
 
         // Setup spinner
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        mOrders = mOrderRepo.getOrders();
         spinner.setAdapter(new MyAdapter(
                 toolbar.getContext(),
-                new String[]{
-                        "Invoice No. 2097414 - 01 Jan 2017",
-                        "Invoice No. 2097323 - 30 Nov 2016",
-                        "Invoice No. 2097212 - 27 Aug 2016",
-                        "Invoice No. 2097101 - 15 Apr 2016",
-                }));
+                mOrders));
 
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // When the given dropdown item is selected, show its contents in the
                 // container view.
+                OrderDetailFragment fragment = new OrderDetailFragment();
+                Bundle args = new Bundle();
+                args.putSerializable(CUSTOMER, mCustomer);
+                args.putSerializable(ORDER, mOrders.get(position));
+                fragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                        .replace(R.id.container, fragment)
                         .commit();
             }
 
@@ -61,46 +84,46 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_order, menu);
+        getMenuInflater().inflate(R.menu.menu_order_list, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.menu_item_new_order:
+                FragmentManager fm = getSupportFragmentManager();
+                OrderEditFragment orderEditFragment = new OrderEditFragment();
+                orderEditFragment.show(fm, ADD_ORDER);
+                return true;
+            case R.id.menu_item_products:
+                Intent intent = new Intent(this, ProductListActivity.class);
+                this.startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
 
-    private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
+    private static class MyAdapter extends ArrayAdapter<Order> implements ThemedSpinnerAdapter {
         private final ThemedSpinnerAdapter.Helper mDropDownHelper;
 
-        public MyAdapter(Context context, String[] objects) {
-            super(context, android.R.layout.simple_list_item_1, objects);
+        public MyAdapter(Context context, List<Order> orders) {
+            super(context, android.R.layout.simple_list_item_1, orders);
             mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
         }
 
@@ -117,7 +140,8 @@ public class OrderActivity extends AppCompatActivity {
             }
 
             TextView textView = (TextView) view.findViewById(android.R.id.text1);
-            textView.setText(getItem(position));
+            Order order = getItem(position);
+            textView.setText("Invoice No. " + order.invoiceNumber + " - " + order.created.toString());
 
             return view;
         }
