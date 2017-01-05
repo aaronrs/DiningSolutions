@@ -18,4 +18,8 @@ public class Address extends Model {
         this.county = county;
         this.postcode = postcode;
     }
+
+    public String getHeader() {
+        return String.format("%s %s %s, %s", name, line1, town, postcode);
+    }
 }

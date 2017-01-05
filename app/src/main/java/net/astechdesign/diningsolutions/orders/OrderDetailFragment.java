@@ -54,12 +54,9 @@ public class OrderDetailFragment extends Fragment {
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
-
-        if (mOrder != null) {
-            setFields(rootView, R.id.order_detail_name, Integer.toString(mOrder.id));
-            setFields(rootView, R.id.order_detail_phone, Integer.toString(mOrder.customerId));
-            setFields(rootView, R.id.order_detail_email, mOrder.created.toString());
-        }
+        setFields(rootView, R.id.order_detail_name, mCustomer.name);
+        setFields(rootView, R.id.order_detail_phone, mCustomer.phone == null ? "" : mCustomer.phone.number);
+        setFields(rootView, R.id.order_detail_email, mCustomer.email == null ? "" : mCustomer.email.address);
 
         return rootView;
     }
