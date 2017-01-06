@@ -40,5 +40,8 @@ public class Order extends Model {
         orderItems.add(orderItem);
     }
 
-
+    @Override
+    public String toString() {
+        return "Invoice No. " + invoiceNumber + " - " + created.toString();
+    }
 }

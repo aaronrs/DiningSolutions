@@ -154,7 +154,7 @@ public class OrderListActivity extends AppCompatActivity {
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.order_delivery_date);
+                mIdView = (TextView) view.findViewById(R.id.product_price);
             }
 
             @Override

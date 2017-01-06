@@ -40,7 +40,7 @@ public class OrderItemTable extends CMSTable<OrderItem> {
 
     }
 
-    protected ContentValues getInsertValues(OrderItem item) {
+    public ContentValues getInsertValues(OrderItem item) {
         ContentValues values = new ContentValues();
         values.put(ORDER_ID, item.orderId);
         values.put(PRODUCT_NAME, item.name);
@@ -53,7 +53,8 @@ public class OrderItemTable extends CMSTable<OrderItem> {
 
     public List<OrderItem> getOrderItems(SQLiteDatabase mDatabase, Order order) {
         List<OrderItem> orderItems = new ArrayList<>();
-        Cursor orderItemCursor = mDatabase.rawQuery(DbQuery.getSelectWhere(TABLE_NAME, ORDER_ID), new String[]{Integer.toString(order.getId())});
+        Cursor orderItemCursor = mDatabase.rawQuery("select * from orderItems", null);
+//        Cursor orderItemCursor = mDatabase.rawQuery(DbQuery.getSelectWhere(TABLE_NAME, ORDER_ID), new String[]{Integer.toString(order.getId())});
         orderItemCursor.moveToFirst();
         while (!orderItemCursor.isAfterLast()) {
             OrderItemCursorWrapper cursorWrapper = new OrderItemCursorWrapper(orderItemCursor);

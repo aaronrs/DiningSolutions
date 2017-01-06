@@ -1,6 +1,8 @@
 package net.astechdesign.diningsolutions.orders;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,14 +14,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.customers.CustomerDetailActivity;
+import net.astechdesign.diningsolutions.customers.CustomerDetailFragment;
+import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.model.OrderItem;
+import net.astechdesign.diningsolutions.repositories.OrderRepo;
+
+import java.util.List;
 
 public class OrderDetailFragment extends Fragment {
 
     public static final String ADD_ORDER = "add_order";
     public static final String CUSTOMER = "customer";
     public static final String ORDER = "order";
+    private OrderRepo mOrderRepo;
 
     private Customer mCustomer;
     private Order mOrder;
@@ -34,10 +44,13 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mOrderRepo = new OrderRepo(getContext());
+
         mCustomer = (Customer)getArguments().getSerializable(CUSTOMER);
         if (getArguments().containsKey(ORDER)) {
             mOrder = (Order) getArguments().getSerializable(ORDER);
         }
+
         Activity activity = this.getActivity();
         CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
         if (appBarLayout != null) {
@@ -50,20 +63,97 @@ public class OrderDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.order_detail, container, false);
 
-        View recyclerView = rootView.findViewById(R.id.product_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
-
         setFields(rootView, R.id.order_detail_name, mCustomer.name);
         setFields(rootView, R.id.order_detail_phone, mCustomer.phone == null ? "" : mCustomer.phone.number);
         setFields(rootView, R.id.order_detail_email, mCustomer.email == null ? "" : mCustomer.email.address);
+        setFields(rootView, R.id.order_invoice_number, mOrder.invoiceNumber);
+
+        View recyclerView = rootView.findViewById(R.id.order_items_list);
+        assert recyclerView != null;
+        setupRecyclerView((RecyclerView) recyclerView);
 
         return rootView;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-//        recyclerView.setAdapter(new OrderListActivity.SimpleItemRecyclerViewAdapter(OrderRepo.get(this).getmOrders()));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(mOrderRepo.getOrderItems(mOrder)));
     }
+
+    public class SimpleItemRecyclerViewAdapter
+            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+
+        private final List<OrderItem> mValues;
+
+        public SimpleItemRecyclerViewAdapter(List<OrderItem> items) {
+            mValues = items;
+        }
+
+        @Override
+        public SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.order_item_list_content, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+            holder.setItem(mValues.get(position));
+
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, CustomerDetailActivity.class);
+                        intent.putExtra(CustomerDetailFragment.ARG_CUSTOMER, holder.getId());
+                        context.startActivity(intent);
+                    }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mValues == null ? 0 : mValues.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public final View mView;
+            public final TextView mNameView;
+            public final TextView mBatchView;
+            public final TextView mPriceView;
+            public final TextView mQuantityView;
+            public final TextView mCostView;
+            public OrderItem mItem;
+
+            public ViewHolder(View view) {
+                super(view);
+                mView = view;
+                mNameView = (TextView) view.findViewById(R.id.name);
+                mBatchView = (TextView) view.findViewById(R.id.batch_number);
+                mPriceView = (TextView) view.findViewById(R.id.product_price);
+                mQuantityView = (TextView) view.findViewById(R.id.product_quantity);
+                mCostView = (TextView) view.findViewById(R.id.product_cost);
+            }
+
+            @Override
+            public String toString() {
+                return super.toString() + " '" + mNameView.getText() + "'";
+            }
+
+            public void setItem(OrderItem item) {
+                this.mItem = item;
+                mNameView.setText(item.name);
+                mBatchView.setText(item.batch);
+                mPriceView.setText(Double.toString(item.price));
+                mQuantityView.setText(item.quantity);
+                mCostView.setText(Double.toString(item.price * item.quantity));
+            }
+
+            public int getId() {
+                return mItem.id;
+            }
+        }
+    }
+
 
     private void setFields(View rootView, int id, String text) {
         ((TextView) rootView.findViewById(id)).setText(text);

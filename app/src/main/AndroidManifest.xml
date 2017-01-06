@@ -20,7 +20,13 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".orders.OrderListActivity"
-            android:parentActivityName=".customers.CustomerListActivity"></activity>
+            android:parentActivityName=".customers.CustomerListActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".customers.CustomerDetailActivity"
             android:parentActivityName=".customers.CustomerListActivity"></activity>
@@ -31,11 +37,6 @@
             android:name=".orders.OrderActivity"
             android:label="@string/title_activity_order"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

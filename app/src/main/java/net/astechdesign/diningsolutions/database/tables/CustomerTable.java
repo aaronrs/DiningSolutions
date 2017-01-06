@@ -84,14 +84,6 @@ public class CustomerTable extends CMSTable<Customer> {
         return customerList;
     }
 
-    public void addOrUpdate(SQLiteDatabase mDatabase, Customer customer) {
-        if (customer.id == -1) {
-            add(mDatabase, customer);
-        } else {
-            update(mDatabase, customer);
-        }
-    }
-
     private void add(SQLiteDatabase mDatabase, Customer customer) {
         ContentValues insertValues = getInsertValues(customer);
         mDatabase.insert(TABLE_NAME, null, insertValues);

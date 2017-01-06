@@ -50,8 +50,8 @@ public class OrderActivity extends AppCompatActivity {
 
         mOrderRepo = new OrderRepo(this);
 
-        mCustomer = new Customer(-1, "Name", "email", "phone", true, new DSDDate(), "", null);
-//        mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
+//        mCustomer = new Customer(0, "Name", "email", "phone", true, new DSDDate(), "", null);
+        mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,7 +59,7 @@ public class OrderActivity extends AppCompatActivity {
 
         // Setup spinner
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        mOrders = mOrderRepo.getOrders();
+        mOrders = mOrderRepo.getOrders(mCustomer);
         spinner.setAdapter(new MyAdapter(
                 toolbar.getContext(),
                 mOrders));

@@ -35,7 +35,7 @@ public class OrderAssets {
         try {
             while ((line = br.readLine()) != null) {
                 String[] orderInfo = line.split("\\|");
-                String key = orderInfo[0] + orderInfo[1];
+                String key = orderInfo[1] + orderInfo[2];
                 if (!orderMap.containsKey(key)) {
                     orderMap.put(key, new ArrayList<String[]>());
                 }
@@ -47,10 +47,11 @@ public class OrderAssets {
         List<Order> orderList = new ArrayList<>();
         int invoice = 1234;
         for (String key : orderMap.keySet()) {
-            DSDDate deliveryDate = new DSDDate(orderMap.get(key).get(0)[1]);
-            Order order = new Order(-1, customerId, deliveryDate, "" + invoice);
+            DSDDate deliveryDate = new DSDDate(orderMap.get(key).get(0)[2]);
+            int id = Integer.parseInt(orderMap.get(key).get(0)[0]);
+            Order order = new Order(id, customerId, deliveryDate, "" + invoice);
             for (String[] orderInfo : orderMap.get(key)) {
-                order.addItem(new OrderItem(-1, -1, orderInfo[0], 0, Integer.parseInt(orderInfo[4]), orderInfo[4], deliveryDate));
+                order.addItem(new OrderItem(-1, id, orderInfo[1], 0, Integer.parseInt(orderInfo[5]), orderInfo[5], deliveryDate));
             }
             orderList.add(order);
             invoice++;

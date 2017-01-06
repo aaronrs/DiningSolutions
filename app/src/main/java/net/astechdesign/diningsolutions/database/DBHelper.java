@@ -71,6 +71,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return orderTable;
     }
 
+    public OrderItemTable getOrderItemsTable() {
+        return orderItemTable;
+    }
+
     public List<Product> getProducts() {
         return null;
     }
