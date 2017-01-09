@@ -51,7 +51,7 @@ public class OrderAssets {
             int id = Integer.parseInt(orderMap.get(key).get(0)[0]);
             Order order = new Order(id, customerId, deliveryDate, "" + invoice);
             for (String[] orderInfo : orderMap.get(key)) {
-                order.addItem(new OrderItem(-1, id, orderInfo[1], 0, Integer.parseInt(orderInfo[5]), orderInfo[5], deliveryDate));
+                order.addItem(new OrderItem(-1, id, orderInfo[3], Double.parseDouble(orderInfo[6]), Integer.parseInt(orderInfo[5]), orderInfo[4], deliveryDate));
             }
             orderList.add(order);
             invoice++;

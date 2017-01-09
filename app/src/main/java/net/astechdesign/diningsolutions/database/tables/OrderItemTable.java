@@ -59,6 +59,7 @@ public class OrderItemTable extends CMSTable<OrderItem> {
         while (!orderItemCursor.isAfterLast()) {
             OrderItemCursorWrapper cursorWrapper = new OrderItemCursorWrapper(orderItemCursor);
             orderItems.add(cursorWrapper.getOrderItem());
+            orderItemCursor.moveToNext();
         }
         return orderItems;
     }

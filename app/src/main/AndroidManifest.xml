@@ -12,7 +12,12 @@
             android:name=".customers.CustomerListActivity"
             android:label="@string/title_customer_list"
             android:parentActivityName=".todos.TodoListActivity">
-`        </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".products.ProductListActivity"
             android:label="@string/title_product_list"
@@ -21,15 +26,11 @@
         <activity
             android:name=".orders.OrderListActivity"
             android:parentActivityName=".customers.CustomerListActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".customers.CustomerDetailActivity"
-            android:parentActivityName=".customers.CustomerListActivity"></activity>
+            android:parentActivityName=".customers.CustomerListActivity">
+        </activity>
         <activity
             android:name=".todos.TodoListActivity"
             android:label="@string/title_todo_list"></activity>

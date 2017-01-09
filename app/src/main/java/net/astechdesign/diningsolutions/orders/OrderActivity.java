@@ -1,14 +1,14 @@
 package net.astechdesign.diningsolutions.orders;
 
+import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.content.res.Resources.Theme;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,24 +18,19 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.content.Context;
-import android.support.v7.widget.ThemedSpinnerAdapter;
-import android.content.res.Resources.Theme;
-
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
 import java.util.List;
 
+import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ADD_ORDER;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
-import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ADD_ORDER;
 
 public class OrderActivity extends AppCompatActivity {
 

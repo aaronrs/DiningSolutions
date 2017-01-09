@@ -21,7 +21,8 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.orders.OrderListActivity;
+import net.astechdesign.diningsolutions.orders.OrderActivity;
+import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
@@ -125,7 +126,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
         }
 
         @Override
-        public SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.customer_list_content, parent, false);
             return new ViewHolder(view);
@@ -197,8 +198,8 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     }
 
     public void showOrders(View view) {
-        Intent intent = new Intent(this, OrderListActivity.class);
-        intent.putExtra(OrderListActivity.ARG_CUSTOMER, mCurrentCustomer);
+        Intent intent = new Intent(this, OrderActivity.class);
+        intent.putExtra(OrderDetailFragment.CUSTOMER, mCurrentCustomer);
         this.startActivity(intent);
     }
 }
