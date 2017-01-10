@@ -8,6 +8,7 @@ import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
@@ -74,5 +75,11 @@ public class OrderRepo extends Repo {
 
     public List<OrderItem> getOrderItems(Order order) {
         return orderItemsTable.getOrderItems(mDatabase, order);
+    }
+
+    public void create(Customer mCustomer) {
+        int invoiceNumber = orderTable.newInvoiceNumber(mDatabase);
+        Order order = new Order(-1, mCustomer.getId(), new DSDDate(), invoiceNumber);
+        orderTable.addOrUpdate(mDatabase, order);
     }
 }

@@ -10,11 +10,11 @@ public class Order extends Model {
     public final DSDDate created;
     public List<OrderItem> orderItems;
 
-    public Order(int id, int customerId, DSDDate created, String invoiceNumber) {
+    public Order(int id, int customerId, DSDDate created, int invoiceNumber) {
         super(id);
         this.customerId = customerId;
         this.created = created;
-        this.invoiceNumber = invoiceNumber;
+        this.invoiceNumber = Integer.toString(invoiceNumber);
     }
 
     public int totalQuantity() {

@@ -65,4 +65,10 @@ public class OrderTable extends CMSTable<Order> {
         }
         return orders;
     }
+
+    public int newInvoiceNumber(SQLiteDatabase db) {
+        Cursor cursor = db.query(TABLE_NAME, new String[]{INVOICE_NO}, null, null, null, null, INVOICE_NO + " DESC", "1");
+        cursor.moveToFirst();
+        return Integer.parseInt(cursor.getString(0)) + 1;
+    }
 }

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources.Theme;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +30,6 @@ import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
 import java.util.List;
 
-import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ADD_ORDER;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
@@ -52,6 +53,11 @@ public class OrderActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // Setup spinner
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -80,14 +86,14 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
         mOrder = mOrders.get(0);
         initialiseView();
@@ -114,9 +120,7 @@ public class OrderActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_order:
-                FragmentManager fm = getSupportFragmentManager();
-                OrderEditFragment orderEditFragment = new OrderEditFragment();
-                orderEditFragment.show(fm, ADD_ORDER);
+                createNewOrder();
                 return true;
             case R.id.menu_item_products:
                 Intent intent = new Intent(this, ProductListActivity.class);
@@ -125,6 +129,10 @@ public class OrderActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void createNewOrder() {
+        mOrderRepo.create(mCustomer);
     }
 
 
