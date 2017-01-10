@@ -23,7 +23,6 @@ public class CustomerEditFragment extends DialogFragment {
     private CustomerEditFragment.CustomerEditListener mListener;
     private Customer mCurrentCustomer;
     private TextView mNameText;
-    private TextView mEmailText;
     private TextView mPhoneText;
     private TextView mAddressNameText;
     private TextView mAddressLine1Text;
@@ -31,6 +30,8 @@ public class CustomerEditFragment extends DialogFragment {
     private TextView mAddressTownText;
     private TextView mAddressCountyText;
     private TextView mAddressPostcodeText;
+    private TextView mEmailText1;
+    private TextView mEmailText2;
 
     public void setCustomer(Customer mCurrentCustomer) {
         this.mCurrentCustomer = mCurrentCustomer;
@@ -46,7 +47,8 @@ public class CustomerEditFragment extends DialogFragment {
         final Customer customer = mCurrentCustomer;
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_customer, null);
         mNameText = (TextView) view.findViewById(R.id.customer_name);
-        mEmailText = (TextView) view.findViewById(R.id.customer_email);
+        mEmailText1 = (TextView) view.findViewById(R.id.customer_email1);
+        mEmailText2 = (TextView) view.findViewById(R.id.customer_email2);
         mPhoneText = (TextView) view.findViewById(R.id.customer_phone);
         mAddressNameText = (TextView) view.findViewById(R.id.address_name);
         mAddressLine1Text = (TextView) view.findViewById(R.id.address_line1);
@@ -57,7 +59,8 @@ public class CustomerEditFragment extends DialogFragment {
 
         if (mCurrentCustomer != null) {
             mNameText.setText(customer.name);
-            mEmailText.setText(customer.email.address);
+            mEmailText1.setText(customer.email.address.split("@")[0]);
+            mEmailText2.setText(customer.email.address.split("@")[1]);
             mPhoneText.setText(customer.phone.number);
             Address address = customer.address;
             if (address != null) {
@@ -88,7 +91,7 @@ public class CustomerEditFragment extends DialogFragment {
                         Customer newCustomer = new Customer(
                                 customer == null ? -1 : customer.id,
                                 getText(mNameText),
-                                getText(mEmailText),
+                                getText(mEmailText1) + "@" + getText(mEmailText2),
                                 getText(mPhoneText),
                                 true,
                                 customer == null ? new DSDDate() : customer.created,
