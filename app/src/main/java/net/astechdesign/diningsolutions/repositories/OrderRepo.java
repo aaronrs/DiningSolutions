@@ -79,7 +79,7 @@ public class OrderRepo extends Repo {
 
     public void create(Customer mCustomer) {
         int invoiceNumber = orderTable.newInvoiceNumber(mDatabase);
-        Order order = new Order(-1, mCustomer.getId(), new DSDDate(), invoiceNumber);
+        Order order = new Order(-1, mCustomer.getId(), new DSDDate(), Integer.toString(invoiceNumber));
         orderTable.addOrUpdate(mDatabase, order);
     }
 }

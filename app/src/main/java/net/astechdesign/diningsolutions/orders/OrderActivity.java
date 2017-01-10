@@ -47,7 +47,6 @@ public class OrderActivity extends AppCompatActivity {
 
         mOrderRepo = new OrderRepo(this);
 
-//        mCustomer = new Customer(0, "Name", "email", "phone", true, new DSDDate(), "", null);
         mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -59,9 +58,9 @@ public class OrderActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        mOrders = mOrderRepo.getOrders(mCustomer);
         // Setup spinner
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        mOrders = mOrderRepo.getOrders(mCustomer);
         spinner.setAdapter(new MyAdapter(
                 toolbar.getContext(),
                 mOrders));
@@ -90,13 +89,15 @@ public class OrderActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Emailing order to " + mCustomer.email.address, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
-        mOrder = mOrders.get(0);
-        initialiseView();
+        if (!mOrders.isEmpty()) {
+            mOrder = mOrders.get(0);
+            initialiseView();
+        }
     }
 
     private void initialiseView() {
