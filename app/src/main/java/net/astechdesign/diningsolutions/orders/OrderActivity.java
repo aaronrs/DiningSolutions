@@ -37,6 +37,7 @@ public class OrderActivity extends AppCompatActivity {
     private Customer mCustomer;
     private OrderRepo mOrderRepo;
     private List<Order> mOrders;
+    private Order mOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class OrderActivity extends AppCompatActivity {
                 args.putSerializable(ORDER, mOrders.get(position));
                 fragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, fragment)
+                        .replace(R.id.order_container, fragment)
                         .commit();
             }
 
@@ -88,6 +89,19 @@ public class OrderActivity extends AppCompatActivity {
 //            }
 //        });
 
+        mOrder = mOrders.get(0);
+        initialiseView();
+    }
+
+    private void initialiseView() {
+        setFields(R.id.order_detail_name, mCustomer.name);
+        setFields(R.id.order_detail_phone, mCustomer.phone == null ? "" : mCustomer.phone.number);
+        setFields(R.id.order_detail_email, mCustomer.email == null ? "" : mCustomer.email.address);
+        setFields(R.id.order_invoice_number, mOrder.invoiceNumber);
+    }
+
+    private void setFields(int id, String text) {
+        ((TextView) findViewById(id)).setText(text);
     }
 
     @Override

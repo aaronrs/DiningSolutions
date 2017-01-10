@@ -24,10 +24,6 @@
             android:parentActivityName=".todos.TodoListActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".orders.OrderListActivity"
-            android:parentActivityName=".customers.CustomerListActivity">
-        </activity>
-        <activity
             android:name=".customers.CustomerDetailActivity"
             android:parentActivityName=".customers.CustomerListActivity">
         </activity>
@@ -37,7 +33,8 @@
         <activity
             android:name=".orders.OrderActivity"
             android:label="@string/title_activity_order"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".customers.CustomerListActivity">
         </activity>
     </application>
 
