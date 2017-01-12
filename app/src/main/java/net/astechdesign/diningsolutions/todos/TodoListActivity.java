@@ -27,6 +27,7 @@ import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.DSDTime;
 import net.astechdesign.diningsolutions.model.Todo;
+import net.astechdesign.diningsolutions.repositories.RepoManager;
 import net.astechdesign.diningsolutions.repositories.TodoRepo;
 
 import java.util.Date;
@@ -45,12 +46,14 @@ public class TodoListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     private NewTodoFragment newTodoFragment;
+    private TodoRepo todoRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_list);
 
+        todoRepo = RepoManager.getTodoRepo(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
@@ -101,7 +104,7 @@ public class TodoListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        List<Todo> todoList = TodoRepo.get();
+        List<Todo> todoList = todoRepo.get();
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(todoList));
     }
 

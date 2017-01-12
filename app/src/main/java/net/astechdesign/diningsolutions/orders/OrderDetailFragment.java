@@ -15,6 +15,8 @@ import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
+import net.astechdesign.diningsolutions.repositories.Repo;
+import net.astechdesign.diningsolutions.repositories.RepoManager;
 
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOrderRepo = new OrderRepo(getContext());
+        mOrderRepo = RepoManager.getOrderRepo(getContext());
 
         mCustomer = (Customer)getArguments().getSerializable(CUSTOMER);
         if (getArguments().containsKey(ORDER)) {

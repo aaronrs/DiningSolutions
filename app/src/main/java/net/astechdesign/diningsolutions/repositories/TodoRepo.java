@@ -1,5 +1,7 @@
 package net.astechdesign.diningsolutions.repositories;
 
+import android.content.Context;
+
 import net.astechdesign.diningsolutions.model.Todo;
 
 import java.util.ArrayList;
@@ -8,26 +10,17 @@ import java.util.UUID;
 
 public class TodoRepo {
 
-    private static final TodoRepo instance = new TodoRepo();
     private List<Todo> todos = new ArrayList<>();
 
-    public TodoRepo() {
+    TodoRepo(Context context) {
         todos.add(new Todo());
     }
 
-    public static Todo get(UUID uuid) {
-        return instance.getTodo(uuid);
-    }
-
-    public static List<Todo> get() {
-        return instance.getTodos();
-    }
-
-    private Todo getTodo(UUID uuid) {
+    public Todo get(UUID uuid) {
         return new Todo();
     }
 
-    public List<Todo> getTodos() {
+    public List<Todo> get() {
         return todos;
     }
 }

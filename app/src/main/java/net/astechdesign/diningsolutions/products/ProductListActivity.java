@@ -23,6 +23,7 @@ import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductRepo;
+import net.astechdesign.diningsolutions.repositories.RepoManager;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
-        productRepo = new ProductRepo(this);
+        productRepo = RepoManager.getProductRepo(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

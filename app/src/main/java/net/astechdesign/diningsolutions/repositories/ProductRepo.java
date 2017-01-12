@@ -16,7 +16,7 @@ public class ProductRepo {
     private final ProductTable productTable;
     private final DBHelper dbHelper;
 
-    public ProductRepo(Context context) {
+    ProductRepo(Context context) {
         mContext = context.getApplicationContext();
         dbHelper = DBHelper.getDBHelper(context);
         mDatabase = dbHelper.getWritableDatabase();
@@ -25,22 +25,11 @@ public class ProductRepo {
 
     public List<Product> get() {
         List<Product> productList = productTable.get(mDatabase);
-        if (productList == null || productList.isEmpty()) {
-            initDb(mContext);
-            productList = productTable.get(mDatabase);
-        }
         return productList;
     }
 
     public void addOrUpdate(Product product) {
         productTable.addOrUpdate(mDatabase, product);
-    }
-
-    private void initDb(Context context) {
-        List<Product> productList = ProductAssets.getProducts(context);
-        for (Product product : productList) {
-            productTable.addOrUpdate(mDatabase, product);
-        }
     }
 
     public Product get(int id) {

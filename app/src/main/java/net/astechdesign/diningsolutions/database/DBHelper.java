@@ -35,10 +35,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        productTable = new ProductTable();
+        productTable = new ProductTable(context);
         orderItemTable = new OrderItemTable();
-        orderTable = new OrderTable();
-        customerTable = new CustomerTable();
+        orderTable = new OrderTable(context);
+        customerTable = new CustomerTable(context);
         tables.add(productTable);
         tables.add(customerTable);
         tables.add(orderTable);

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.repositories.RepoManager;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
@@ -43,7 +44,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        customerRepo = new CustomerRepo(this);
+        customerRepo = RepoManager.getCustomerRepo(this);
         setContentView(R.layout.activity_customer_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -104,7 +105,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
 
     @Override
     public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
-        CustomerRepo.addOrUpdate(this, customer);
+        customerRepo.addOrUpdate(customer);
         setupRecyclerView((RecyclerView) mRecyclerView);
         showCustomerDetails(customer);
 

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DSDDate implements Serializable {
+public class DSDDate implements Serializable, Comparable {
 
     private static final DSDDateFormatter dateFormatter = DSDDateFormatter.instance();
     private final Date date;
@@ -49,5 +49,27 @@ public class DSDDate implements Serializable {
 
     public String dbFormat() {
         return dateFormatter.dbFormat(date);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        return date != null ? date.equals(((DSDDate) o).date) : ((DSDDate) o).date == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = date != null ? date.hashCode() : 0;
+        result = 31 * result + year;
+        result = 31 * result + month;
+        result = 31 * result + day;
+        return result;
+    }
+
+    @Override
+    public int compareTo(Object another) {
+        return date.compareTo(((DSDDate) another).date);
     }
 }

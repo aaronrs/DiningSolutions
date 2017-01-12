@@ -12,6 +12,7 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductRepo;
+import net.astechdesign.diningsolutions.repositories.RepoManager;
 
 /**
  * A fragment representing a single Product detail screen.
@@ -42,7 +43,7 @@ public class ProductDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ProductRepo productRepo = new ProductRepo(getContext());
+        ProductRepo productRepo = RepoManager.getProductRepo(getContext());
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader

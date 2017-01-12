@@ -1,14 +1,15 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Product;
+import net.astechdesign.diningsolutions.repositories.ProductAssets;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class ProductTable extends CMSTable<Product> {
 
@@ -28,9 +29,20 @@ public class ProductTable extends CMSTable<Product> {
             PRODUCT_BARCODE + " TEXT, " +
             PRODUCT_DELETED + " INTEGER " +
             ")";
+    private Context context;
 
-    public ProductTable() {
+    public ProductTable(Context context) {
         super(TABLE_NAME, CREATE_TABLE);
+        this.context = context;
+    }
+
+    @Override
+    public void create(SQLiteDatabase db) {
+        super.create(db);
+        List<Product> productList = ProductAssets.getProducts(context);
+        for (Product product : productList) {
+            addOrUpdate(db, product);
+        }
     }
 
     @Override

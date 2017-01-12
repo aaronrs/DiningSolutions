@@ -1,11 +1,13 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.repositories.CustomerAssets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +45,20 @@ public class CustomerTable extends CMSTable<Customer> {
             ADDRESS_COUNTY + " TEXT, " +
             ADDRESS_POSTCODE + " TEXT " +
             ")";
+    private Context context;
 
-    public CustomerTable() {
+    public CustomerTable(Context context) {
         super(TABLE_NAME, CREATE_TABLE);
+        this.context = context;
+    }
+
+    @Override
+    public void create(SQLiteDatabase db) {
+        super.create(db);
+        List<Customer> customerList = CustomerAssets.getCustomers(context);
+        for (Customer customer: customerList) {
+            addOrUpdate(db, customer);
+        }
     }
 
     @Override

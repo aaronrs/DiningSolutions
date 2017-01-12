@@ -1,6 +1,5 @@
 package net.astechdesign.diningsolutions.repositories;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -12,65 +11,26 @@ import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class OrderRepo extends Repo {
-
-    private static OrderRepo instance;
-
-    private Context mContext;
 
     private final SQLiteDatabase mDatabase;
     private final OrderTable orderTable;
     private final OrderItemTable orderItemsTable;
 
-    public OrderRepo(Context context) {
-        mContext = context.getApplicationContext();
+    OrderRepo(Context context) {
         DBHelper dbHelper = DBHelper.getDBHelper(context);
         mDatabase = dbHelper.getWritableDatabase();
         orderTable = dbHelper.getOrderTable();
         orderItemsTable = dbHelper.getOrderItemsTable();
     }
 
-    public List<Order> getOrders() {
-        List<Order> orders = orderTable.getOrders(mDatabase);
-        if (orders.isEmpty()) {
-            initDb(mContext);
-            orders = orderTable.getOrders(mDatabase);
-        }
-        return orders;
-    }
-
     public List<Order> getOrders(Customer customer) {
         List<Order> orders = orderTable.getOrders(mDatabase, customer);
-        if (orders.isEmpty()) {
-            initDb(mContext);
-            orders = orderTable.getOrders(mDatabase, customer);
-        }
         return orders;
-    }
-
-    public static List<Order> get(Context context, Customer customer) {
-        return getInstance(context).getOrders(customer);
-    }
-
-    private static OrderRepo getInstance(Context context) {
-        if (instance == null) {
-            instance = new OrderRepo(context);
-        }
-        return instance;
-    }
-
-    private void initDb(Context context) {
-        List<Order> productList = OrderAssets.getOrders(context, CustomerRepo.get(context).get(0).id);
-        for (Order order : productList) {
-            ContentValues insertValues = orderTable.getInsertValues(order);
-            mDatabase.insert(orderTable.TABLE_NAME, null, insertValues);
-            for (OrderItem item : order.orderItems) {
-                insertValues = orderItemsTable.getInsertValues(item);
-                mDatabase.insert(orderItemsTable.TABLE_NAME, null, insertValues);
-            }
-        }
     }
 
     public List<OrderItem> getOrderItems(Order order) {
@@ -81,5 +41,19 @@ public class OrderRepo extends Repo {
         int invoiceNumber = orderTable.newInvoiceNumber(mDatabase);
         Order order = new Order(-1, mCustomer.getId(), new DSDDate(), Integer.toString(invoiceNumber));
         orderTable.addOrUpdate(mDatabase, order);
+    }
+
+    public List<Order> getOrdersByDate(Customer mCustomer) {
+        List<Order> orders = getOrders(mCustomer);
+        Collections.sort(orders, new Comparator<Order>() {
+            @Override
+            public int compare(Order lhs, Order rhs) {
+                if (lhs.created.equals(rhs.created)) {
+                    return - lhs.invoiceNumber.compareTo(rhs.invoiceNumber);
+                }
+                return - lhs.created.compareTo(rhs.created);
+            }
+        });
+        return orders;
     }
 }

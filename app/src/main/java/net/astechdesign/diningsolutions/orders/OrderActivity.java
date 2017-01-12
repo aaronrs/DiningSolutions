@@ -27,6 +27,7 @@ import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
+import net.astechdesign.diningsolutions.repositories.RepoManager;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        mOrderRepo = new OrderRepo(this);
+        mOrderRepo = RepoManager.getOrderRepo(this);
 
         mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
 
@@ -58,7 +59,7 @@ public class OrderActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mOrders = mOrderRepo.getOrders(mCustomer);
+        mOrders = mOrderRepo.getOrdersByDate(mCustomer);
         // Setup spinner
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setAdapter(new MyAdapter(
@@ -68,16 +69,7 @@ public class OrderActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // When the given dropdown item is selected, show its contents in the
-                // container view.
-                OrderDetailFragment fragment = new OrderDetailFragment();
-                Bundle args = new Bundle();
-                args.putSerializable(CUSTOMER, mCustomer);
-                args.putSerializable(ORDER, mOrders.get(position));
-                fragment.setArguments(args);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.order_container, fragment)
-                        .commit();
+                showOrder(position);
             }
 
             @Override
@@ -98,6 +90,19 @@ public class OrderActivity extends AppCompatActivity {
             mOrder = mOrders.get(0);
             initialiseView();
         }
+    }
+
+    private void showOrder(int position) {
+        OrderDetailFragment fragment = new OrderDetailFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(CUSTOMER, mCustomer);
+        mOrder = mOrders.get(position);
+        initialiseView();
+        args.putSerializable(ORDER, mOrder);
+        fragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.order_container, fragment)
+                .commit();
     }
 
     private void initialiseView() {
@@ -122,6 +127,7 @@ public class OrderActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_item_new_order:
                 createNewOrder();
+                showOrder(0);
                 return true;
             case R.id.menu_item_products:
                 Intent intent = new Intent(this, ProductListActivity.class);
