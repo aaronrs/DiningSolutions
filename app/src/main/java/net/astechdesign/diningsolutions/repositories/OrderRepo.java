@@ -4,37 +4,38 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
-import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
-import net.astechdesign.diningsolutions.model.OrderItem;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class OrderRepo extends Repo {
+public class OrderRepo {
 
-    private final SQLiteDatabase mDatabase;
+    private static OrderRepo repo;
     private final OrderTable orderTable;
-    private final OrderItemTable orderItemsTable;
+    private final Context mContext;
+    private final SQLiteDatabase mDatabase;
 
-    OrderRepo(Context context) {
-        DBHelper dbHelper = DBHelper.getDBHelper(context);
-        mDatabase = dbHelper.getWritableDatabase();
-        orderTable = dbHelper.getOrderTable();
-        orderItemsTable = dbHelper.getOrderItemsTable();
+    public static OrderRepo get(Context context) {
+        if (repo == null) {
+            repo = new OrderRepo(context.getApplicationContext());
+        }
+        return repo;
+    }
+
+    private OrderRepo(Context context) {
+        mContext = context;
+        mDatabase = new DBHelper(mContext).getWritableDatabase();
+        orderTable = DBHelper.getOrderTable();
     }
 
     public List<Order> getOrders(Customer customer) {
         List<Order> orders = orderTable.getOrders(mDatabase, customer);
         return orders;
-    }
-
-    public List<OrderItem> getOrderItems(Order order) {
-        return orderItemsTable.getOrderItems(mDatabase, order);
     }
 
     public void create(Customer mCustomer) {

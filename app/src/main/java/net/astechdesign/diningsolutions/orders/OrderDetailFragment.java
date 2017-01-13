@@ -14,9 +14,8 @@ import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
+import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
-import net.astechdesign.diningsolutions.repositories.Repo;
-import net.astechdesign.diningsolutions.repositories.RepoManager;
 
 import java.util.List;
 
@@ -29,6 +28,7 @@ public class OrderDetailFragment extends Fragment {
 
     private Customer mCustomer;
     private Order mOrder;
+    private OrderItemRepo orderItemRepo;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,7 +40,8 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOrderRepo = RepoManager.getOrderRepo(getContext());
+        mOrderRepo = OrderRepo.get(getContext());
+        orderItemRepo = OrderItemRepo.get(getContext());
 
         mCustomer = (Customer)getArguments().getSerializable(CUSTOMER);
         if (getArguments().containsKey(ORDER)) {
@@ -71,7 +72,7 @@ public class OrderDetailFragment extends Fragment {
     private void setupRecyclerView(View rootView) {
         View recyclerView = rootView.findViewById(R.id.order_items_list);
         assert recyclerView != null;
-        ((RecyclerView)recyclerView).setAdapter(new SimpleItemRecyclerViewAdapter(mOrderRepo.getOrderItems(mOrder)));
+        ((RecyclerView)recyclerView).setAdapter(new SimpleItemRecyclerViewAdapter(orderItemRepo.getOrderItems(mOrder)));
     }
 
     public class SimpleItemRecyclerViewAdapter

@@ -11,24 +11,31 @@ import java.util.List;
 
 public class CustomerRepo {
 
+    private static CustomerRepo repo;
+
+    private final CustomerTable mCustomerTable;
     private final Context mContext;
     private final SQLiteDatabase mDatabase;
-    private final CustomerTable customerTable;
-    private final DBHelper dbHelper;
 
-    CustomerRepo(Context context) {
-        this.mContext = context.getApplicationContext();
-        dbHelper = DBHelper.getDBHelper(context);
-        mDatabase = dbHelper.getWritableDatabase();
-        customerTable = dbHelper.getCustomerTable();
+    public static CustomerRepo get(Context context) {
+        if (repo == null) {
+            repo = new CustomerRepo(context.getApplicationContext());
+        }
+        return repo;
+    }
+
+    private CustomerRepo(Context context) {
+        mContext = context;
+        mDatabase = new DBHelper(mContext).getWritableDatabase();
+        mCustomerTable = DBHelper.getCustomerTable();
     }
 
     public List<Customer> get() {
-        List<Customer> customerList = customerTable.get(mDatabase);
+        List<Customer> customerList = mCustomerTable.get(mDatabase);
         return customerList;
     }
 
     public void addOrUpdate(Customer customer) {
-        customerTable.addOrUpdate(mDatabase, customer);
+        mCustomerTable.addOrUpdate(mDatabase, customer);
     }
 }

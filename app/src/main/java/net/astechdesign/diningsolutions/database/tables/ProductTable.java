@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductAssets;
 
@@ -37,8 +38,7 @@ public class ProductTable extends CMSTable<Product> {
     }
 
     @Override
-    public void create(SQLiteDatabase db) {
-        super.create(db);
+    public void initDb(SQLiteDatabase db) {
         List<Product> productList = ProductAssets.getProducts(context);
         for (Product product : productList) {
             addOrUpdate(db, product);
@@ -46,7 +46,7 @@ public class ProductTable extends CMSTable<Product> {
     }
 
     @Override
-    public void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void upgrade(int oldVersion, int newVersion) {
 
     }
 
@@ -61,9 +61,9 @@ public class ProductTable extends CMSTable<Product> {
         return values;
     }
 
-    public List<Product> get(SQLiteDatabase mDatabase) {
+    public List<Product> get(SQLiteDatabase db) {
         List<Product> productList = new ArrayList<>();
-        Cursor cursor = mDatabase.query(TABLE_NAME, null, PRODUCT_DELETED + " = 0", null, null, null, PRODUCT_NAME);
+        Cursor cursor = db.query(TABLE_NAME, null, PRODUCT_DELETED + " = 0", null, null, null, PRODUCT_NAME);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
@@ -73,8 +73,8 @@ public class ProductTable extends CMSTable<Product> {
         return productList;
     }
 
-    public Product get(SQLiteDatabase mDatabase, int id) {
-        Cursor cursor = mDatabase.query(TABLE_NAME, null, _ID + " = ? " + PRODUCT_DELETED + " = 0", id(id), null, null, PRODUCT_NAME);
+    public Product get(SQLiteDatabase db, int id) {
+        Cursor cursor = db.query(TABLE_NAME, null, _ID + " = ? " + PRODUCT_DELETED + " = 0", id(id), null, null, PRODUCT_NAME);
         cursor.moveToFirst();
         ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
         return productCursorWrapper.getProduct();

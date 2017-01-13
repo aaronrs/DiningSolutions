@@ -20,10 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductRepo;
-import net.astechdesign.diningsolutions.repositories.RepoManager;
 
 import java.util.List;
 
@@ -34,14 +32,11 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
     private ProductRecyclerViewAdapter adapter;
     private View mRecyclerView;
     private ProductEditFragment newProductFragment;
-    private ProductRepo productRepo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
-
-        productRepo = RepoManager.getProductRepo(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,7 +53,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
     }
 
     private void setupRecyclerView(@NonNull View recyclerView) {
-        adapter = new ProductRecyclerViewAdapter(productRepo.get());
+        adapter = new ProductRecyclerViewAdapter(ProductRepo.get(this).get());
         ((RecyclerView) recyclerView).setAdapter(adapter);
     }
 
@@ -84,7 +79,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
 
     @Override
     public void onDialogPositiveClick(DialogInterface dialog, Product product) {
-        productRepo.addOrUpdate(product);
+        ProductRepo.get(this).addOrUpdate(product);
         if (product.isDeleted()) {
             Toast.makeText(this, "Product deleted: " + product.name, Toast.LENGTH_SHORT).show();
         }

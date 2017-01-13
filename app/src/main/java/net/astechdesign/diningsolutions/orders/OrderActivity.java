@@ -27,7 +27,6 @@ import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
-import net.astechdesign.diningsolutions.repositories.RepoManager;
 
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        mOrderRepo = RepoManager.getOrderRepo(this);
+        mOrderRepo = OrderRepo.get(this);
 
         mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
 
@@ -140,6 +139,7 @@ public class OrderActivity extends AppCompatActivity {
 
     private void createNewOrder() {
         mOrderRepo.create(mCustomer);
+        mOrders = mOrderRepo.getOrdersByDate(mCustomer);
     }
 
 

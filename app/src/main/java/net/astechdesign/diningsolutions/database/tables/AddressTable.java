@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.model.Address;
-import net.astechdesign.diningsolutions.model.Customer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +34,16 @@ public class AddressTable extends CMSTable<Address> {
             ADDRESS_POSTCODE + " TEXT " +
             ")";
 
-    protected AddressTable() {
+    protected AddressTable(DBHelper db) {
         super(TABLE_NAME, CREATE_TABLE);
     }
 
     @Override
-    public void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void initDb(SQLiteDatabase db) {
+    }
+
+    @Override
+    public void upgrade(int oldVersion, int newVersion) {
 
     }
 
@@ -55,9 +59,9 @@ public class AddressTable extends CMSTable<Address> {
         return values;
     }
 
-    public List<Address> get(SQLiteDatabase mDatabase) {
+    public List<Address> get(SQLiteDatabase db) {
         List<Address> addressList = new ArrayList<>();
-        Cursor cursor = mDatabase.query(TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             AddressCursorWrapper addressCursorWrapper = new AddressCursorWrapper(cursor);
@@ -67,19 +71,19 @@ public class AddressTable extends CMSTable<Address> {
         return addressList;
     }
 
-    public Address get(SQLiteDatabase mDatabase, UUID customerId) {
-        Cursor cursor = mDatabase.query(TABLE_NAME, null, CUSTOMER_ID + " = ?", new String[]{customerId.toString()}, null, null, null);
+    public Address get(SQLiteDatabase db, UUID customerId) {
+        Cursor cursor = db.query(TABLE_NAME, null, CUSTOMER_ID + " = ?", new String[]{customerId.toString()}, null, null, null);
         cursor.moveToFirst();
         AddressCursorWrapper addressCursorWrapper = new AddressCursorWrapper(cursor);
         return addressCursorWrapper.getAddress();
     }
 
-    public void add(SQLiteDatabase mDatabase, Address address) {
+    public void add(SQLiteDatabase db, Address address) {
         ContentValues insertValues = getInsertValues(address);
-        mDatabase.insert(TABLE_NAME, null, insertValues);
+        db.insert(TABLE_NAME, null, insertValues);
     }
 
-    public void update(SQLiteDatabase mDatabase, UUID customerId, Address address) {
-        mDatabase.update(TABLE_NAME, getInsertValues(address), _ID + " = ?", new String[]{Integer.toString(address.id)});
+    public void update(SQLiteDatabase db, UUID customerId, Address address) {
+        db.update(TABLE_NAME, getInsertValues(address), _ID + " = ?", new String[]{Integer.toString(address.id)});
     }
 }

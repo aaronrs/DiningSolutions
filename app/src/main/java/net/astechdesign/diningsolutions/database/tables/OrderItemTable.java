@@ -1,9 +1,11 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
@@ -31,12 +33,16 @@ public class OrderItemTable extends CMSTable<OrderItem> {
             DELIVERY_DATE + " DATE" +
             ")";
 
-    public OrderItemTable() {
+    public OrderItemTable(Context mContext) {
         super(TABLE_NAME, CREATE_TABLE);
     }
 
     @Override
-    public void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void initDb(SQLiteDatabase db) {
+    }
+
+    @Override
+    public void upgrade(int oldVersion, int newVersion) {
 
     }
 
@@ -51,9 +57,9 @@ public class OrderItemTable extends CMSTable<OrderItem> {
         return values;
     }
 
-    public List<OrderItem> getOrderItems(SQLiteDatabase mDatabase, Order order) {
+    public List<OrderItem> getOrderItems(SQLiteDatabase db, Order order) {
         List<OrderItem> orderItems = new ArrayList<>();
-        Cursor orderItemCursor = mDatabase.rawQuery("select * from orderItems", null);
+        Cursor orderItemCursor = db.rawQuery("select * from orderItems", null);
 //        Cursor orderItemCursor = mDatabase.rawQuery(DbQuery.getSelectWhere(TABLE_NAME, ORDER_ID), new String[]{Integer.toString(order.getId())});
         orderItemCursor.moveToFirst();
         while (!orderItemCursor.isAfterLast()) {

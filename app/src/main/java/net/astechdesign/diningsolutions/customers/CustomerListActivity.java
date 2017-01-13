@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.repositories.RepoManager;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
@@ -39,12 +38,10 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     private CustomerEditFragment customerEditFragment;
     private Customer mCurrentCustomer;
     private View mRecyclerView;
-    private CustomerRepo customerRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        customerRepo = RepoManager.getCustomerRepo(this);
         setContentView(R.layout.activity_customer_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -105,7 +102,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
 
     @Override
     public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
-        customerRepo.addOrUpdate(customer);
+        CustomerRepo.get(this).addOrUpdate(customer);
         setupRecyclerView((RecyclerView) mRecyclerView);
         showCustomerDetails(customer);
 
@@ -114,7 +111,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(customerRepo.get()));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(CustomerRepo.get(this).get()));
     }
 
     public class SimpleItemRecyclerViewAdapter

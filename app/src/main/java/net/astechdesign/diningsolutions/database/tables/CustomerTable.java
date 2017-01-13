@@ -5,13 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.repositories.CustomerAssets;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class CustomerTable extends CMSTable<Customer> {
 
@@ -53,8 +53,7 @@ public class CustomerTable extends CMSTable<Customer> {
     }
 
     @Override
-    public void create(SQLiteDatabase db) {
-        super.create(db);
+    public void initDb(SQLiteDatabase db) {
         List<Customer> customerList = CustomerAssets.getCustomers(context);
         for (Customer customer: customerList) {
             addOrUpdate(db, customer);
@@ -62,7 +61,7 @@ public class CustomerTable extends CMSTable<Customer> {
     }
 
     @Override
-    public void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void upgrade(int oldVersion, int newVersion) {
 
     }
 
@@ -84,9 +83,9 @@ public class CustomerTable extends CMSTable<Customer> {
         return values;
     }
 
-    public List<Customer> get(SQLiteDatabase mDatabase) {
+    public List<Customer> get(SQLiteDatabase db) {
         List<Customer> customerList = new ArrayList<>();
-        Cursor cursor = mDatabase.query(TABLE_NAME, null, null, null, null, null, CUSTOMER_NAME);
+        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, CUSTOMER_NAME);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             CustomerCursorWrapper customerCursorWrapper = new CustomerCursorWrapper(cursor);
@@ -95,14 +94,5 @@ public class CustomerTable extends CMSTable<Customer> {
             cursor.moveToNext();
         }
         return customerList;
-    }
-
-    private void add(SQLiteDatabase mDatabase, Customer customer) {
-        ContentValues insertValues = getInsertValues(customer);
-        mDatabase.insert(TABLE_NAME, null, insertValues);
-    }
-
-    private void update(SQLiteDatabase mDatabase, Customer customer) {
-        mDatabase.update(TABLE_NAME, getInsertValues(customer), _ID + " = ?", new String[]{Integer.toString(customer.id)});
     }
 }

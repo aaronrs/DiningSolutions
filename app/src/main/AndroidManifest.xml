@@ -12,11 +12,6 @@
             android:name=".customers.CustomerListActivity"
             android:label="@string/title_customer_list"
             android:parentActivityName=".todos.TodoListActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".products.ProductListActivity"
@@ -29,7 +24,13 @@
         </activity>
         <activity
             android:name=".todos.TodoListActivity"
-            android:label="@string/title_todo_list"></activity>
+            android:label="@string/title_todo_list">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".orders.OrderActivity"
             android:label="@string/title_activity_order"

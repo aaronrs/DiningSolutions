@@ -11,16 +11,23 @@ import java.util.List;
 
 public class ProductRepo {
 
-    private final Context mContext;
+    private static ProductRepo repo;
+
     private final SQLiteDatabase mDatabase;
     private final ProductTable productTable;
-    private final DBHelper dbHelper;
+    private Context mContext;
 
-    ProductRepo(Context context) {
-        mContext = context.getApplicationContext();
-        dbHelper = DBHelper.getDBHelper(context);
-        mDatabase = dbHelper.getWritableDatabase();
-        productTable = dbHelper.getProductTable();
+    public static ProductRepo get(Context context) {
+        if (repo == null) {
+            repo = new ProductRepo(context.getApplicationContext());
+        }
+        return repo;
+    }
+
+    private ProductRepo(Context context) {
+        mContext = context;
+        mDatabase = new DBHelper(mContext).getWritableDatabase();
+        productTable = DBHelper.getProductTable();
     }
 
     public List<Product> get() {

@@ -1,13 +1,12 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.model.Model;
-
-import java.util.List;
-import java.util.UUID;
 
 public abstract class CMSTable<T extends Model> implements BaseColumns {
 
@@ -19,34 +18,37 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
         this.createTable = createTable;
     }
 
-    public void create(SQLiteDatabase db) {
+    public final void create(SQLiteDatabase db) {
         try {
             db.execSQL(createTable);
+            initDb(db);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public abstract void upgrade(SQLiteDatabase db, int oldVersion, int newVersion);
+    public abstract void initDb(SQLiteDatabase db);
+
+    public abstract void upgrade(int oldVersion, int newVersion);
 
     protected abstract ContentValues getInsertValues(T model);
 
-    public void addOrUpdate(SQLiteDatabase mDatabase, T model) {
+    public void addOrUpdate(SQLiteDatabase db, T model) {
         if (model.getId() == -1) {
-            add(mDatabase, model);
+            add(db, model);
         } else {
-            update(mDatabase, model);
+            update(db, model);
         }
     }
 
-    private void add(SQLiteDatabase mDatabase, T model) {
+    private void add(SQLiteDatabase db, T model) {
         ContentValues insertValues = getInsertValues(model);
-        mDatabase.insert(tableName, null, insertValues);
+        db.insert(tableName, null, insertValues);
     }
 
-    private void update(SQLiteDatabase mDatabase, T model) {
+    private void update(SQLiteDatabase db, T model) {
         ContentValues insertValues = getInsertValues(model);
-        mDatabase.update(tableName, insertValues, _ID + " = ?", new String[]{Integer.toString(model.getId())});
+        db.update(tableName, insertValues, _ID + " = ?", new String[]{Integer.toString(model.getId())});
     }
 
     protected String[] id(int id) {

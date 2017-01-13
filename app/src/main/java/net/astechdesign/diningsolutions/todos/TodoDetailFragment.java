@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Todo;
-import net.astechdesign.diningsolutions.repositories.RepoManager;
 import net.astechdesign.diningsolutions.repositories.TodoRepo;
 
 import java.util.UUID;
@@ -50,7 +49,7 @@ public class TodoDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             UUID uuid = UUID.randomUUID();
-            mItem = RepoManager.getTodoRepo(getContext()).get(uuid);
+            mItem = TodoRepo.get(getContext()).get(uuid);
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
