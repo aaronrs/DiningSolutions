@@ -14,8 +14,6 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.Phone;
 
 public class OrderEditFragment extends DialogFragment {
 

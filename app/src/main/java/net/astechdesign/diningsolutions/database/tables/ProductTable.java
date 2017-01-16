@@ -79,4 +79,12 @@ public class ProductTable extends CMSTable<Product> {
         ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
         return productCursorWrapper.getProduct();
     }
+
+    public Cursor getCursor(SQLiteDatabase mDatabase) {
+        return mDatabase.query(TABLE_NAME, null, null, null, null, null, PRODUCT_NAME);
+    }
+
+    public Cursor getCursor(SQLiteDatabase mDatabase, String filter) {
+        return mDatabase.query(TABLE_NAME, null, PRODUCT_NAME + " LIKE ?", new String[]{filter}, null, null, PRODUCT_NAME);
+    }
 }

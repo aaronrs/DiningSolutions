@@ -4,86 +4,86 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <Button
+        android:text="Add Product"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_product_btn"
+        android:onClick="addProduct" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/back"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Produce Purchased" />
 
-            <TextView
-                style="?android:attr/textAppearanceMedium"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Produce Purchased" />
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Batch No." />
 
-            <TextView
-                style="?android:attr/textAppearanceMedium"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Batch No." />
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Price" />
 
-            <TextView
-                style="?android:attr/textAppearanceMedium"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Price" />
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Quantity" />
 
-            <TextView
-                style="?android:attr/textAppearanceMedium"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Quantity" />
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Cost" />
 
-            <TextView
-                style="?android:attr/textAppearanceMedium"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Cost" />
+    </LinearLayout>
 
-        </LinearLayout>
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/order_items_list"
+        android:name="net.astechdesign.diningsolutions.OrderDetailFragment"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:context="net.astechdesign.diningsolutions.customers.OrderDetailFragment"
+        tools:listitem="@layout/order_item_list_content" />
 
-        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/order_items_list"
-            android:name="net.astechdesign.diningsolutions.OrderDetailFragment"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="net.astechdesign.diningsolutions.customers.OrderDetailFragment"
-            tools:listitem="@layout/order_item_list_content"
-            android:layout_width="300dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="640dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="16dp"
+            android:text="Total" />
 
-            <TextView
-                style="?android:attr/textAppearanceMedium"
-                android:layout_width="640dp"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:padding="16dp"
-                android:text="Total" />
+        <TextView
+            android:id="@+id/order_detail_total"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp" />
 
-            <TextView
-                android:id="@+id/order_detail_total"
-                style="?android:attr/textAppearanceMedium"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:padding="16dp" />
-
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

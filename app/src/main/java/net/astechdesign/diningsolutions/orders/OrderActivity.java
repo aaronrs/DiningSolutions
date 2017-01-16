@@ -1,12 +1,14 @@
 package net.astechdesign.diningsolutions.orders;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources.Theme;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ThemedSpinnerAdapter;
@@ -23,8 +25,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
@@ -33,12 +37,14 @@ import java.util.List;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
-public class OrderActivity extends AppCompatActivity {
+public class OrderActivity extends AppCompatActivity implements AddProductFragment.ProductAddListener {
 
+    private static final String ADD_PRODUCT = "add_product";
     private Customer mCustomer;
     private OrderRepo mOrderRepo;
     private List<Order> mOrders;
     private Order mOrder;
+    private AddProductFragment newProductFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +148,11 @@ public class OrderActivity extends AppCompatActivity {
         mOrders = mOrderRepo.getOrdersByDate(mCustomer);
     }
 
+    @Override
+    public void onDialogPositiveClick(DialogInterface dialog, Product product) {
+        Snackbar.make(findViewById(R.id.main_content), "Added product " + product.name, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
 
     private static class MyAdapter extends ArrayAdapter<Order> implements ThemedSpinnerAdapter {
         private final ThemedSpinnerAdapter.Helper mDropDownHelper;
@@ -215,5 +226,11 @@ public class OrderActivity extends AppCompatActivity {
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_INVOICE_NUMBER)));
             return rootView;
         }
+    }
+
+    public void addProduct(View view) {
+        FragmentManager fm = getSupportFragmentManager();
+        newProductFragment = new AddProductFragment();
+        newProductFragment.show(fm, ADD_PRODUCT);
     }
 }

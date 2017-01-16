@@ -1,6 +1,7 @@
 package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
@@ -41,5 +42,13 @@ public class ProductRepo {
 
     public Product get(int id) {
         return productTable.get(mDatabase, id);
+    }
+
+    public Cursor getProductCursor() {
+        return productTable.getCursor(mDatabase);
+    }
+
+    public Cursor getProductCursor(CharSequence filter) {
+        return productTable.getCursor(mDatabase, String.format("%%%s%%",filter));
     }
 }
