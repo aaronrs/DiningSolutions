@@ -9,7 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="net.astechdesign.diningsolutions.orders.OrderListActivity">
+    tools:context="net.astechdesign.diningsolutions.orders.OrderActivity">
 
     <!--
     This layout is a two-pane layout for the Customers

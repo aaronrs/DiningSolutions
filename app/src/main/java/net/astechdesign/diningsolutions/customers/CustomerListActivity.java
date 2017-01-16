@@ -1,6 +1,5 @@
 package net.astechdesign.diningsolutions.customers;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
@@ -33,10 +33,10 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     private static final String ADD_CUSTOMER = "add_customer";
     private static final String EDIT_CUSTOMER = "edit_customer";
 
-    private boolean mTwoPane;
     private CustomerEditFragment newCustomerFragment;
     private CustomerEditFragment customerEditFragment;
     private Customer mCurrentCustomer;
+    private AutoCompleteTextView mSelectCustomerView;
     private View mRecyclerView;
 
     @Override
@@ -64,17 +64,10 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             }
         });
 
+        mSelectCustomerView = (AutoCompleteTextView) findViewById(R.id.customer_select);
         mRecyclerView = findViewById(R.id.customer_list);
         assert mRecyclerView != null;
         setupRecyclerView((RecyclerView) mRecyclerView);
-
-        if (findViewById(R.id.customer_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
     }
 
     @Override
@@ -137,14 +130,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
-                        showCustomerDetails(holder.mItem);
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, CustomerDetailActivity.class);
-                        intent.putExtra(CustomerDetailFragment.ARG_CUSTOMER, holder.getId());
-                        context.startActivity(intent);
-                    }
+                    showCustomerDetails(holder.mItem);
                 }
             });
         }
