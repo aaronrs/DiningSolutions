@@ -27,7 +27,9 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
@@ -41,7 +43,6 @@ public class OrderActivity extends AppCompatActivity implements AddProductFragme
 
     private static final String ADD_PRODUCT = "add_product";
     private Customer mCustomer;
-    private OrderRepo mOrderRepo;
     private List<Order> mOrders;
     private Order mOrder;
     private AddProductFragment newProductFragment;
@@ -50,8 +51,6 @@ public class OrderActivity extends AppCompatActivity implements AddProductFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
-
-        mOrderRepo = OrderRepo.get(this);
 
         mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
 
@@ -64,7 +63,7 @@ public class OrderActivity extends AppCompatActivity implements AddProductFragme
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mOrders = mOrderRepo.getOrdersByDate(mCustomer);
+        mOrders = OrderRepo.get(this).getOrdersByDate(mCustomer);
         // Setup spinner
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setAdapter(new MyAdapter(
@@ -144,12 +143,18 @@ public class OrderActivity extends AppCompatActivity implements AddProductFragme
     }
 
     private void createNewOrder() {
-        mOrderRepo.create(mCustomer);
-        mOrders = mOrderRepo.getOrdersByDate(mCustomer);
+        OrderRepo.get(this).create(mCustomer);
+        mOrders = OrderRepo.get(this).getOrdersByDate(mCustomer);
     }
 
     @Override
     public void onDialogPositiveClick(DialogInterface dialog, Product product) {
+        int quantity = 1;
+        String batch = "123";
+        DSDDate deliveryDate = new DSDDate();
+        mOrder.addItem(product, quantity, batch, deliveryDate);
+        OrderRepo.get(this).add(mOrder);
+
         Snackbar.make(findViewById(R.id.main_content), "Added product " + product.name, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
