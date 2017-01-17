@@ -66,7 +66,11 @@ public class CustomerDetailFragment extends Fragment {
     }
 
     private void setText(View rootView, int id, String value) {
-        ((TextView) rootView.findViewById(id)).setText(value);
-
+        TextView view = (TextView) rootView.findViewById(id);
+        if (value.trim().isEmpty()) {
+            view.setVisibility(View.GONE);
+        } else {
+            view.setText(value);
+        }
     }
 }

@@ -45,7 +45,7 @@ public class Order extends Model {
         return "Invoice No. " + invoiceNumber + " - " + created.toString();
     }
 
-    public void addItem(Product product, int quantity, String batch, DSDDate deliveryDate) {
-        addItem(new OrderItem(orderItems.size(), this.id, product.name, product.price, quantity, batch, deliveryDate));
+    public void addItem(Product product, double price, int quantity, String batch, DSDDate deliveryDate) {
+        addItem(new OrderItem(orderItems.size(), this.id, product.name, price, quantity, batch, deliveryDate));
     }
 }

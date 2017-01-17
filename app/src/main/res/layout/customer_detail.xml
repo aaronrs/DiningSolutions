@@ -17,59 +17,60 @@
         style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="@dimen/detail_padding" />
     <TextView
         android:id="@+id/customer_email"
         style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="@dimen/detail_padding" />
     <TextView
         android:id="@+id/customer_phone"
         style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="@dimen/detail_padding" />
     <TextView
-        android:text="Address"
-        style="?android:attr/textAppearanceLarge"
+        android:text="ADDRESS"
+        style="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="@dimen/detail_padding" />
     <TextView
         android:id="@+id/address_name"
         style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="@dimen/detail_padding" />
     <TextView
         android:id="@+id/address_line1"
         style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="@dimen/detail_padding" />
     <TextView
         android:id="@+id/address_line2"
         style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="@dimen/detail_padding" />
     <TextView
         android:id="@+id/address_town"
         style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="@dimen/detail_padding" />
     <TextView
         android:id="@+id/address_county"
         style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:padding="@dimen/detail_padding" />
     <TextView
         android:id="@+id/address_postcode"
         style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:inputType="textCapCharacters"
+        android:padding="@dimen/detail_padding" />
 </LinearLayout>

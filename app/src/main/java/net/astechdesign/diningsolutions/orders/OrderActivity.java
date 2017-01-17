@@ -146,11 +146,9 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     }
 
     @Override
-    public void onDialogPositiveClick(DialogInterface dialog, Product product) {
-        int quantity = 1;
-        String batch = "123";
+    public void onDialogPositiveClick(DialogInterface dialog, Product product, String price, String batch, String quantity) {
         DSDDate deliveryDate = new DSDDate();
-        mOrder.addItem(product, quantity, batch, deliveryDate);
+        mOrder.addItem(product, Double.parseDouble(price), Integer.parseInt(quantity), batch, deliveryDate);
         OrderRepo.get(this).add(mOrder);
 
         Snackbar.make(findViewById(R.id.main_content), "Added product " + product.name, Snackbar.LENGTH_LONG)
