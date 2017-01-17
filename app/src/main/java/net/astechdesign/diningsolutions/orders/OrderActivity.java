@@ -25,11 +25,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
-import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
@@ -39,13 +37,13 @@ import java.util.List;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
-public class OrderActivity extends AppCompatActivity implements AddProductFragment.ProductAddListener {
+public class OrderActivity extends AppCompatActivity implements OrderAddProductFragment.ProductAddListener {
 
     private static final String ADD_PRODUCT = "add_product";
     private Customer mCustomer;
     private List<Order> mOrders;
     private Order mOrder;
-    private AddProductFragment newProductFragment;
+    private OrderAddProductFragment newProductFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,7 +233,7 @@ public class OrderActivity extends AppCompatActivity implements AddProductFragme
 
     public void addProduct(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        newProductFragment = new AddProductFragment();
+        newProductFragment = new OrderAddProductFragment();
         newProductFragment.show(fm, ADD_PRODUCT);
     }
 }

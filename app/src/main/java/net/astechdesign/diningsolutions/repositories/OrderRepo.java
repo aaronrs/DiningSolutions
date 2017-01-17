@@ -8,6 +8,7 @@ import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.model.Product;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -56,5 +57,9 @@ public class OrderRepo {
             }
         });
         return orders;
+    }
+
+    public void add(Order mOrder) {
+        orderTable.addOrUpdate(mDatabase, mOrder);
     }
 }

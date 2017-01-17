@@ -22,4 +22,9 @@ public class Product extends Model {
     public boolean isDeleted() {
         return deleted == 1;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

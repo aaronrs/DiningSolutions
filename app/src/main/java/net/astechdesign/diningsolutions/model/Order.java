@@ -8,7 +8,7 @@ public class Order extends Model {
     public int customerId;
     public String invoiceNumber;
     public final DSDDate created;
-    public List<OrderItem> orderItems;
+    public List<OrderItem> orderItems = new ArrayList<>();
 
     public Order(int id, int customerId, DSDDate created, String invoiceNumber) {
         super(id);
@@ -43,5 +43,9 @@ public class Order extends Model {
     @Override
     public String toString() {
         return "Invoice No. " + invoiceNumber + " - " + created.toString();
+    }
+
+    public void addItem(Product product, int quantity, String batch, DSDDate deliveryDate) {
+        addItem(new OrderItem(orderItems.size(), this.id, product.name, product.price, quantity, batch, deliveryDate));
     }
 }

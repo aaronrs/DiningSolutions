@@ -1,19 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
-    <TextView
-        android:text="Product Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <AutoCompleteTextView
-        android:hint="Product Name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/product_name_select" />
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Product Name" />
+
+        <AutoCompleteTextView
+            android:id="@+id/product_name_select"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Product Name"
+            tools:inputType="textCapWords"
+            android:layout_width="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/product_price"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Price"
+            android:inputType="numberDecimal" />
+
+        <EditText
+                android:id="@+id/product_batch"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Batch"
+                android:inputType="text"
+                android:layout_width="120dp" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="Quantity"
+            android:gravity="right"
+            android:layout_width="80dp" />
+
+        <EditText
+                android:id="@+id/product_quantity"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+            android:ems="10"
+                android:text="1"
+                android:inputType="number" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 </LinearLayout>
