@@ -2,13 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:title="Products"
+        android:id="@+id/menu_item_products"
+        app:showAsAction="always|withText" />
+
     <item android:title="New Order"
         android:id="@+id/menu_item_new_order"
         android:icon="@drawable/ic_action_add"
-        app:showAsAction="ifRoom|withText" />
-
-    <item android:title="View Products"
-        android:id="@+id/menu_item_products"
-        android:icon="@drawable/ic_action_add"
-        app:showAsAction="never" />
+        app:showAsAction="always|withText" />
 </menu>

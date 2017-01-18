@@ -10,9 +10,9 @@ import net.astechdesign.diningsolutions.database.tables.ProductTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.Product;
-import net.astechdesign.diningsolutions.repositories.CustomerAssets;
-import net.astechdesign.diningsolutions.repositories.OrderAssets;
-import net.astechdesign.diningsolutions.repositories.ProductAssets;
+import net.astechdesign.diningsolutions.repositories.assets.CustomerAssets;
+import net.astechdesign.diningsolutions.repositories.assets.OrderAssets;
+import net.astechdesign.diningsolutions.repositories.assets.ProductAssets;
 
 import java.util.List;
 

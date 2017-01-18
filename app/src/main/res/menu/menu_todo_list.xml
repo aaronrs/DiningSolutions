@@ -2,18 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="Add Todo"
-        android:id="@+id/menu_item_new_todo"
-        android:icon="@drawable/ic_action_add"
-        app:showAsAction="ifRoom|withText" />
-
     <item android:title="Customers"
         android:id="@+id/menu_item_customers"
-        android:icon="@drawable/ic_action_add"
-        app:showAsAction="never" />
+        app:showAsAction="always|withText" />
 
-    <item android:title="View Products"
+    <item android:title="Products"
         android:id="@+id/menu_item_products"
+        app:showAsAction="always|withText" />
+
+    <item android:title="New Todo"
+        android:id="@+id/menu_item_new_todo"
         android:icon="@drawable/ic_action_add"
-        app:showAsAction="never" />
+        app:showAsAction="always|withText" />
 </menu>

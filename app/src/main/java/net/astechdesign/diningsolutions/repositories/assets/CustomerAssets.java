@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions.repositories;
+package net.astechdesign.diningsolutions.repositories.assets;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class CustomerAssets {
@@ -32,7 +34,7 @@ public class CustomerAssets {
 
         Pattern pattern = Pattern.compile("^\\d{1,3} .*");
 
-        List<String> peeps = new ArrayList<>();
+        Set<String> peeps = new HashSet<>();
         List<Customer> customerList = new ArrayList<>();
         String line;
         try {
@@ -56,13 +58,10 @@ public class CustomerAssets {
                 String postcode = customerInfo[7].trim();
                 String created = customerInfo[8].trim();
 
-//                if (!name.startsWith("Southwell") || peeps.contains(name + postcode)) {
-//                    continue;
-//                }
-                peeps.add(name + postcode);
-
-                Address address = new Address(-1, house, line1, line2, town, county, postcode);
-                customerList.add(new Customer(-1, name, email, "", true, DSDDate.fileCreate(created), "", address));
+                if (peeps.add(name + postcode)) {
+                    Address address = new Address(-1, house, line1, line2, town, county, postcode);
+                    customerList.add(new Customer(-1, name, email, "", true, DSDDate.fileCreate(created), "", address));
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

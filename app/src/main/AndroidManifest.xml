@@ -9,14 +9,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".customers.CustomerListActivity"
-            android:label="@string/title_customer_list"
-            android:parentActivityName=".todos.TodoListActivity">
+            android:name=".todos.TodoListActivity"
+            android:label="@string/title_todo_list">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".customers.CustomerListActivity"
+            android:label="@string/title_customer_list"
+            android:parentActivityName=".todos.TodoListActivity">
         </activity>
         <activity
             android:name=".products.ProductListActivity"
@@ -26,10 +30,6 @@
         <activity
             android:name=".customers.CustomerDetailActivity"
             android:parentActivityName=".customers.CustomerListActivity">
-        </activity>
-        <activity
-            android:name=".todos.TodoListActivity"
-            android:label="@string/title_todo_list">
         </activity>
         <activity
             android:name=".orders.OrderActivity"

@@ -59,8 +59,10 @@ public class CustomerEditFragment extends DialogFragment {
 
         if (mCurrentCustomer != null) {
             mNameText.setText(customer.name);
-            mEmailText1.setText(customer.email.address.split("@")[0]);
-            mEmailText2.setText(customer.email.address.split("@")[1]);
+            if (customer.email.address.contains("@")) {
+                mEmailText1.setText(customer.email.address.split("@")[0]);
+                mEmailText2.setText(customer.email.address.split("@")[1]);
+            }
             mPhoneText.setText(customer.phone.number);
             Address address = customer.address;
             if (address != null) {

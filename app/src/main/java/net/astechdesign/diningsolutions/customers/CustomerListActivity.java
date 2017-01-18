@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -43,7 +42,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     private CustomerEditFragment customerEditFragment;
     private Customer mCurrentCustomer;
     private AutoCompleteTextView mSelectCustomerView;
-    private View mRecyclerView;
+    private RecyclerView mRecyclerView;
     private List<Customer> mCustomerList;
     private List<Customer> mFilteredCustomerList;
     private TextView mCustomerSelect;
@@ -95,9 +94,8 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 }
             }
         });
-        mRecyclerView = findViewById(R.id.customer_list);
-        assert mRecyclerView != null;
-        setupRecyclerView((RecyclerView) mRecyclerView);
+        mRecyclerView = (RecyclerView) findViewById(R.id.customer_list);
+        setupRecyclerView();
     }
 
     private void updateRecycler(String value) {
@@ -110,7 +108,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 mFilteredCustomerList.add(customer);
             }
         }
-        setupRecyclerView((RecyclerView) mRecyclerView);
+        setupRecyclerView();
     }
 
     @Override
@@ -139,15 +137,16 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     @Override
     public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
         CustomerRepo.get(this).addOrUpdate(customer);
-        setupRecyclerView((RecyclerView) mRecyclerView);
+        mCustomerList = CustomerRepo.get(this).get();
+        updateRecycler("");
         showCustomerDetails(customer);
 
         Snackbar.make(findViewById(R.id.coordinatorLayout), "Edited Customer " + customer.name, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(mFilteredCustomerList));
+    private void setupRecyclerView() {
+        mRecyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(mFilteredCustomerList));
     }
 
     public class SimpleItemRecyclerViewAdapter

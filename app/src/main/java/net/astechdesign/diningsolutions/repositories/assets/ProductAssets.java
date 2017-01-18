@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions.repositories;
+package net.astechdesign.diningsolutions.repositories.assets;
 
 import android.content.Context;
 import android.content.res.AssetManager;

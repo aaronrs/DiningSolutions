@@ -1,14 +1,11 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
-import net.astechdesign.diningsolutions.model.OrderItem;
-import net.astechdesign.diningsolutions.repositories.OrderAssets;
 
 import java.util.ArrayList;
 import java.util.List;
