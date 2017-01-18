@@ -45,19 +45,9 @@ public class CustomerTable extends CMSTable<Customer> {
             ADDRESS_COUNTY + " TEXT, " +
             ADDRESS_POSTCODE + " TEXT " +
             ")";
-    private Context context;
 
-    public CustomerTable(Context context) {
+    public CustomerTable() {
         super(TABLE_NAME, CREATE_TABLE);
-        this.context = context;
-    }
-
-    @Override
-    public void initDb(SQLiteDatabase db) {
-        List<Customer> customerList = CustomerAssets.getCustomers(context);
-        for (Customer customer: customerList) {
-            addOrUpdate(db, customer);
-        }
     }
 
     @Override

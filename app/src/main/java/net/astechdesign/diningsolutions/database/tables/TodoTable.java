@@ -11,12 +11,8 @@ public class TodoTable  extends CMSTable<Todo>{
     private static final String TABLE_NAME = "todos";
     private static final String CREATE_TABLE = "";
 
-    public TodoTable(Context mContext) {
+    public TodoTable() {
         super(TABLE_NAME, CREATE_TABLE);
-    }
-
-    @Override
-    public void initDb(SQLiteDatabase db) {
     }
 
     @Override

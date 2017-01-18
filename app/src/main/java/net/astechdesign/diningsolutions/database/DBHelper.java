@@ -4,17 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import net.astechdesign.diningsolutions.database.tables.CMSTable;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.database.tables.ProductTable;
 import net.astechdesign.diningsolutions.database.tables.TodoTable;
-import net.astechdesign.diningsolutions.model.Product;
-import net.astechdesign.diningsolutions.repositories.CustomerRepo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -32,21 +26,18 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
         if (customerTable == null) {
-            customerTable = new CustomerTable(mContext);
-            orderTable = new OrderTable(mContext);
-            orderItemTable = new OrderItemTable(mContext);
-            todoTable = new TodoTable(mContext);
-            productTable = new ProductTable(mContext);
+            customerTable = new CustomerTable();
+            orderTable = new OrderTable();
+            orderItemTable = new OrderItemTable();
+            todoTable = new TodoTable();
+            productTable = new ProductTable();
         }
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        customerTable.create(db);
-        orderTable.create(db);
-        orderItemTable.create(db);
-        todoTable.create(db);
-        productTable.create(db);
+        DBLoader.create(db, productTable, customerTable, orderTable, orderItemTable, todoTable);
+        DBLoader.load(mContext, db, productTable, customerTable, orderTable);
     }
 
     @Override

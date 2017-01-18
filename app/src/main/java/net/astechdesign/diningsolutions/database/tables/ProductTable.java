@@ -30,19 +30,9 @@ public class ProductTable extends CMSTable<Product> {
             PRODUCT_BARCODE + " TEXT, " +
             PRODUCT_DELETED + " INTEGER " +
             ")";
-    private Context context;
 
-    public ProductTable(Context context) {
+    public ProductTable() {
         super(TABLE_NAME, CREATE_TABLE);
-        this.context = context;
-    }
-
-    @Override
-    public void initDb(SQLiteDatabase db) {
-        List<Product> productList = ProductAssets.getProducts(context);
-        for (Product product : productList) {
-            addOrUpdate(db, product);
-        }
     }
 
     @Override

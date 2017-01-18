@@ -96,11 +96,13 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
     private void showOrder(int position) {
         OrderDetailFragment fragment = new OrderDetailFragment();
+
         Bundle args = new Bundle();
         args.putSerializable(CUSTOMER, mCustomer);
+
         mOrder = mOrders.get(position);
-        initialiseView();
         args.putSerializable(ORDER, mOrder);
+        initialiseView();
         fragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.order_container, fragment)

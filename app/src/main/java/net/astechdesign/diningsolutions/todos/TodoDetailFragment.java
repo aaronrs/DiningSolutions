@@ -47,7 +47,7 @@ public class TodoDetailFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
+            // to create content from a content provider.
             UUID uuid = UUID.randomUUID();
             mItem = TodoRepo.get(getContext()).get(uuid);
 

@@ -33,12 +33,8 @@ public class OrderItemTable extends CMSTable<OrderItem> {
             DELIVERY_DATE + " DATE" +
             ")";
 
-    public OrderItemTable(Context mContext) {
+    public OrderItemTable() {
         super(TABLE_NAME, CREATE_TABLE);
-    }
-
-    @Override
-    public void initDb(SQLiteDatabase db) {
     }
 
     @Override

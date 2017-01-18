@@ -21,13 +21,10 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
     public final void create(SQLiteDatabase db) {
         try {
             db.execSQL(createTable);
-            initDb(db);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    public abstract void initDb(SQLiteDatabase db);
 
     public abstract void upgrade(int oldVersion, int newVersion);
 

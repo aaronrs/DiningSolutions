@@ -28,25 +28,9 @@ public class OrderTable extends CMSTable<Order> {
             ORDER_DATE + " DATE, " +
             INVOICE_NO + " TEXT " +
             ")";
-    private Context context;
 
-    public OrderTable(Context context) {
+    public OrderTable() {
         super(TABLE_NAME, CREATE_TABLE);
-        this.context = context;
-    }
-
-    @Override
-    public void initDb(SQLiteDatabase db) {
-        OrderItemTable orderItemTable = new OrderItemTable(context);
-        List<Order> productList = OrderAssets.getOrders(context, 1);
-        for (Order order : productList) {
-            ContentValues insertValues = getInsertValues(order);
-            db.insert(TABLE_NAME, null, insertValues);
-            for (OrderItem item : order.orderItems) {
-                insertValues = orderItemTable.getInsertValues(item);
-                db.insert(orderItemTable.TABLE_NAME, null, insertValues);
-            }
-        }
     }
 
     @Override
@@ -63,7 +47,7 @@ public class OrderTable extends CMSTable<Order> {
 
     public List<Order> getOrders(SQLiteDatabase db, Customer customer) {
         List<Order> orders = new ArrayList<>();
-        Cursor orderCursor = db.rawQuery(DbQuery.getSelectWhere(TABLE_NAME, CUSTOMER_ID), new String[]{Integer.toString(customer.getId())});
+        Cursor orderCursor = db.rawQuery(DbQuery.CUSTOMER_ORDERS, new String[]{Integer.toString(customer.getId())});
         orderCursor.moveToFirst();
         while (!orderCursor.isAfterLast()) {
             OrderCursorWrapper cursorWrapper = new OrderCursorWrapper(orderCursor);

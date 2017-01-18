@@ -39,10 +39,6 @@ public class AddressTable extends CMSTable<Address> {
     }
 
     @Override
-    public void initDb(SQLiteDatabase db) {
-    }
-
-    @Override
     public void upgrade(int oldVersion, int newVersion) {
 
     }
