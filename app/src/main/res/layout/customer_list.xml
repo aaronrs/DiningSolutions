@@ -23,16 +23,18 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
-        <AutoCompleteTextView
+        <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
             android:id="@+id/customer_select"
-            android:hint="name" />
+            android:hint="Name"
+            android:layout_height="wrap_content" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/customer_list"
             android:name="net.astechdesign.diningsolutions.CustomerListFragment"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             app:layoutManager="LinearLayoutManager"

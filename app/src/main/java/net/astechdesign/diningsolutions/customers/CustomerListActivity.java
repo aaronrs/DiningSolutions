@@ -1,5 +1,6 @@
 package net.astechdesign.diningsolutions.customers;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +12,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
@@ -26,6 +32,7 @@ import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
@@ -38,6 +45,9 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     private Customer mCurrentCustomer;
     private AutoCompleteTextView mSelectCustomerView;
     private View mRecyclerView;
+    private List<Customer> mCustomerList;
+    private List<Customer> mFilteredCustomerList;
+    private TextView mCustomerSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +74,43 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             }
         });
 
-        mSelectCustomerView = (AutoCompleteTextView) findViewById(R.id.customer_select);
+        mCustomerList = CustomerRepo.get(this).get();
+        mFilteredCustomerList = new ArrayList<>();
+        mFilteredCustomerList.addAll(mCustomerList);
+
+        mCustomerSelect = (EditText) findViewById(R.id.customer_select);
+        mCustomerSelect.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String value = s.toString().trim();
+                if (value.length() == 0 || value.length() > 2) {
+                    updateRecycler(value);
+                }
+            }
+        });
         mRecyclerView = findViewById(R.id.customer_list);
         assert mRecyclerView != null;
+        setupRecyclerView((RecyclerView) mRecyclerView);
+    }
+
+    private void updateRecycler(String value) {
+        mFilteredCustomerList.clear();
+        if (value.trim().length() == 0) {
+            mFilteredCustomerList.addAll(mCustomerList);
+        }
+        for (Customer customer : mCustomerList) {
+            if (customer.name.toLowerCase().contains(value.toLowerCase())) {
+                mFilteredCustomerList.add(customer);
+            }
+        }
         setupRecyclerView((RecyclerView) mRecyclerView);
     }
 
@@ -104,7 +148,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(CustomerRepo.get(this).get()));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(mFilteredCustomerList));
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -131,6 +175,8 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 @Override
                 public void onClick(View v) {
                     showCustomerDetails(holder.mItem);
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(holder.mView.getWindowToken(), 0);
                 }
             });
         }

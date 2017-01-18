@@ -34,4 +34,9 @@ public class Customer extends Model {
         this.referral = referral;
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
