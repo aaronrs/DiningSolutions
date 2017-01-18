@@ -9,8 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".todos.TodoListActivity"
-            android:label="@string/title_todo_list">
+            android:name=".todos.TodoListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
