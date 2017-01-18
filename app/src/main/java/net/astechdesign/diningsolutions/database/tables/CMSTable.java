@@ -30,7 +30,9 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
 
     protected abstract ContentValues getInsertValues(T model);
 
-    public void addOrUpdate(SQLiteDatabase db, T model) {
+    public abstract void addOrUpdate(SQLiteDatabase db, T model);
+
+    protected void addOrUpdateModel(SQLiteDatabase db, T model) {
         if (model.getId() == -1) {
             add(db, model);
         } else {

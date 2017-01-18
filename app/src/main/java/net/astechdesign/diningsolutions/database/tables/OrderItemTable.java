@@ -53,6 +53,11 @@ public class OrderItemTable extends CMSTable<OrderItem> {
         return values;
     }
 
+    @Override
+    public void addOrUpdate(SQLiteDatabase db, OrderItem model) {
+        addOrUpdateModel(db, model);
+    }
+
     public List<OrderItem> getOrderItems(SQLiteDatabase db, Order order) {
         List<OrderItem> orderItems = new ArrayList<>();
         Cursor orderItemCursor = db.rawQuery("select * from orderItems", null);

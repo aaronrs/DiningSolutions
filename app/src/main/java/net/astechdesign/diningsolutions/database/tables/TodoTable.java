@@ -24,4 +24,9 @@ public class TodoTable  extends CMSTable<Todo>{
     protected ContentValues getInsertValues(Todo model) {
         return null;
     }
+
+    @Override
+    public void addOrUpdate(SQLiteDatabase db, Todo model) {
+        addOrUpdateModel(db, model);
+    }
 }

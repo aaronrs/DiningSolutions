@@ -73,6 +73,11 @@ public class CustomerTable extends CMSTable<Customer> {
         return values;
     }
 
+    @Override
+    public void addOrUpdate(SQLiteDatabase db, Customer model) {
+        addOrUpdateModel(db, model);
+    }
+
     public List<Customer> get(SQLiteDatabase db) {
         List<Customer> customerList = new ArrayList<>();
         Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, CUSTOMER_NAME);

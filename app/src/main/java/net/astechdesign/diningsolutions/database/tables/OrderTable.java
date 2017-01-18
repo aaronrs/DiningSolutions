@@ -45,6 +45,11 @@ public class OrderTable extends CMSTable<Order> {
         return values;
     }
 
+    @Override
+    public void addOrUpdate(SQLiteDatabase db, Order model) {
+        addOrUpdateModel(db, model);
+    }
+
     public List<Order> getOrders(SQLiteDatabase db, Customer customer) {
         List<Order> orders = new ArrayList<>();
         Cursor orderCursor = db.rawQuery(DbQuery.CUSTOMER_ORDERS, new String[]{Integer.toString(customer.getId())});

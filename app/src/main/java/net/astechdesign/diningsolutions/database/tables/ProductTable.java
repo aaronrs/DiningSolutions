@@ -51,6 +51,11 @@ public class ProductTable extends CMSTable<Product> {
         return values;
     }
 
+    @Override
+    public void addOrUpdate(SQLiteDatabase db, Product model) {
+        addOrUpdateModel(db, model);
+    }
+
     public List<Product> get(SQLiteDatabase db) {
         List<Product> productList = new ArrayList<>();
         Cursor cursor = db.query(TABLE_NAME, null, PRODUCT_DELETED + " = 0", null, null, null, PRODUCT_NAME);

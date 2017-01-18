@@ -55,6 +55,11 @@ public class AddressTable extends CMSTable<Address> {
         return values;
     }
 
+    @Override
+    public void addOrUpdate(SQLiteDatabase db, Address model) {
+        addOrUpdateModel(db, model);
+    }
+
     public List<Address> get(SQLiteDatabase db) {
         List<Address> addressList = new ArrayList<>();
         Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
