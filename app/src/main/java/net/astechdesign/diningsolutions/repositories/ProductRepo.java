@@ -5,9 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
+import net.astechdesign.diningsolutions.database.wrappers.ProductCursorWrapper;
 import net.astechdesign.diningsolutions.database.tables.ProductTable;
 import net.astechdesign.diningsolutions.model.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRepo {
@@ -32,7 +34,14 @@ public class ProductRepo {
     }
 
     public List<Product> get() {
-        List<Product> productList = productTable.get(mDatabase);
+        List<Product> productList = new ArrayList<>();
+        Cursor cursor = productTable.get(mDatabase);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
+            productList.add(productCursorWrapper.getProduct());
+            cursor.moveToNext();
+        }
         return productList;
     }
 
@@ -41,14 +50,17 @@ public class ProductRepo {
     }
 
     public Product get(int id) {
-        return productTable.get(mDatabase, id);
+        Cursor cursor = productTable.get(mDatabase, id);
+        cursor.moveToFirst();
+        ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
+        return productCursorWrapper.getProduct();
     }
 
-    public Cursor getProductCursor() {
-        return productTable.getCursor(mDatabase);
+    public Cursor getProducts() {
+        return productTable.get(mDatabase);
     }
 
-    public Cursor getProductCursor(CharSequence filter) {
-        return productTable.getCursor(mDatabase, String.format("%%%s%%",filter));
+    public Cursor getProducts(CharSequence filter) {
+        return productTable.get(mDatabase, String.format("%%%s%%",filter));
     }
 }

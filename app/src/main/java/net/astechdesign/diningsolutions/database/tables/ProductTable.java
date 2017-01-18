@@ -1,16 +1,11 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.astechdesign.diningsolutions.database.DBHelper;
+import net.astechdesign.diningsolutions.database.wrappers.ProductCursorWrapper;
 import net.astechdesign.diningsolutions.model.Product;
-import net.astechdesign.diningsolutions.repositories.ProductAssets;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProductTable extends CMSTable<Product> {
 
@@ -56,30 +51,15 @@ public class ProductTable extends CMSTable<Product> {
         addOrUpdateModel(db, model);
     }
 
-    public List<Product> get(SQLiteDatabase db) {
-        List<Product> productList = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_NAME, null, PRODUCT_DELETED + " = 0", null, null, null, PRODUCT_NAME);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
-            productList.add(productCursorWrapper.getProduct());
-            cursor.moveToNext();
-        }
-        return productList;
+    public Cursor get(SQLiteDatabase db) {
+        return db.query(TABLE_NAME, null, PRODUCT_DELETED + " = 0", null, null, null, PRODUCT_NAME);
     }
 
-    public Product get(SQLiteDatabase db, int id) {
-        Cursor cursor = db.query(TABLE_NAME, null, _ID + " = ? " + PRODUCT_DELETED + " = 0", id(id), null, null, PRODUCT_NAME);
-        cursor.moveToFirst();
-        ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
-        return productCursorWrapper.getProduct();
+    public Cursor get(SQLiteDatabase db, int id) {
+        return db.query(TABLE_NAME, null, _ID + " = ? " + PRODUCT_DELETED + " = 0", id(id), null, null, PRODUCT_NAME);
     }
 
-    public Cursor getCursor(SQLiteDatabase mDatabase) {
-        return mDatabase.query(TABLE_NAME, null, null, null, null, null, PRODUCT_NAME);
-    }
-
-    public Cursor getCursor(SQLiteDatabase mDatabase, String filter) {
+    public Cursor get(SQLiteDatabase mDatabase, String filter) {
         return mDatabase.query(TABLE_NAME, null, PRODUCT_NAME + " LIKE ?", new String[]{filter}, null, null, PRODUCT_NAME);
     }
 }

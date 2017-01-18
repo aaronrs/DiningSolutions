@@ -11,18 +11,23 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductListActivity extends AppCompatActivity implements ProductEditFragment.EditProductListener {
@@ -32,6 +37,9 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
     private ProductRecyclerViewAdapter adapter;
     private View mRecyclerView;
     private ProductEditFragment newProductFragment;
+    private List<Product> mProductList;
+    private List<Product> mFilteredProducts;
+    private EditText mProductSelect;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,13 +55,49 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        mProductSelect = (EditText) findViewById(R.id.product_select);
+        mProductSelect.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String value = s.toString().trim();
+                if (value.length() == 0 || value.length() > 2) {
+                    updateRecycler(value);
+                }
+            }
+        });
+
+        mProductList = ProductRepo.get(this).get();
+        mFilteredProducts = new ArrayList<>();
+        mFilteredProducts.addAll(mProductList);
+
         mRecyclerView = findViewById(R.id.product_list);
         assert mRecyclerView != null;
         setupRecyclerView(mRecyclerView);
     }
 
+    private void updateRecycler(String value) {
+        mFilteredProducts.clear();
+        if (value.trim().length() == 0) {
+            mFilteredProducts.addAll(mProductList);
+        }
+        for (Product product : mProductList) {
+            if (product.name.toLowerCase().contains(value.toLowerCase())) {
+                mFilteredProducts.add(product);
+            }
+        }
+        setupRecyclerView(mRecyclerView);
+    }
+
     private void setupRecyclerView(@NonNull View recyclerView) {
-        adapter = new ProductRecyclerViewAdapter(ProductRepo.get(this).get());
+        adapter = new ProductRecyclerViewAdapter(mFilteredProducts);
         ((RecyclerView) recyclerView).setAdapter(adapter);
     }
 
@@ -83,7 +127,6 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
         if (product.isDeleted()) {
             Toast.makeText(this, "Product deleted: " + product.name, Toast.LENGTH_SHORT).show();
         }
-//        adapter.notifyDataSetChanged();
         setupRecyclerView(mRecyclerView);
     }
 
