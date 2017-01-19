@@ -15,6 +15,7 @@ public class OrderTable extends CMSTable<Order> {
     public static final String TABLE_NAME = "orders";
 
     public static final String CUSTOMER_ID = "customer_id";
+    public static final String ORDER_ID = "id";
     public static final String ORDER_DATE = "order_date";
     public static final String INVOICE_NO = "invoice_no";
 
@@ -22,6 +23,7 @@ public class OrderTable extends CMSTable<Order> {
             "CREATE TABLE " + TABLE_NAME + " (" +
             _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CUSTOMER_ID + " INTEGER, " +
+            ORDER_ID + " INTEGER," +
             ORDER_DATE + " DATE, " +
             INVOICE_NO + " TEXT " +
             ")";
@@ -36,6 +38,7 @@ public class OrderTable extends CMSTable<Order> {
 
     public ContentValues getInsertValues(Order order) {
         ContentValues values = new ContentValues();
+        values.put(OrderTable.ORDER_ID, order.id);
         values.put(OrderTable.CUSTOMER_ID, order.customerId);
         values.put(OrderTable.INVOICE_NO, order.invoiceNumber);
         values.put(OrderTable.ORDER_DATE, order.created.dbFormat());
@@ -47,16 +50,8 @@ public class OrderTable extends CMSTable<Order> {
         addOrUpdateModel(db, model);
     }
 
-    public List<Order> getOrders(SQLiteDatabase db, Customer customer) {
-        List<Order> orders = new ArrayList<>();
-        Cursor orderCursor = db.rawQuery(DbQuery.CUSTOMER_ORDERS, new String[]{Integer.toString(customer.getId())});
-        orderCursor.moveToFirst();
-        while (!orderCursor.isAfterLast()) {
-            OrderCursorWrapper cursorWrapper = new OrderCursorWrapper(orderCursor);
-            orders.add(cursorWrapper.getOrder());
-            orderCursor.moveToNext();
-        }
-        return orders;
+    public Cursor getOrders(SQLiteDatabase db, Customer customer) {
+        return db.rawQuery(CUSTOMER_ORDERS, new String[]{Integer.toString(customer.getId())});
     }
 
     public int newInvoiceNumber(SQLiteDatabase db) {
@@ -64,4 +59,20 @@ public class OrderTable extends CMSTable<Order> {
         cursor.moveToFirst();
         return Integer.parseInt(cursor.getString(0)) + 1;
     }
+
+    public String CUSTOMER_ORDERS = "SELECT " +
+            CUSTOMER_ID + ", " +
+            INVOICE_NO + ", " +
+            ORDER_DATE + " " +
+//            OrderItemTable.ORDER_ID + ", " +
+//            OrderItemTable.PRODUCT_NAME + ", " +
+//            OrderItemTable.PRODUCT_BATCH + ", " +
+//            OrderItemTable.PRODUCT_PRICE + ", " +
+//            OrderItemTable.PRODUCT_QUANTITY + ", " +
+//            OrderItemTable.DELIVERY_DATE + " " +
+            "from " + OrderTable.TABLE_NAME + " as ot " +
+//            "JOIN " + OrderItemTable.TABLE_NAME + " as oit " +
+//            " ON ot." + OrderTable._ID + " = oit." + OrderItemTable.ORDER_ID +
+            "WHERE " + OrderTable.CUSTOMER_ID + " = ? " +
+            "";
 }

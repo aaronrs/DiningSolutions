@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
+import net.astechdesign.diningsolutions.database.wrappers.AddressCursorWrapper;
 import net.astechdesign.diningsolutions.model.Address;
 
 import java.util.ArrayList;

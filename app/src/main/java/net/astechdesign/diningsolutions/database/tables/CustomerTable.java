@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.database.wrappers.CustomerCursorWrapper;
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 

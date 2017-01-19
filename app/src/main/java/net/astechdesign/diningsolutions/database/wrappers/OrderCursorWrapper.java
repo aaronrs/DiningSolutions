@@ -1,8 +1,9 @@
-package net.astechdesign.diningsolutions.database.tables;
+package net.astechdesign.diningsolutions.database.wrappers;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
+import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;

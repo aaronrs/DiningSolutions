@@ -1,22 +1,24 @@
 package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
+import net.astechdesign.diningsolutions.database.wrappers.OrderCursorWrapper;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
-import net.astechdesign.diningsolutions.model.Product;
+import net.astechdesign.diningsolutions.model.OrderItem;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderRepo {
 
     private static OrderRepo repo;
+    private static OrderItemRepo itemRepo;
     private final OrderTable orderTable;
     private final Context mContext;
     private final SQLiteDatabase mDatabase;
@@ -24,6 +26,7 @@ public class OrderRepo {
     public static OrderRepo get(Context context) {
         if (repo == null) {
             repo = new OrderRepo(context.getApplicationContext());
+            itemRepo = new OrderItemRepo(context.getApplicationContext());
         }
         return repo;
     }
@@ -35,7 +38,14 @@ public class OrderRepo {
     }
 
     public List<Order> getOrders(Customer customer) {
-        List<Order> orders = orderTable.getOrders(mDatabase, customer);
+        Cursor cursor = orderTable.getOrders(mDatabase, customer);
+        List<Order> orders = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            OrderCursorWrapper cursorWrapper = new OrderCursorWrapper(cursor);
+            orders.add(cursorWrapper.getOrder());
+            cursor.moveToNext();
+        }
         return orders;
     }
 
@@ -45,21 +55,10 @@ public class OrderRepo {
         orderTable.addOrUpdate(mDatabase, order);
     }
 
-    public List<Order> getOrdersByDate(Customer mCustomer) {
-        List<Order> orders = getOrders(mCustomer);
-        Collections.sort(orders, new Comparator<Order>() {
-            @Override
-            public int compare(Order lhs, Order rhs) {
-                if (lhs.created.equals(rhs.created)) {
-                    return - lhs.invoiceNumber.compareTo(rhs.invoiceNumber);
-                }
-                return - lhs.created.compareTo(rhs.created);
-            }
-        });
-        return orders;
-    }
-
-    public void add(Order mOrder) {
-        orderTable.addOrUpdate(mDatabase, mOrder);
+    public void add(Order order) {
+        orderTable.addOrUpdate(mDatabase, order);
+        for (OrderItem item : order.orderItems) {
+            itemRepo.add(mDatabase, item);
+        }
     }
 }

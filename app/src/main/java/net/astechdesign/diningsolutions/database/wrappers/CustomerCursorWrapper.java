@@ -1,8 +1,10 @@
-package net.astechdesign.diningsolutions.database.tables;
+package net.astechdesign.diningsolutions.database.wrappers;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
+import net.astechdesign.diningsolutions.database.tables.AddressTable;
+import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;

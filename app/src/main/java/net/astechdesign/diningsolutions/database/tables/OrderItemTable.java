@@ -58,16 +58,7 @@ public class OrderItemTable extends CMSTable<OrderItem> {
         addOrUpdateModel(db, model);
     }
 
-    public List<OrderItem> getOrderItems(SQLiteDatabase db, Order order) {
-        List<OrderItem> orderItems = new ArrayList<>();
-        Cursor orderItemCursor = db.rawQuery("select * from orderItems", null);
-//        Cursor orderItemCursor = mDatabase.rawQuery(DbQuery.getSelectWhere(TABLE_NAME, ORDER_ID), new String[]{Integer.toString(order.getId())});
-        orderItemCursor.moveToFirst();
-        while (!orderItemCursor.isAfterLast()) {
-            OrderItemCursorWrapper cursorWrapper = new OrderItemCursorWrapper(orderItemCursor);
-            orderItems.add(cursorWrapper.getOrderItem());
-            orderItemCursor.moveToNext();
-        }
-        return orderItems;
+    public Cursor getOrderItems(SQLiteDatabase db, Order order) {
+        return db.rawQuery("select * from orderItems", null);
     }
 }

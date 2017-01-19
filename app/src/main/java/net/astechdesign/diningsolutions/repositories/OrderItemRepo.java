@@ -1,13 +1,16 @@
 package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
+import net.astechdesign.diningsolutions.database.wrappers.OrderItemCursorWrapper;
 import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderItemRepo {
@@ -25,13 +28,25 @@ public class OrderItemRepo {
         return repo;
     }
 
-    private OrderItemRepo(Context context) {
+    public OrderItemRepo(Context context) {
         mContext = context;
         mDatabase = new DBHelper(mContext).getWritableDatabase();
         orderItemTable = DBHelper.getOrderItemTable();
     }
 
     public List<OrderItem> getOrderItems(Order order) {
-        return orderItemTable.getOrderItems(mDatabase, order);
+        Cursor cursor = orderItemTable.getOrderItems(mDatabase, order);
+        List<OrderItem> orderItems = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            OrderItemCursorWrapper cursorWrapper = new OrderItemCursorWrapper(cursor);
+            orderItems.add(cursorWrapper.getOrderItem());
+            cursor.moveToNext();
+        }
+        return orderItems;
+    }
+
+    public void add(SQLiteDatabase mDatabase, OrderItem item) {
+        orderItemTable.addOrUpdate(mDatabase, item);
     }
 }

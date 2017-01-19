@@ -61,7 +61,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mOrders = OrderRepo.get(this).getOrdersByDate(mCustomer);
+        mOrders = OrderRepo.get(this).getOrders(mCustomer);
         // Setup spinner
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setAdapter(new MyAdapter(
@@ -144,7 +144,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
     private void createNewOrder() {
         OrderRepo.get(this).create(mCustomer);
-        mOrders = OrderRepo.get(this).getOrdersByDate(mCustomer);
+        mOrders = OrderRepo.get(this).getOrders(mCustomer);
     }
 
     @Override

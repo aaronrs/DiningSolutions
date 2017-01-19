@@ -11,7 +11,7 @@ import net.astechdesign.diningsolutions.model.Model;
 public abstract class CMSTable<T extends Model> implements BaseColumns {
 
     private final String tableName;
-    private final java.lang.String createTable;
+    private final String createTable;
 
     protected CMSTable(String tableName, String createTable) {
         this.tableName = tableName;
@@ -22,7 +22,7 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
         try {
             db.execSQL(createTable);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
