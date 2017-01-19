@@ -48,10 +48,9 @@ public class OrderAssets {
         int invoice = 1234;
         for (String key : orderMap.keySet()) {
             DSDDate deliveryDate = new DSDDate(orderMap.get(key).get(0)[2]);
-            int id = Integer.parseInt(orderMap.get(key).get(0)[0]);
-            Order order = new Order(id, customerId, deliveryDate, "" + invoice);
+            Order order = new Order(-1, customerId, deliveryDate, "" + invoice);
             for (String[] orderInfo : orderMap.get(key)) {
-                order.addItem(new OrderItem(-1, id, orderInfo[3], Double.parseDouble(orderInfo[6]), Integer.parseInt(orderInfo[5]), orderInfo[4], deliveryDate));
+                order.addItem(new OrderItem(-1, -1, orderInfo[3], Double.parseDouble(orderInfo[6]), Integer.parseInt(orderInfo[5]), orderInfo[4], deliveryDate));
             }
             orderList.add(order);
             invoice++;

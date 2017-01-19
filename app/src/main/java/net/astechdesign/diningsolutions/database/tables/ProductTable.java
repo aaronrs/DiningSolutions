@@ -9,7 +9,7 @@ import net.astechdesign.diningsolutions.model.Product;
 
 public class ProductTable extends CMSTable<Product> {
 
-    private static final String TABLE_NAME = "products";
+    public static final String TABLE_NAME = "products";
 
     public static final String PRODUCT_NAME = "name";
     public static final String PRODUCT_PRICE = "price";
