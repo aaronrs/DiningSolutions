@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CustomerTable extends CMSTable<Customer> {
 
-    static final String TABLE_NAME = "customers";
+    public static final String TABLE_NAME = "customers";
 
     public static final String CUSTOMER_NAME = "name";
     public static final String CUSTOMER_EMAIL = "email";
@@ -76,16 +76,13 @@ public class CustomerTable extends CMSTable<Customer> {
         addOrUpdateModel(db, model);
     }
 
-    public List<Customer> get(SQLiteDatabase db) {
-        List<Customer> customerList = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, CUSTOMER_NAME);
+    public Cursor get(SQLiteDatabase db) {
+        return db.query(TABLE_NAME, null, null, null, null, null, CUSTOMER_NAME);
+    }
+
+    public int getId(SQLiteDatabase db, String name) {
+        Cursor cursor = db.query(TABLE_NAME, null, CUSTOMER_NAME + " = ?", new String[]{name}, null, null, CUSTOMER_NAME);
         cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            CustomerCursorWrapper customerCursorWrapper = new CustomerCursorWrapper(cursor);
-            Customer customer = customerCursorWrapper.getCustomer();
-            customerList.add(customer);
-            cursor.moveToNext();
-        }
-        return customerList;
+        return cursor.getInt(cursor.getColumnIndex(_ID));
     }
 }

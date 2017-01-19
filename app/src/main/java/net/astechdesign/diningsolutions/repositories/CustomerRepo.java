@@ -1,12 +1,15 @@
 package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
+import net.astechdesign.diningsolutions.database.wrappers.CustomerCursorWrapper;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerRepo {
@@ -31,7 +34,15 @@ public class CustomerRepo {
     }
 
     public List<Customer> get() {
-        List<Customer> customerList = mCustomerTable.get(mDatabase);
+        Cursor cursor = mCustomerTable.get(mDatabase);
+        List<Customer> customerList = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            CustomerCursorWrapper customerCursorWrapper = new CustomerCursorWrapper(cursor);
+            Customer customer = customerCursorWrapper.getCustomer();
+            customerList.add(customer);
+            cursor.moveToNext();
+        }
         return customerList;
     }
 

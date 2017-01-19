@@ -1,6 +1,7 @@
 package net.astechdesign.diningsolutions.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.tables.CMSTable;
@@ -36,9 +37,22 @@ public class DBLoader {
             customerTable.addOrUpdate(db, customer);
         }
 
-        List<Order> orderList = OrderAssets.getOrders(context, 1);
+        int customerId = customerTable.getId(db, "Southwell");
+        List<Order> orderList = OrderAssets.getOrders(context, customerId);
         for (Order order : orderList) {
             orderTable.addOrUpdate(db, order);
+        }
+    }
+
+    public static void showTable(SQLiteDatabase db, String tableName) {
+        Cursor cursor = db.query(tableName, null, null, null, null, null, null);
+        int count = cursor.getCount();
+        String[] columnNames = cursor.getColumnNames();
+        System.out.println(count);
+        System.out.println(columnNames);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            cursor.moveToNext();
         }
     }
 }
