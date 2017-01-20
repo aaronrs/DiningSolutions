@@ -59,6 +59,8 @@ public class OrderDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.order_detail, container, false);
+        TextView totalView = (TextView) rootView.findViewById(R.id.order_detail_total);
+        totalView.setText(Double.toString(mOrder.total()));
         setupRecyclerView(rootView);
 
         return rootView;
@@ -125,23 +127,14 @@ public class OrderDetailFragment extends Fragment {
                 mCostView = (TextView) view.findViewById(R.id.product_cost);
             }
 
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mNameView.getText() + "'";
-            }
-
             public void setItem(OrderItem item) {
                 this.mItem = item;
-                mNameView.setText(item.name);
+                mNameView.setText(mItem.name);
                 mBatchView.setText(mItem.batch);
                 mPriceView.setText(Double.toString(mItem.price));
-                mQuantityView.setText(mItem.quantity);
+                mQuantityView.setText(Integer.toString(mItem.quantity));
                 mCostView.setText(Double.toString(mItem.cost()));
             }
         }
-    }
-
-    private void setFields(View rootView, int id, String text) {
-        ((TextView) rootView.findViewById(id)).setText(text);
     }
 }

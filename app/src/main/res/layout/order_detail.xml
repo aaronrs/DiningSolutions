@@ -14,42 +14,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="16dp">
 
         <TextView
             style="?android:attr/textAppearanceMedium"
-            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Produce Purchased" />
+            android:text="Produce Purchased"
+            android:layout_width="500dp" />
 
         <TextView
             style="?android:attr/textAppearanceMedium"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:padding="16dp"
             android:text="Batch No." />
 
         <TextView
             style="?android:attr/textAppearanceMedium"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:gravity="right"
             android:text="Price" />
 
         <TextView
             style="?android:attr/textAppearanceMedium"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:gravity="right"
             android:text="Quantity" />
 
         <TextView
             style="?android:attr/textAppearanceMedium"
-            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Cost" />
+            android:text="Cost"
+            android:gravity="right"
+            android:layout_width="100dp" />
 
     </LinearLayout>
 
@@ -57,8 +56,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/order_items_list"
         android:name="net.astechdesign.diningsolutions.OrderDetailFragment"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
@@ -66,24 +65,29 @@
         tools:listitem="@layout/order_item_list_content" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:layout_width="740dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <TextView
             style="?android:attr/textAppearanceMedium"
-            android:layout_width="640dp"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:padding="16dp"
-            android:text="Total" />
+            android:text="Total"
+            android:layout_width="100dp" />
 
         <TextView
             android:id="@+id/order_detail_total"
             style="?android:attr/textAppearanceMedium"
-            android:layout_width="250dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:padding="16dp" />
+            android:gravity="right" />
 
     </LinearLayout>
 </LinearLayout>

@@ -38,8 +38,8 @@ public class OrderAddProductFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_add_product, null);
-        mBatchView = (EditText) view.findViewById(R.id.product_batch);
         mPriceView = (EditText) view.findViewById(R.id.product_price);
+        mBatchView = (EditText) view.findViewById(R.id.product_batch);
         mQuantityView = (EditText) view.findViewById(R.id.product_quantity);
 
         List<Product> productList = ProductRepo.get(getContext()).get();
@@ -68,8 +68,8 @@ public class OrderAddProductFragment extends DialogFragment {
                         mListener.onDialogPositiveClick(dialog,
                                 mProduct,
                                 Double.parseDouble(mPriceView.getText().toString()),
-                                Integer.parseInt(mBatchView.getText().toString()),
-                                mQuantityView.getText().toString());
+                                Integer.parseInt(mQuantityView.getText().toString()),
+                                mBatchView.getText().toString());
                     }
                 })
                 .create();

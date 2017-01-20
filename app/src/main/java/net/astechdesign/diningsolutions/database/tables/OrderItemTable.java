@@ -38,8 +38,8 @@ public class OrderItemTable extends CMSTable<OrderItem> {
         values.put(ORDER_ID, item.getDbId());
         values.put(PRODUCT_NAME, item.name);
         values.put(PRODUCT_BATCH, item.batch);
-        values.put(PRODUCT_QUANTITY, item.price);
-        values.put(PRODUCT_PRICE, item.quantity);
+        values.put(PRODUCT_PRICE, item.price);
+        values.put(PRODUCT_QUANTITY, item.quantity);
         values.put(DELIVERY_DATE, item.deliveryDate.dbFormat());
         return values;
     }

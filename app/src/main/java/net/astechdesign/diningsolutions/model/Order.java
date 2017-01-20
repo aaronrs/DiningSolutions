@@ -47,4 +47,12 @@ public class Order extends Model {
     public void addItem(Product product, double price, int quantity, String batch, DSDDate deliveryDate) {
         addItem(new OrderItem(null, product.name, price, quantity, batch, deliveryDate));
     }
+
+    public double total() {
+        double total = 0;
+        for (OrderItem item: orderItems) {
+            total += item.price * item.quantity;
+        }
+        return total;
+    }
 }

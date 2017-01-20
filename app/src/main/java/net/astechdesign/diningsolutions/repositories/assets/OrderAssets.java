@@ -48,6 +48,6 @@ public class OrderAssets {
             orderMap.put(order[0], new Order(null, created, order[3]));
         }
         Order order1 = orderMap.get(order[0]);
-        order1.addItem(new OrderItem(null, order[4], Double.parseDouble(order[7]), Integer.parseInt(order[5]), order[6], created));
+        order1.addItem(new OrderItem(null, order[4], Double.parseDouble(order[7]), Integer.parseInt(order[6]), order[5], created));
     }
 }
