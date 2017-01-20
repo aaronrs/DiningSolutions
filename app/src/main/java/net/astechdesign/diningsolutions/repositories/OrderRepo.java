@@ -42,8 +42,10 @@ public class OrderRepo {
         List<Order> orders = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            OrderCursorWrapper cursorWrapper = new OrderCursorWrapper(cursor);
-            orders.add(cursorWrapper.getOrder());
+            Order order = new OrderCursorWrapper(cursor).getOrder();
+            List<OrderItem> orderItems = itemRepo.getOrderItems(order);
+            order.orderItems.addAll(orderItems);
+            orders.add(order);
             cursor.moveToNext();
         }
         return orders;

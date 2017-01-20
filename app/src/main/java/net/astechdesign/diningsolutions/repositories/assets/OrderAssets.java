@@ -20,6 +20,8 @@ import java.util.UUID;
 
 public class OrderAssets {
 
+    private static Map<String, Order> orderMap = new HashMap<>();
+
     public static List<Order> getOrders(Context context, int customerId) {
         AssetManager assets = context.getAssets();
         InputStream is;
@@ -30,32 +32,24 @@ public class OrderAssets {
         }
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-        Map<String, List<String[]>> orderMap = new HashMap<>();
         String line;
         try {
             while ((line = br.readLine()) != null) {
-                String[] orderInfo = line.split("\\|");
-                String key = orderInfo[1] + orderInfo[2];
-                if (!orderMap.containsKey(key)) {
-                    orderMap.put(key, new ArrayList<String[]>());
-                }
-                orderMap.get(key).add(orderInfo);
+                addOrder(customerId, line);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<Order> orderList = new ArrayList<>();
-        int invoice = 1234;
-        for (String key : orderMap.keySet()) {
-            DSDDate deliveryDate = new DSDDate(orderMap.get(key).get(0)[2]);
-            Order order = new Order(-1, customerId, deliveryDate, "" + invoice);
-            for (String[] orderInfo : orderMap.get(key)) {
-                order.addItem(new OrderItem(-1, -1, orderInfo[3], Double.parseDouble(orderInfo[6]), Integer.parseInt(orderInfo[5]), orderInfo[4], deliveryDate));
-            }
-            orderList.add(order);
-            invoice++;
-        }
+        return new ArrayList<>(orderMap.values());
+    }
 
-        return orderList;
+    private static void addOrder(int customer_id, String info) {
+        String[] order = info.split("\\|");
+        DSDDate created = new DSDDate(order[2]);
+        if (!orderMap.containsKey(order[0])) {
+            orderMap.put(order[0], new Order(Integer.parseInt(order[0]), customer_id, created, order[3]));
+        }
+        Order order1 = orderMap.get(order[0]);
+        order1.addItem(new OrderItem(order1.orderItems.size(), order1.id, order[4], Double.parseDouble(order[7]), Integer.parseInt(order[5]), order[6], created));
     }
 }

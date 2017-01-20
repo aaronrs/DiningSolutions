@@ -14,16 +14,16 @@ public class OrderTable extends CMSTable<Order> {
 
     public static final String TABLE_NAME = "orders";
 
-    public static final String CUSTOMER_ID = "customer_id";
     public static final String ORDER_ID = "id";
+    public static final String CUSTOMER_ID = "customer_id";
     public static final String ORDER_DATE = "order_date";
     public static final String INVOICE_NO = "invoice_no";
 
     private static String CREATE_TABLE = "" +
             "CREATE TABLE " + TABLE_NAME + " (" +
             _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            CUSTOMER_ID + " INTEGER, " +
             ORDER_ID + " INTEGER," +
+            CUSTOMER_ID + " INTEGER, " +
             ORDER_DATE + " DATE, " +
             INVOICE_NO + " TEXT " +
             ")";
@@ -61,18 +61,11 @@ public class OrderTable extends CMSTable<Order> {
     }
 
     public String CUSTOMER_ORDERS = "SELECT " +
+            ORDER_ID + ", " +
             CUSTOMER_ID + ", " +
             INVOICE_NO + ", " +
             ORDER_DATE + " " +
-//            OrderItemTable.ORDER_ID + ", " +
-//            OrderItemTable.PRODUCT_NAME + ", " +
-//            OrderItemTable.PRODUCT_BATCH + ", " +
-//            OrderItemTable.PRODUCT_PRICE + ", " +
-//            OrderItemTable.PRODUCT_QUANTITY + ", " +
-//            OrderItemTable.DELIVERY_DATE + " " +
-            "from " + OrderTable.TABLE_NAME + " as ot " +
-//            "JOIN " + OrderItemTable.TABLE_NAME + " as oit " +
-//            " ON ot." + OrderTable._ID + " = oit." + OrderItemTable.ORDER_ID +
-            "WHERE " + OrderTable.CUSTOMER_ID + " = ? " +
+            " FROM " + OrderTable.TABLE_NAME +
+            " WHERE " + OrderTable.CUSTOMER_ID + " = ? " +
             "";
 }

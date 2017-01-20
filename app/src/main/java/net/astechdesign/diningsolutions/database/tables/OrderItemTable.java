@@ -59,6 +59,19 @@ public class OrderItemTable extends CMSTable<OrderItem> {
     }
 
     public Cursor getOrderItems(SQLiteDatabase db, Order order) {
-        return db.rawQuery("select * from orderItems", null);
+        return db.rawQuery(ORDER_ITEMS, new String[]{Integer.toString(order.id)});
     }
+
+    public String ORDER_ITEMS = "SELECT " +
+            _ID + ", " +
+            ORDER_ID + ", " +
+            PRODUCT_NAME + ", " +
+            PRODUCT_BATCH + ", " +
+            PRODUCT_QUANTITY + ", " +
+            PRODUCT_PRICE + ", " +
+            DELIVERY_DATE + " " +
+            " FROM " + OrderItemTable.TABLE_NAME +
+            " WHERE " + OrderItemTable.ORDER_ID + " = ? " +
+            "";
+
 }

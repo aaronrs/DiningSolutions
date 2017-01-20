@@ -29,15 +29,15 @@ public class DBHelper extends SQLiteOpenHelper {
             customerTable = new CustomerTable();
             orderTable = new OrderTable();
             orderItemTable = new OrderItemTable();
-            todoTable = new TodoTable();
+//            todoTable = new TodoTable();
             productTable = new ProductTable();
         }
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        DBLoader.create(db, productTable, customerTable, orderTable, orderItemTable, todoTable);
-        DBLoader.load(mContext, db, productTable, customerTable, orderTable);
+        DBLoader.create(db, productTable, customerTable, orderTable, orderItemTable);
+        DBLoader.load(mContext, db, productTable, customerTable, orderTable, orderItemTable);
     }
 
     @Override

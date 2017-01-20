@@ -6,10 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.tables.CMSTable;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
+import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.database.tables.ProductTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.assets.CustomerAssets;
 import net.astechdesign.diningsolutions.repositories.assets.OrderAssets;
@@ -26,7 +28,7 @@ public class DBLoader {
         }
     }
 
-    public static void load(Context context, SQLiteDatabase db, ProductTable productTable, CustomerTable customerTable, OrderTable orderTable) {
+    public static void load(Context context, SQLiteDatabase db, ProductTable productTable, CustomerTable customerTable, OrderTable orderTable, OrderItemTable orderItemTable) {
         List<Product> productList = ProductAssets.getProducts(context);
         for (Product product : productList) {
             productTable.addOrUpdate(db, product);
@@ -41,6 +43,9 @@ public class DBLoader {
         List<Order> orderList = OrderAssets.getOrders(context, customerId);
         for (Order order : orderList) {
             orderTable.addOrUpdate(db, order);
+            for (OrderItem item : order.orderItems) {
+                orderItemTable.addOrUpdate(db, item);
+            }
         }
     }
 

@@ -18,7 +18,7 @@ public class OrderCursorWrapper extends CursorWrapper {
     }
 
     public Order getOrder() {
-        int id = getInt(getColumnIndex(OrderTable._ID));
+        int id = getInt(getColumnIndex(OrderTable.ORDER_ID));
         int customerId = getInt(getColumnIndex(OrderTable.CUSTOMER_ID));
         DSDDate orderDate = new DSDDate(getString(getColumnIndex(OrderTable.ORDER_DATE)));
         String invoiceNumber = getString(getColumnIndex(OrderTable.INVOICE_NO));
