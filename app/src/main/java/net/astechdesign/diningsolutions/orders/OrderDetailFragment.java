@@ -61,11 +61,6 @@ public class OrderDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.order_detail, container, false);
         setupRecyclerView(rootView);
 
-//        setFields(rootView, R.id.order_detail_name, mCustomer.name);
-//        setFields(rootView, R.id.order_detail_phone, mCustomer.phone == null ? "" : mCustomer.phone.number);
-//        setFields(rootView, R.id.order_detail_email, mCustomer.email == null ? "" : mCustomer.email.address);
-//        setFields(rootView, R.id.order_invoice_number, mOrder.invoiceNumber);
-//
         return rootView;
     }
 
@@ -138,10 +133,10 @@ public class OrderDetailFragment extends Fragment {
             public void setItem(OrderItem item) {
                 this.mItem = item;
                 mNameView.setText(item.name);
-                mBatchView.setText(item.batch);
-                mPriceView.setText(Double.toString(item.price));
-//                mQuantityView.setText(item.quantity);
-                mCostView.setText(Double.toString(item.price * item.quantity));
+                mBatchView.setText(mItem.batch);
+                mPriceView.setText(Double.toString(mItem.price));
+                mQuantityView.setText(mItem.quantity);
+                mCostView.setText(Double.toString(mItem.cost()));
             }
         }
     }

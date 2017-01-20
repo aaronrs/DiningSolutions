@@ -19,11 +19,11 @@
 
         <AutoCompleteTextView
             android:id="@+id/product_name_select"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Product Name"
-            tools:inputType="textCapWords"
-            android:layout_width="match_parent" />
+            tools:inputType="textCapWords" />
     </LinearLayout>
 
     <LinearLayout
@@ -40,26 +40,26 @@
             android:inputType="numberDecimal" />
 
         <EditText
-                android:id="@+id/product_batch"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Batch"
-                android:inputType="text"
-                android:layout_width="120dp" />
+            android:id="@+id/product_batch"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Batch"
+            android:inputType="text" />
 
         <TextView
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:text="Quantity"
             android:gravity="right"
-            android:layout_width="80dp" />
+            android:text="Quantity" />
 
         <EditText
-                android:id="@+id/product_quantity"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
+            android:id="@+id/product_quantity"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
             android:ems="10"
-                android:text="1"
-                android:inputType="number" />
+            android:inputType="number"
+            android:text="1" />
 
         <TextView
             android:layout_width="match_parent"

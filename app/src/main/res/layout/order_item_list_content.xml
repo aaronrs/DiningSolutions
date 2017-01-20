@@ -2,45 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/product_name"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Product name"
-        android:layout_width="300dp" />
+        android:layout_width="300dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/batch_number"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Batch" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/product_price"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Price" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/product_quantity"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Quantity" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/product_cost"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Cost" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:text="COST" />
 </LinearLayout>

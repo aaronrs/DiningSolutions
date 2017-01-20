@@ -14,6 +14,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -86,20 +88,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.setData(Uri.parse("mailto:"));
-                emailIntent.setType("text/plain");
-
-                emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{mCustomer.email.address});
-                emailIntent.putExtra(Intent.EXTRA_CC  , new String[]{mCustomer.email.address});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice");
-                emailIntent.putExtra(Intent.EXTRA_TEXT   , "Some products");
-
-                try {
-                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(OrderActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
-                }
+                sendEmail();
                 Snackbar.make(view, "Emailing order to " + mCustomer.email.address, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -109,6 +98,27 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
             mOrder = mOrders.get(0);
             initialiseView();
         }
+    }
+
+    private void sendEmail() {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{mCustomer.email.address});
+        emailIntent.putExtra(Intent.EXTRA_CC, new String[]{mCustomer.email.address});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + mOrder.invoiceNumber);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, getOrderText());
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(OrderActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String getOrderText() {
+        return "Order: \t123";
     }
 
     private void showOrder(int position) {
@@ -165,9 +175,9 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     }
 
     @Override
-    public void onDialogPositiveClick(DialogInterface dialog, Product product, String price, String batch, String quantity) {
+    public void onDialogPositiveClick(DialogInterface dialog, Product product, double price, int quantity, String batch) {
         DSDDate deliveryDate = new DSDDate();
-        mOrder.addItem(product, Double.parseDouble(price), Integer.parseInt(quantity), batch, deliveryDate);
+        mOrder.addItem(product, price, quantity, batch, deliveryDate);
         OrderRepo.get(this).add(mCustomer, mOrder);
 
         Snackbar.make(findViewById(R.id.main_content), "Added product " + product.name, Snackbar.LENGTH_LONG)

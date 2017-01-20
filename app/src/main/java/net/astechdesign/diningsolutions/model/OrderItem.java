@@ -18,4 +18,8 @@ public class OrderItem extends Model {
         this.batch = batch;
         this.deliveryDate = deliveryDate;
     }
+
+    public double cost() {
+        return price * quantity;
+    }
 }
