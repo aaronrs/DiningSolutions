@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
-import net.astechdesign.diningsolutions.database.wrappers.ProductCursorWrapper;
 import net.astechdesign.diningsolutions.database.tables.ProductTable;
+import net.astechdesign.diningsolutions.database.wrappers.ProductCursorWrapper;
 import net.astechdesign.diningsolutions.model.Product;
 
 import java.util.ArrayList;
@@ -47,20 +47,5 @@ public class ProductRepo {
 
     public void addOrUpdate(Product product) {
         productTable.addOrUpdate(mDatabase, product);
-    }
-
-    public Product get(int id) {
-        Cursor cursor = productTable.get(mDatabase, id);
-        cursor.moveToFirst();
-        ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
-        return productCursorWrapper.getProduct();
-    }
-
-    public Cursor getProducts() {
-        return productTable.get(mDatabase);
-    }
-
-    public Cursor getProducts(CharSequence filter) {
-        return productTable.get(mDatabase, String.format("%%%s%%",filter));
     }
 }

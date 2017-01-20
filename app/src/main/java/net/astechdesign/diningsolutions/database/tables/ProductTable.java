@@ -51,10 +51,6 @@ public class ProductTable extends CMSTable<Product> {
         return db.query(TABLE_NAME, null, PRODUCT_DELETED + " = 0", null, null, null, PRODUCT_NAME);
     }
 
-    public Cursor get(SQLiteDatabase db, int id) {
-        return db.query(TABLE_NAME, null, _ID + " = ? " + PRODUCT_DELETED + " = 0", selectionArgs(id), null, null, PRODUCT_NAME);
-    }
-
     public Cursor get(SQLiteDatabase mDatabase, String filter) {
         return mDatabase.query(TABLE_NAME, null, PRODUCT_NAME + " LIKE ?", new String[]{filter}, null, null, PRODUCT_NAME);
     }

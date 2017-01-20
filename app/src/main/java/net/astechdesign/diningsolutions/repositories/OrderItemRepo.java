@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
-import net.astechdesign.diningsolutions.database.wrappers.OrderItemCursorWrapper;
 import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
+import net.astechdesign.diningsolutions.database.wrappers.OrderItemCursorWrapper;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 

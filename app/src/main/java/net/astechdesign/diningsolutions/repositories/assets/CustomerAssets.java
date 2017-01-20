@@ -6,8 +6,6 @@ import android.content.res.AssetManager;
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.Email;
-import net.astechdesign.diningsolutions.model.Phone;
 
 import java.io.BufferedReader;
 import java.io.IOException;
