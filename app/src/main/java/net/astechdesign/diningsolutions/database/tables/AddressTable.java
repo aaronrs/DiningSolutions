@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.wrappers.AddressCursorWrapper;
 import net.astechdesign.diningsolutions.model.Address;
+import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.Model;
+import net.astechdesign.diningsolutions.model.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +27,7 @@ public class AddressTable extends CMSTable<Address> {
     public static final String ADDRESS_COUNTY = "county";
     public static final String ADDRESS_POSTCODE = "postcode";
 
-    private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            _ID + " INTEGER PRIMARY KEY," +
+    private static String CREATE_TABLE =
             CUSTOMER_ID + " TEXT, " +
             ADDRESS_NAME + " TEXT, " +
             ADDRESS_LINE1 + " TEXT, " +
@@ -33,15 +35,10 @@ public class AddressTable extends CMSTable<Address> {
             ADDRESS_TOWN + " TEXT, " +
             ADDRESS_COUNTY + " TEXT, " +
             ADDRESS_POSTCODE + " TEXT " +
-            ")";
+                    "";
 
     protected AddressTable(DBHelper db) {
         super(TABLE_NAME, CREATE_TABLE);
-    }
-
-    @Override
-    public void upgrade(int oldVersion, int newVersion) {
-
     }
 
     @Override
@@ -57,8 +54,8 @@ public class AddressTable extends CMSTable<Address> {
     }
 
     @Override
-    public void addOrUpdate(SQLiteDatabase db, Address model) {
-        addOrUpdateModel(db, model);
+    protected String getParentIdColumn() {
+        return CUSTOMER_ID;
     }
 
     public List<Address> get(SQLiteDatabase db) {
@@ -78,14 +75,5 @@ public class AddressTable extends CMSTable<Address> {
         cursor.moveToFirst();
         AddressCursorWrapper addressCursorWrapper = new AddressCursorWrapper(cursor);
         return addressCursorWrapper.getAddress();
-    }
-
-    public void add(SQLiteDatabase db, Address address) {
-        ContentValues insertValues = getInsertValues(address);
-        db.insert(TABLE_NAME, null, insertValues);
-    }
-
-    public void update(SQLiteDatabase db, UUID customerId, Address address) {
-        db.update(TABLE_NAME, getInsertValues(address), _ID + " = ?", new String[]{Integer.toString(address.id)});
     }
 }

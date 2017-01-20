@@ -113,7 +113,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
             case R.id.menu_item_new_product:
                 FragmentManager fm = getSupportFragmentManager();
                 newProductFragment = new ProductEditFragment();
-                newProductFragment.setProduct(new Product(-1, "", "", 0.00, "", 0));
+                newProductFragment.setProduct(new Product(null, "", "", 0.00, "", 0));
                 newProductFragment.show(fm, ADD_PRODUCT);
                 return true;
             default:

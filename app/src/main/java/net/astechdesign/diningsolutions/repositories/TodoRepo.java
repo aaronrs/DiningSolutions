@@ -33,8 +33,8 @@ public class TodoRepo {
         this.todoTable = DBHelper.getTodoTable();
     }
 
-    public Todo get(UUID uuid) {
-        return new Todo(0);
+    public Todo get(UUID id) {
+        return new Todo(id, "Test", "Data");
     }
 
     public List<Todo> get() {

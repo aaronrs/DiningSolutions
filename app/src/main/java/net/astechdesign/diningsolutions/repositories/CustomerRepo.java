@@ -43,6 +43,7 @@ public class CustomerRepo {
             customerList.add(customer);
             cursor.moveToNext();
         }
+        cursor.close();
         return customerList;
     }
 

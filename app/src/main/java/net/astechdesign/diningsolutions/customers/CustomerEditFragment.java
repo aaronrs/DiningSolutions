@@ -82,7 +82,7 @@ public class CustomerEditFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Address address = new Address(
-                                customer == null ? -1 : customer.address.id,
+                                null,
                                 getText(mAddressNameText),
                                 getText(mAddressLine1Text),
                                 getText(mAddressLine2Text),
@@ -91,7 +91,7 @@ public class CustomerEditFragment extends DialogFragment {
                                 getText(mAddressPostcodeText)
                                 );
                         Customer newCustomer = new Customer(
-                                customer == null ? -1 : customer.id,
+                                customer.getId(),
                                 getText(mNameText),
                                 getText(mEmailText1) + "@" + getText(mEmailText2),
                                 getText(mPhoneText),

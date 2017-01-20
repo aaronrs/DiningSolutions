@@ -41,7 +41,7 @@ public class OrderRepo {
         Cursor cursor = orderTable.getOrders(mDatabase, customer);
         List<Order> orders = new ArrayList<>();
         cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
+        while (!cursor.isAfterLast() && cursor.getCount() > 0) {
             Order order = new OrderCursorWrapper(cursor).getOrder();
             List<OrderItem> orderItems = itemRepo.getOrderItems(order);
             order.orderItems.addAll(orderItems);
@@ -53,14 +53,14 @@ public class OrderRepo {
 
     public void create(Customer mCustomer) {
         int invoiceNumber = orderTable.newInvoiceNumber(mDatabase);
-        Order order = new Order(-1, mCustomer.getId(), new DSDDate(), Integer.toString(invoiceNumber));
-        orderTable.addOrUpdate(mDatabase, order);
+        Order order = new Order(null, new DSDDate(), Integer.toString(invoiceNumber));
+        orderTable.addOrUpdate(mDatabase, mCustomer, order);
     }
 
-    public void add(Order order) {
-        orderTable.addOrUpdate(mDatabase, order);
+    public void add(Customer customer, Order order) {
+        orderTable.addOrUpdate(mDatabase, customer, order);
         for (OrderItem item : order.orderItems) {
-            itemRepo.add(mDatabase, item);
+            itemRepo.add(mDatabase, order, item);
         }
     }
 }

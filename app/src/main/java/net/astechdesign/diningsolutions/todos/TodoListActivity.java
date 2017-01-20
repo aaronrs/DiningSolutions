@@ -131,7 +131,7 @@ public class TodoListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(TodoDetailFragment.ARG_ITEM_ID, holder.mItem.id.toString());
+                        arguments.putString(TodoDetailFragment.ARG_ITEM_ID, holder.mItem.getDbId());
                         TodoDetailFragment fragment = new TodoDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -140,7 +140,7 @@ public class TodoListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, TodoDetailActivity.class);
-                        intent.putExtra(TodoDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(TodoDetailFragment.ARG_ITEM_ID, holder.mItem.getDbId());
 
                         context.startActivity(intent);
                     }

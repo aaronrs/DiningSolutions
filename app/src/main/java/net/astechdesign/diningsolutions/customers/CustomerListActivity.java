@@ -32,6 +32,7 @@ import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
 
@@ -206,10 +207,6 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 this.mItem = item;
                 mNameView.setText(item.name);
                 mPhoneView.setText(item.phone.number);
-            }
-
-            public int getId() {
-                return mItem.id;
             }
         }
     }

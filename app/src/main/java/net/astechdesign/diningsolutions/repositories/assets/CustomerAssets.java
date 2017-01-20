@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class CustomerAssets {
@@ -59,8 +60,8 @@ public class CustomerAssets {
                 String created = customerInfo[8].trim();
 
                 if (peeps.add(name + postcode)) {
-                    Address address = new Address(-1, house, line1, line2, town, county, postcode);
-                    customerList.add(new Customer(-1, name, email, "", true, DSDDate.fileCreate(created), "", address));
+                    Address address = new Address(UUID.randomUUID(), house, line1, line2, town, county, postcode);
+                    customerList.add(new Customer(null, name, email, "", true, DSDDate.fileCreate(created), "", address));
                 }
             }
         } catch (Exception e) {

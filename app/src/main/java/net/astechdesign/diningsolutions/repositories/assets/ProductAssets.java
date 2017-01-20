@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ProductAssets {
 
@@ -33,7 +34,7 @@ public class ProductAssets {
                 String name = productInfo[0];
                 if (!productNames.contains(name)) {
                     productNames.add(name);
-                    productList.add(new Product(-1, name, "", new Double(productInfo[1]), null, 0));
+                    productList.add(new Product(UUID.randomUUID(), name, "", new Double(productInfo[1]), null, 0));
                 }
             }
         } catch (Exception e) {

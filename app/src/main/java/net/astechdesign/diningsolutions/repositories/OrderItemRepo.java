@@ -43,10 +43,11 @@ public class OrderItemRepo {
             orderItems.add(cursorWrapper.getOrderItem());
             cursor.moveToNext();
         }
+        cursor.close();
         return orderItems;
     }
 
-    public void add(SQLiteDatabase mDatabase, OrderItem item) {
-        orderItemTable.addOrUpdate(mDatabase, item);
+    public void add(SQLiteDatabase mDatabase, Order order, OrderItem item) {
+        orderItemTable.addOrUpdate(mDatabase, order, item);
     }
 }

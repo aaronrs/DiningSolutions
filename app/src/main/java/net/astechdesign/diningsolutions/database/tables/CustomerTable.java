@@ -4,12 +4,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.astechdesign.diningsolutions.database.wrappers.CustomerCursorWrapper;
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.Order;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 public class CustomerTable extends CMSTable<Customer> {
 
@@ -21,6 +20,7 @@ public class CustomerTable extends CMSTable<Customer> {
     public static final String CUSTOMER_CURRENT = "current";
     public static final String CUSTOMER_CREATED = "created";
     public static final String CUSTOMER_REFERRAL = "referral";
+    public static final String ADDRESS_ID = "address_id";
     public static final String ADDRESS_NAME = "house_name";
     public static final String ADDRESS_LINE1 = "line1";
     public static final String ADDRESS_LINE2 = "line2";
@@ -28,29 +28,24 @@ public class CustomerTable extends CMSTable<Customer> {
     public static final String ADDRESS_COUNTY = "county";
     public static final String ADDRESS_POSTCODE = "postcode";
 
-    private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            _ID + " INTEGER PRIMARY KEY," +
+    private static String CREATE_TABLE =
             CUSTOMER_NAME + " INTEGER, " +
             CUSTOMER_EMAIL + " TEXT, " +
             CUSTOMER_PHONE + " TEXT, " +
             CUSTOMER_CURRENT + " INTEGER, " +
             CUSTOMER_CREATED + " TEXT, " +
             CUSTOMER_REFERRAL + " TEXT, " +
+            ADDRESS_ID + " TEXT, " +
             ADDRESS_NAME + " TEXT, " +
             ADDRESS_LINE1 + " TEXT, " +
             ADDRESS_LINE2 + " TEXT, " +
             ADDRESS_TOWN + " TEXT, " +
             ADDRESS_COUNTY + " TEXT, " +
             ADDRESS_POSTCODE + " TEXT " +
-            ")";
+            "";
 
     public CustomerTable() {
         super(TABLE_NAME, CREATE_TABLE);
-    }
-
-    @Override
-    public void upgrade(int oldVersion, int newVersion) {
-
     }
 
     protected ContentValues getInsertValues(Customer customer) {
@@ -62,6 +57,7 @@ public class CustomerTable extends CMSTable<Customer> {
         values.put(CUSTOMER_CREATED, customer.created.dbFormat());
         values.put(CUSTOMER_REFERRAL, customer.referral);
         Address address = customer.address;
+        values.put(ADDRESS_ID, address.getDbId());
         values.put(ADDRESS_NAME, address.name);
         values.put(ADDRESS_LINE1, address.line1);
         values.put(ADDRESS_LINE2, address.line2);
@@ -72,17 +68,15 @@ public class CustomerTable extends CMSTable<Customer> {
     }
 
     @Override
-    public void addOrUpdate(SQLiteDatabase db, Customer model) {
-        addOrUpdateModel(db, model);
+    protected String getParentIdColumn() {
+        return null;
     }
 
     public Cursor get(SQLiteDatabase db) {
         return db.query(TABLE_NAME, null, null, null, null, null, CUSTOMER_NAME);
     }
 
-    public int getId(SQLiteDatabase db, String name) {
-        Cursor cursor = db.query(TABLE_NAME, null, CUSTOMER_NAME + " = ?", new String[]{name}, null, null, CUSTOMER_NAME);
-        cursor.moveToFirst();
-        return cursor.getInt(cursor.getColumnIndex(_ID));
+    public Cursor get(SQLiteDatabase db, String name) {
+        return db.query(TABLE_NAME, null, CUSTOMER_NAME + " = ?", new String[]{name}, null, null, CUSTOMER_NAME);
     }
 }

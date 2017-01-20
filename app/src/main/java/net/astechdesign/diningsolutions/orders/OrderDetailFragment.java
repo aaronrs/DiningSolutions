@@ -143,10 +143,6 @@ public class OrderDetailFragment extends Fragment {
 //                mQuantityView.setText(item.quantity);
                 mCostView.setText(Double.toString(item.price * item.quantity));
             }
-
-            public int getId() {
-                return mItem.id;
-            }
         }
     }
 

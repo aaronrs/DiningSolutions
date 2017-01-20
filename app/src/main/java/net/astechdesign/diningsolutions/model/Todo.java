@@ -3,11 +3,13 @@ package net.astechdesign.diningsolutions.model;
 import java.util.UUID;
 
 public class Todo extends Model {
-    public String content = "Content";
-    public String details = "Visit Joe Blogss and take Turkey Supremes";
-    public UUID id = UUID.randomUUID();
 
-    public Todo(int id) {
+    public final String title;
+    public final String details;
+
+    public Todo(UUID id, String title, String details) {
         super(id);
+        this.title = title;
+        this.details = details;
     }
 }

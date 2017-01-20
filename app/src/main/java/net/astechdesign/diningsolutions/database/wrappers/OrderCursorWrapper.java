@@ -3,6 +3,7 @@ package net.astechdesign.diningsolutions.database.wrappers;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
+import net.astechdesign.diningsolutions.database.tables.CMSTable;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
@@ -18,12 +19,11 @@ public class OrderCursorWrapper extends CursorWrapper {
     }
 
     public Order getOrder() {
-        int id = getInt(getColumnIndex(OrderTable.ORDER_ID));
-        int customerId = getInt(getColumnIndex(OrderTable.CUSTOMER_ID));
+        UUID id = UUID.fromString(getString(getColumnIndex(CMSTable.UUID_ID)));
         DSDDate orderDate = new DSDDate(getString(getColumnIndex(OrderTable.ORDER_DATE)));
         String invoiceNumber = getString(getColumnIndex(OrderTable.INVOICE_NO));
 
-        Order order = new Order(id, customerId, orderDate, invoiceNumber);
+        Order order = new Order(id, orderDate, invoiceNumber);
         return order;
     }
 }

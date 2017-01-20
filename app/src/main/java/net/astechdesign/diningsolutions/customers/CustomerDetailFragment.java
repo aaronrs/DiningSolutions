@@ -47,7 +47,7 @@ public class CustomerDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.customer_detail, container, false);
 
         if (mItem != null) {
-            rootView.findViewById(R.id.customer_order_btn).setTag(mItem.id);
+            rootView.findViewById(R.id.customer_order_btn).setTag(mItem.getDbId());
             setText(rootView, R.id.customer_name, mItem.name);
             setText(rootView, R.id.customer_email, mItem.email.address);
             setText(rootView, R.id.customer_phone, mItem.phone.number);

@@ -1,6 +1,8 @@
-package net.astechdesign.diningsolutions.database.tables;
+package net.astechdesign.diningsolutions.database;
 
-public class DbQuery {
+import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
+
+public class DBQuery {
 
     private static String query = "SELECT * from %s WHERE %s = ?";
 

@@ -1,6 +1,8 @@
 package net.astechdesign.diningsolutions.model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Customer extends Model {
 
@@ -11,9 +13,9 @@ public class Customer extends Model {
     public final DSDDate created;
     public final String referral;
     public final Address address;
-    public List<Order> orderList;
+    public final List<Order> orderList = new ArrayList<>();
 
-    public Customer(int id, String name, Email email, Phone phone, boolean current, DSDDate created, String referral, Address address) {
+    public Customer(UUID id, String name, Email email, Phone phone, boolean current, DSDDate created, String referral, Address address) {
         super(id);
         this.name = name;
         this.email = email;
@@ -24,7 +26,7 @@ public class Customer extends Model {
         this.address = address;
     }
 
-    public Customer(int id, String name, String email, String phone, boolean current, DSDDate created, String referral, Address address) {
+    public Customer(UUID id, String name, String email, String phone, boolean current, DSDDate created, String referral, Address address) {
         super(id);
         this.name = name;
         this.email = new Email(email);
@@ -33,6 +35,10 @@ public class Customer extends Model {
         this.created = created;
         this.referral = referral;
         this.address = address;
+    }
+
+    public void addOrder(Order order) {
+        orderList.add(order);
     }
 
     @Override

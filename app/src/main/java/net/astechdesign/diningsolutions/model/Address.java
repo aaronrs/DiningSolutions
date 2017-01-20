@@ -1,5 +1,7 @@
 package net.astechdesign.diningsolutions.model;
 
+import java.util.UUID;
+
 public class Address extends Model {
 
     public final String name;
@@ -9,7 +11,7 @@ public class Address extends Model {
     public final String county;
     public final String postcode;
 
-    public Address(int id, String name, String line1, String line2, String town, String county, String postcode) {
+    public Address(UUID id, String name, String line1, String line2, String town, String county, String postcode) {
         super(id);
         this.name = name;
         this.line1 = line1;

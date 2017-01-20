@@ -1,16 +1,13 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 public class OrderItemTable extends CMSTable<OrderItem> {
 
@@ -23,28 +20,22 @@ public class OrderItemTable extends CMSTable<OrderItem> {
     public static final String PRODUCT_PRICE = "price";
     public static final String DELIVERY_DATE = "delivery_date";
 
-    private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    private static String CREATE_TABLE =
             ORDER_ID + " TEXT, " +
             PRODUCT_NAME + " TEXT, " +
             PRODUCT_BATCH + " TEXT, " +
             PRODUCT_QUANTITY + " NUMBER, " +
             PRODUCT_PRICE + " NUMBER, " +
             DELIVERY_DATE + " DATE" +
-            ")";
+            "";
 
     public OrderItemTable() {
         super(TABLE_NAME, CREATE_TABLE);
     }
 
-    @Override
-    public void upgrade(int oldVersion, int newVersion) {
-
-    }
-
     public ContentValues getInsertValues(OrderItem item) {
         ContentValues values = new ContentValues();
-        values.put(ORDER_ID, item.orderId);
+        values.put(ORDER_ID, item.getDbId());
         values.put(PRODUCT_NAME, item.name);
         values.put(PRODUCT_BATCH, item.batch);
         values.put(PRODUCT_QUANTITY, item.price);
@@ -54,16 +45,16 @@ public class OrderItemTable extends CMSTable<OrderItem> {
     }
 
     @Override
-    public void addOrUpdate(SQLiteDatabase db, OrderItem model) {
-        addOrUpdateModel(db, model);
+    protected String getParentIdColumn() {
+        return ORDER_ID;
     }
 
     public Cursor getOrderItems(SQLiteDatabase db, Order order) {
-        return db.rawQuery(ORDER_ITEMS, new String[]{Integer.toString(order.id)});
+        return db.rawQuery(ORDER_ITEMS, new String[]{order.getDbId()});
     }
 
     public String ORDER_ITEMS = "SELECT " +
-            _ID + ", " +
+            UUID_ID + ", " +
             ORDER_ID + ", " +
             PRODUCT_NAME + ", " +
             PRODUCT_BATCH + ", " +

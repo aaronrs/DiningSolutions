@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import net.astechdesign.diningsolutions.database.tables.AddressTable;
+import net.astechdesign.diningsolutions.database.tables.CMSTable;
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Product;
 
@@ -16,7 +17,7 @@ public class AddressCursorWrapper extends CursorWrapper {
     }
 
     public Address getAddress() {
-        int id = getInt(getColumnIndex(AddressTable._ID));
+        UUID id = UUID.fromString(getString(getColumnIndex(CMSTable.UUID_ID)));
         String name = getString(getColumnIndex(AddressTable.ADDRESS_NAME));
         String line1 = getString(getColumnIndex(AddressTable.ADDRESS_LINE1));
         String line2 = getString(getColumnIndex(AddressTable.ADDRESS_LINE2));

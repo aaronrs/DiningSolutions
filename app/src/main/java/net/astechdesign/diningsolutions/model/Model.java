@@ -1,16 +1,24 @@
 package net.astechdesign.diningsolutions.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public abstract class Model implements Serializable {
 
-    public final int id;
+    private UUID id;
 
-    protected Model(int id) {
+    protected Model(UUID id) {
         this.id = id;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
+    }
+
+    public String getDbId() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
+        return id.toString();
     }
 }

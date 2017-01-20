@@ -9,6 +9,7 @@ import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.database.tables.ProductTable;
+import net.astechdesign.diningsolutions.database.wrappers.CustomerCursorWrapper;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
@@ -18,6 +19,7 @@ import net.astechdesign.diningsolutions.repositories.assets.OrderAssets;
 import net.astechdesign.diningsolutions.repositories.assets.ProductAssets;
 
 import java.util.List;
+import java.util.UUID;
 
 public class DBLoader {
 
@@ -39,12 +41,15 @@ public class DBLoader {
             customerTable.addOrUpdate(db, customer);
         }
 
-        int customerId = customerTable.getId(db, "Southwell");
-        List<Order> orderList = OrderAssets.getOrders(context, customerId);
+        Cursor cursor = customerTable.get(db, "Southwell");
+        cursor.moveToFirst();
+        Customer customer = new CustomerCursorWrapper(cursor).getCustomer();
+        cursor.close();
+        List<Order> orderList = OrderAssets.getOrders(context);
         for (Order order : orderList) {
-            orderTable.addOrUpdate(db, order);
+            orderTable.addOrUpdate(db, customer, order);
             for (OrderItem item : order.orderItems) {
-                orderItemTable.addOrUpdate(db, item);
+                orderItemTable.addOrUpdate(db, order, item);
             }
         }
     }

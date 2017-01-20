@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.astechdesign.diningsolutions.database.wrappers.ProductCursorWrapper;
+import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.Product;
+
+import java.util.UUID;
 
 public class ProductTable extends CMSTable<Product> {
 
@@ -17,22 +19,16 @@ public class ProductTable extends CMSTable<Product> {
     public static final String PRODUCT_BARCODE = "barcode";
     public static final String PRODUCT_DELETED = "deleted";
 
-    private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-            _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+    private static String CREATE_TABLE =
             PRODUCT_NAME + " TEXT, " +
             PRODUCT_DESCRIPTION + " TEXT, " +
             PRODUCT_PRICE + " NUMBER, " +
             PRODUCT_BARCODE + " TEXT, " +
             PRODUCT_DELETED + " INTEGER " +
-            ")";
+            "";
 
     public ProductTable() {
         super(TABLE_NAME, CREATE_TABLE);
-    }
-
-    @Override
-    public void upgrade(int oldVersion, int newVersion) {
-
     }
 
     @Override
@@ -47,8 +43,8 @@ public class ProductTable extends CMSTable<Product> {
     }
 
     @Override
-    public void addOrUpdate(SQLiteDatabase db, Product model) {
-        addOrUpdateModel(db, model);
+    protected String getParentIdColumn() {
+        return null;
     }
 
     public Cursor get(SQLiteDatabase db) {
@@ -56,7 +52,7 @@ public class ProductTable extends CMSTable<Product> {
     }
 
     public Cursor get(SQLiteDatabase db, int id) {
-        return db.query(TABLE_NAME, null, _ID + " = ? " + PRODUCT_DELETED + " = 0", id(id), null, null, PRODUCT_NAME);
+        return db.query(TABLE_NAME, null, _ID + " = ? " + PRODUCT_DELETED + " = 0", selectionArgs(id), null, null, PRODUCT_NAME);
     }
 
     public Cursor get(SQLiteDatabase mDatabase, String filter) {
