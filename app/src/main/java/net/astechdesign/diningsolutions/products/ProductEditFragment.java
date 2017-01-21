@@ -26,7 +26,7 @@ public class ProductEditFragment extends DialogFragment {
     private EditProductListener mListener;
 
     public interface EditProductListener {
-        void onDialogPositiveClick(DialogInterface dialog, Product product);
+        void onEditProductPositiveClick(DialogInterface dialog, Product product);
     }
 
     @NonNull
@@ -54,7 +54,7 @@ public class ProductEditFragment extends DialogFragment {
                                 Double.parseDouble(mPriceText.getText().toString()),
                                 mBarcodeText.getText().toString(),
                                 deleted ? 1 : 0);
-                        mListener.onDialogPositiveClick(dialog, newProduct);
+                        mListener.onEditProductPositiveClick(dialog, newProduct);
                     }
                 })
                 .create();

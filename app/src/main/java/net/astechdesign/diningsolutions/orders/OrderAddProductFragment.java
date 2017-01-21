@@ -31,7 +31,7 @@ public class OrderAddProductFragment extends DialogFragment {
     private Product mProduct;
 
     public interface ProductAddListener {
-        void onDialogPositiveClick(DialogInterface dialog, Product product, double price, int quantity, String batch);
+        void onAddProductPositiveClick(DialogInterface dialog, Product product, double price, int quantity, String batch);
     }
 
     @NonNull
@@ -65,7 +65,7 @@ public class OrderAddProductFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onDialogPositiveClick(dialog,
+                        mListener.onAddProductPositiveClick(dialog,
                                 mProduct,
                                 Double.parseDouble(mPriceView.getText().toString()),
                                 Integer.parseInt(mQuantityView.getText().toString()),

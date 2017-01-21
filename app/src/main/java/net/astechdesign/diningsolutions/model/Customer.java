@@ -45,4 +45,12 @@ public class Customer extends Model {
     public String toString() {
         return name;
     }
+
+    public boolean compareValue(String value) {
+        for (String part : name.toLowerCase().split(" ")) {
+            if (part.startsWith(value.toLowerCase()))
+                return true;
+        }
+        return false;
+    }
 }

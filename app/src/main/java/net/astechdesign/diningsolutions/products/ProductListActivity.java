@@ -84,6 +84,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
     }
 
     private void updateRecycler(String value) {
+        mProductList = ProductRepo.get(this).get();
         mFilteredProducts.clear();
         if (value.trim().length() == 0) {
             mFilteredProducts.addAll(mProductList);
@@ -111,6 +112,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_product:
+                mProductSelect.setText("");
                 FragmentManager fm = getSupportFragmentManager();
                 newProductFragment = new ProductEditFragment();
                 newProductFragment.setProduct(new Product(null, "", "", 0.00, "", 0));
@@ -122,12 +124,12 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
     }
 
     @Override
-    public void onDialogPositiveClick(DialogInterface dialog, Product product) {
+    public void onEditProductPositiveClick(DialogInterface dialog, Product product) {
         ProductRepo.get(this).addOrUpdate(product);
         if (product.isDeleted()) {
             Toast.makeText(this, "Product deleted: " + product.name, Toast.LENGTH_SHORT).show();
         }
-        setupRecyclerView(mRecyclerView);
+        updateRecycler("");
     }
 
     public class ProductRecyclerViewAdapter
@@ -153,6 +155,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mProductSelect.setText("");
                     FragmentManager fm = getSupportFragmentManager();
                     ProductEditFragment dialog = new ProductEditFragment();
                     dialog.setProduct(holder.getItem());

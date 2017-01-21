@@ -35,6 +35,8 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
 
     protected abstract ContentValues getInsertValues(T model);
 
+    protected abstract String getParentIdColumn();
+
     public void addOrUpdate(SQLiteDatabase db, T model) {
         if (model.getId() == null) {
             add(db, model);
@@ -71,12 +73,12 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
 
     private void update(SQLiteDatabase db, T model) {
         ContentValues insertValues = getModelValues(model);
-        db.update(tableName, insertValues, _ID + " = ?", new String[]{model.getId().toString()});
+        db.update(tableName, insertValues, UUID_ID + " = ?", new String[]{model.getDbId()});
     }
 
     private void update(SQLiteDatabase db, Model parent, T model) {
         ContentValues insertValues = getModelValues(model);
-        db.update(tableName, insertValues, _ID + " = ?", new String[]{model.getId().toString()});
+        db.update(tableName, insertValues, UUID_ID + " = ?", new String[]{model.getDbId()});
     }
 
     private ContentValues getModelValues(T model) {
@@ -91,6 +93,4 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
         insertValues.put(getParentIdColumn(), parent.getDbId());
         return insertValues;
     }
-
-    protected abstract String getParentIdColumn();
 }

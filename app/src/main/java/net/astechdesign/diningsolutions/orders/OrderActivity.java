@@ -8,15 +8,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,15 +45,16 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     private List<Order> mOrders;
     private Order mOrder;
     private OrderAddProductFragment newProductFragment;
+    private Toolbar toolbar;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -66,13 +63,12 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
         mOrders = OrderRepo.get(this).getOrders(mCustomer);
-        // Setup spinner
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        spinner.setAdapter(new MyAdapter(
-                toolbar.getContext(),
-                mOrders));
 
+        // Setup spinner
+        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setAdapter(newAdapter());
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -98,27 +94,28 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
             mOrder = mOrders.get(0);
             initialiseView();
         }
+        showOrder(0);
+    }
+
+    private MyAdapter newAdapter() {
+        return new MyAdapter(toolbar.getContext(), mOrders);
     }
 
     private void sendEmail() {
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.setType("text/plain");
 
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{mCustomer.email.address});
-        emailIntent.putExtra(Intent.EXTRA_CC, new String[]{mCustomer.email.address});
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + mOrder.invoiceNumber);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, getOrderText());
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setData(Uri.parse("mailto:"));
+        intent.setType("text/plain");
+
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mCustomer.email.address});
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + mOrder.invoiceNumber);
+        intent.putExtra(Intent.EXTRA_TEXT, EmailIntent.text(mOrder));
 
         try {
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            startActivity(Intent.createChooser(intent, "Send mail..."));
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(OrderActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private String getOrderText() {
-        return "Order: \t123";
     }
 
     private void showOrder(int position) {
@@ -172,13 +169,23 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     private void createNewOrder() {
         OrderRepo.get(this).create(mCustomer);
         mOrders = OrderRepo.get(this).getOrders(mCustomer);
+        spinner.setAdapter(newAdapter());
     }
 
     @Override
-    public void onDialogPositiveClick(DialogInterface dialog, Product product, double price, int quantity, String batch) {
+    public void onAddProductPositiveClick(DialogInterface dialog, Product product, double price, int quantity, String batch) {
         DSDDate deliveryDate = new DSDDate();
         mOrder.addItem(product, price, quantity, batch, deliveryDate);
         OrderRepo.get(this).add(mCustomer, mOrder);
+        mOrders = OrderRepo.get(this).getOrders(mCustomer);
+
+        spinner.setAdapter(newAdapter());
+        for (int i=0; i < mOrders.size(); i++) {
+            if (mOrders.get(i).invoiceNumber.equals(mOrder.invoiceNumber)) {
+                showOrder(i);
+                break;
+            }
+        }
 
         Snackbar.make(findViewById(R.id.main_content), "Added product " + product.name, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
@@ -219,42 +226,6 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         @Override
         public void setDropDownViewTheme(Theme theme) {
             mDropDownHelper.setDropDownViewTheme(theme);
-        }
-    }
-
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_INVOICE_NUMBER = "invoice_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_INVOICE_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_order, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_INVOICE_NUMBER)));
-            return rootView;
         }
     }
 

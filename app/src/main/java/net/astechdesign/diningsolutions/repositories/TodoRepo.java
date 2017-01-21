@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.TodoTable;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Todo;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class TodoRepo {
     }
 
     public Todo get(UUID id) {
-        return new Todo(id, "Test", "Data");
+        return new Todo(id, new DSDDate(), "Test", "Data");
     }
 
     public List<Todo> get() {

@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -32,7 +31,6 @@ import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
 
@@ -42,7 +40,6 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     private CustomerEditFragment newCustomerFragment;
     private CustomerEditFragment customerEditFragment;
     private Customer mCurrentCustomer;
-    private AutoCompleteTextView mSelectCustomerView;
     private RecyclerView mRecyclerView;
     private List<Customer> mCustomerList;
     private List<Customer> mFilteredCustomerList;
@@ -90,9 +87,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             @Override
             public void afterTextChanged(Editable s) {
                 String value = s.toString().trim();
-                if (value.length() == 0 || value.length() > 2) {
-                    updateRecycler(value);
-                }
+                updateRecycler(value);
             }
         });
         mRecyclerView = (RecyclerView) findViewById(R.id.customer_list);
@@ -105,7 +100,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             mFilteredCustomerList.addAll(mCustomerList);
         }
         for (Customer customer : mCustomerList) {
-            if (customer.name.toLowerCase().contains(value.toLowerCase())) {
+            if (customer.compareValue(value)) {
                 mFilteredCustomerList.add(customer);
             }
         }
@@ -122,6 +117,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_customer:
+                mCustomerSelect.setText("");
                 FragmentManager fm = getSupportFragmentManager();
                 newCustomerFragment = new CustomerEditFragment();
                 newCustomerFragment.show(fm, ADD_CUSTOMER);
@@ -173,6 +169,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mCustomerSelect.setText("");
                     showCustomerDetails(holder.mItem);
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(holder.mView.getWindowToken(), 0);
@@ -226,5 +223,12 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
         Intent intent = new Intent(this, OrderActivity.class);
         intent.putExtra(OrderDetailFragment.CUSTOMER, mCurrentCustomer);
         this.startActivity(intent);
+    }
+
+    public void addNewVisit(View view) {
+        mCustomerSelect.setText("");
+        FragmentManager fm = getSupportFragmentManager();
+        newCustomerFragment = new CustomerEditFragment();
+        newCustomerFragment.show(fm, ADD_CUSTOMER);
     }
 }

@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:layout_marginTop="8dp">
 
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
         android:text="Anita Southwell" />
 
@@ -16,7 +17,7 @@
         android:id="@+id/telephone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="01494 871610" />
+        android:text="01494 871610"
+        android:paddingLeft="8dp" />
 </LinearLayout>
