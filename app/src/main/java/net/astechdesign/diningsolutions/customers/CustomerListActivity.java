@@ -28,6 +28,7 @@ import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
+import net.astechdesign.diningsolutions.todos.NewTaskFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -228,7 +229,10 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     public void addNewVisit(View view) {
         mCustomerSelect.setText("");
         FragmentManager fm = getSupportFragmentManager();
-        newCustomerFragment = new CustomerEditFragment();
-        newCustomerFragment.show(fm, ADD_CUSTOMER);
+        NewTaskFragment todoFragment = new NewTaskFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(NewTaskFragment.CUSTOMER, mCurrentCustomer);
+        todoFragment.setArguments(bundle);
+        todoFragment.show(fm, ADD_CUSTOMER);
     }
 }

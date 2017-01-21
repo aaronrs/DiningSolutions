@@ -17,11 +17,11 @@ import java.util.UUID;
 
 /**
  * A fragment representing a single Todo detail screen.
- * This fragment is either contained in a {@link TodoListActivity}
- * in two-pane mode (on tablets) or a {@link TodoDetailActivity}
+ * This fragment is either contained in a {@link TaskListActivity}
+ * in two-pane mode (on tablets) or a {@link TaskDetailActivity}
  * on handsets.
  */
-public class TodoDetailFragment extends Fragment {
+public class TaskDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -37,7 +37,7 @@ public class TodoDetailFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public TodoDetailFragment() {
+    public TaskDetailFragment() {
     }
 
     @Override

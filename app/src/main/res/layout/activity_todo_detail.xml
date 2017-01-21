@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="net.astechdesign.diningsolutions.todos.TodoDetailActivity"
+    tools:context="net.astechdesign.diningsolutions.todos.TaskDetailActivity"
     tools:ignore="MergeRootFrame">
 
     <android.support.design.widget.AppBarLayout

@@ -18,17 +18,23 @@ import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.DSDTime;
 
 
-public class NewTodoFragment extends DialogFragment {
+public class NewTaskFragment extends DialogFragment {
+
+    public static final String CUSTOMER = "customer";
 
     private TextView mDateText;
     private TextView mTimeText;
+    private TextView mTitleText;
+    private TextView mDescText;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_todo, null);
-        mDateText = (TextView) view.findViewById(R.id.date_text);
-        mTimeText = (TextView) view.findViewById(R.id.time_text);
+        mDateText = (TextView) view.findViewById(R.id.task_date_button);
+        mTimeText = (TextView) view.findViewById(R.id.task_time_button);
+        mTitleText = (TextView) view.findViewById(R.id.task_title);
+        mDescText = (TextView) view.findViewById(R.id.task_description);
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(R.string.new_todo_title)

@@ -16,9 +16,9 @@ import net.astechdesign.diningsolutions.R;
  * An activity representing a single Todo detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link TodoListActivity}.
+ * in a {@link TaskListActivity}.
  */
-public class TodoDetailActivity extends AppCompatActivity {
+public class TaskDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +55,9 @@ public class TodoDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(TodoDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(TodoDetailFragment.ARG_ITEM_ID));
-            TodoDetailFragment fragment = new TodoDetailFragment();
+            arguments.putString(TaskDetailFragment.ARG_ITEM_ID,
+                    getIntent().getStringExtra(TaskDetailFragment.ARG_ITEM_ID));
+            TaskDetailFragment fragment = new TaskDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.todo_detail_container, fragment)
@@ -75,7 +75,7 @@ public class TodoDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, TodoListActivity.class));
+            navigateUpTo(new Intent(this, TaskListActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

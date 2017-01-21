@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import net.astechdesign.diningsolutions.customers.CustomerPickerFragment;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
@@ -32,7 +31,7 @@ import net.astechdesign.diningsolutions.repositories.TodoRepo;
 import java.util.Date;
 import java.util.List;
 
-public class TodoListActivity extends AppCompatActivity {
+public class TaskListActivity extends AppCompatActivity {
 
     private static final String ADD_TODO = "add_todo";
     private static final String DATE_PICKER = "date_picker";
@@ -44,7 +43,7 @@ public class TodoListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
-    private NewTodoFragment newTodoFragment;
+    private NewTaskFragment newTaskFragment;
     private TodoRepo todoRepo;
 
     @Override
@@ -85,8 +84,8 @@ public class TodoListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_item_new_todo:
                 FragmentManager fm = getSupportFragmentManager();
-                newTodoFragment = new NewTodoFragment();
-                newTodoFragment.show(fm, ADD_TODO);
+                newTaskFragment = new NewTaskFragment();
+                newTaskFragment.show(fm, ADD_TODO);
                 return true;
             case R.id.menu_item_products:
                 Intent intent = new Intent(this, ProductListActivity.class);
@@ -131,16 +130,16 @@ public class TodoListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(TodoDetailFragment.ARG_ITEM_ID, holder.mItem.getDbId());
-                        TodoDetailFragment fragment = new TodoDetailFragment();
+                        arguments.putString(TaskDetailFragment.ARG_ITEM_ID, holder.mItem.getDbId());
+                        TaskDetailFragment fragment = new TaskDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.todo_detail_container, fragment)
                                 .commit();
                     } else {
                         Context context = v.getContext();
-                        Intent intent = new Intent(context, TodoDetailActivity.class);
-                        intent.putExtra(TodoDetailFragment.ARG_ITEM_ID, holder.mItem.getDbId());
+                        Intent intent = new Intent(context, TaskDetailActivity.class);
+                        intent.putExtra(TaskDetailFragment.ARG_ITEM_ID, holder.mItem.getDbId());
 
                         context.startActivity(intent);
                     }
@@ -182,22 +181,15 @@ public class TodoListActivity extends AppCompatActivity {
     public void getDate(View v) {
         FragmentManager fm = getSupportFragmentManager();
         DatePickerFragment dialog = DatePickerFragment.newInstance(new DSDDate());
-        dialog.setTargetFragment(newTodoFragment, DatePickerFragment.REQUEST_DATE);
+        dialog.setTargetFragment(newTaskFragment, DatePickerFragment.REQUEST_DATE);
         dialog.show(fm, DATE_PICKER);
     }
 
     public void getTime(View v) {
         FragmentManager fm = getSupportFragmentManager();
         TimePickerFragment dialog = TimePickerFragment.newInstance(new DSDTime(new Date()));
-        dialog.setTargetFragment(newTodoFragment, TimePickerFragment.REQUEST_TIME);
+        dialog.setTargetFragment(newTaskFragment, TimePickerFragment.REQUEST_TIME);
         dialog.show(fm, TIME_PICKER);
-    }
-
-    public void getCustomer(View v) {
-        FragmentManager fm = getSupportFragmentManager();
-        CustomerPickerFragment dialog = CustomerPickerFragment.newInstance();
-        dialog.setTargetFragment(newTodoFragment, CustomerPickerFragment.REQUEST_CUSTOMER);
-        dialog.show(fm, CUSTOMER_PICKER);
     }
 
 }
