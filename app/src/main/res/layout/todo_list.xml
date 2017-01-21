@@ -9,7 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="net.astechdesign.diningsolutions.todos.TaskListActivity">
+    tools:context="net.astechdesign.diningsolutions.tasks.TaskListActivity">
 
     <!--
     This layout is a two-pane layout for the Todos
@@ -25,7 +25,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="net.astechdesign.diningsolutions.todos.TaskListActivity"
+        tools:context="net.astechdesign.diningsolutions.tasks.TaskListActivity"
         tools:listitem="@layout/todo_list_content"
         android:layout_width="300dp" />
 

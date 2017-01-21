@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".todos.TaskListActivity">
+            android:name=".tasks.TaskListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,12 +19,12 @@
         <activity
             android:name=".customers.CustomerListActivity"
             android:label="@string/title_customer_list"
-            android:parentActivityName=".todos.TaskListActivity">
+            android:parentActivityName=".tasks.TaskListActivity">
         </activity>
         <activity
             android:name=".products.ProductListActivity"
             android:label="@string/title_product_list"
-            android:parentActivityName=".todos.TaskListActivity"
+            android:parentActivityName=".tasks.TaskListActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".customers.CustomerDetailActivity"

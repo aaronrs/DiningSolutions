@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions.todos;
+package net.astechdesign.diningsolutions.tasks;
 
 import android.content.Context;
 import android.content.Intent;
