@@ -33,7 +33,7 @@ public class OrderRepo {
 
     private OrderRepo(Context context) {
         mContext = context;
-        mDatabase = new DBHelper(mContext).getWritableDatabase();
+        mDatabase = DBHelper.get(mContext).getWritableDatabase();
         orderTable = DBHelper.getOrderTable();
     }
 

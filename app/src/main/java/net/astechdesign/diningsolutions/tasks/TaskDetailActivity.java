@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import net.astechdesign.diningsolutions.R;
 
 /**
- * An activity representing a single Todo detail screen. This
+ * An activity representing a single Task detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
  * in a {@link TaskListActivity}.
@@ -23,7 +23,7 @@ public class TaskDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_todo_detail);
+        setContentView(R.layout.activity_task_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
@@ -60,7 +60,7 @@ public class TaskDetailActivity extends AppCompatActivity {
             TaskDetailFragment fragment = new TaskDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.todo_detail_container, fragment)
+                    .add(R.id.task_detail_container, fragment)
                     .commit();
         }
     }

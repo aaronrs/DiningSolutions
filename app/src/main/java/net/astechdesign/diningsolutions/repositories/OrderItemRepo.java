@@ -30,7 +30,7 @@ public class OrderItemRepo {
 
     public OrderItemRepo(Context context) {
         mContext = context;
-        mDatabase = new DBHelper(mContext).getWritableDatabase();
+        mDatabase = DBHelper.get(mContext).getWritableDatabase();
         orderItemTable = DBHelper.getOrderItemTable();
     }
 

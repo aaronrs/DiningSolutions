@@ -29,7 +29,7 @@ public class ProductRepo {
 
     private ProductRepo(Context context) {
         mContext = context;
-        mDatabase = new DBHelper(mContext).getWritableDatabase();
+        mDatabase = DBHelper.get(mContext).getWritableDatabase();
         productTable = DBHelper.getProductTable();
     }
 

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
@@ -25,31 +26,26 @@ import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.DSDTime;
-import net.astechdesign.diningsolutions.model.Todo;
-import net.astechdesign.diningsolutions.repositories.TodoRepo;
+import net.astechdesign.diningsolutions.model.Task;
+import net.astechdesign.diningsolutions.repositories.TaskRepo;
 
 import java.util.Date;
 import java.util.List;
 
 public class TaskListActivity extends AppCompatActivity {
 
-    private static final String ADD_TODO = "add_todo";
+    private static final String ADD_TASK = "add_task";
     private static final String DATE_PICKER = "date_picker";
     private static final String TIME_PICKER = "time_picker";
-    private static final String CUSTOMER_PICKER = "customer_picker";
+    public static final String TASK = "task";
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
     private NewTaskFragment newTaskFragment;
-    private TodoRepo todoRepo;
+    private TaskRepo taskRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_todo_list);
+        setContentView(R.layout.activity_task_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,28 +60,25 @@ public class TaskListActivity extends AppCompatActivity {
             }
         });
 
-        View recyclerView = findViewById(R.id.todo_list);
+        View recyclerView = findViewById(R.id.task_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
-        if (findViewById(R.id.todo_detail_container) != null) {
-            mTwoPane = true;
-        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_todo_list, menu);
+        getMenuInflater().inflate(R.menu.menu_task_list, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_new_todo:
+            case R.id.menu_item_new_task:
                 FragmentManager fm = getSupportFragmentManager();
                 newTaskFragment = new NewTaskFragment();
-                newTaskFragment.show(fm, ADD_TODO);
+                newTaskFragment.show(fm, ADD_TASK);
                 return true;
             case R.id.menu_item_products:
                 Intent intent = new Intent(this, ProductListActivity.class);
@@ -95,54 +88,49 @@ public class TaskListActivity extends AppCompatActivity {
                 intent = new Intent(this, CustomerListActivity.class);
                 this.startActivity(intent);
                 return true;
+            case R.id.action_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                this.startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        List<Todo> todoList = TodoRepo.get(this).get();
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(todoList));
+        List<Task> taskList = TaskRepo.get(this).get();
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(taskList));
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Todo> mValues;
+        private final List<Task> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Todo> items) {
+        public SimpleItemRecyclerViewAdapter(List<Task> items) {
             mValues = items;
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.todo_list_content, parent, false);
+                    .inflate(R.layout.task_list_content, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.setItem(mValues.get(position));
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(TaskDetailFragment.ARG_ITEM_ID, holder.mItem.getDbId());
-                        TaskDetailFragment fragment = new TaskDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.todo_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, TaskDetailActivity.class);
-                        intent.putExtra(TaskDetailFragment.ARG_ITEM_ID, holder.mItem.getDbId());
-
-                        context.startActivity(intent);
-                    }
+                    FragmentManager fm = getSupportFragmentManager();
+                    newTaskFragment = new NewTaskFragment();
+                    Bundle args = new Bundle();
+                    args.putSerializable(TASK, mValues.get(position));
+                    newTaskFragment.setArguments(args);
+                    newTaskFragment.show(fm, ADD_TASK);
                 }
             });
         }
@@ -156,7 +144,7 @@ public class TaskListActivity extends AppCompatActivity {
             private final View mView;
             private final TextView mIdView;
             private final TextView mContentView;
-            private Todo mItem;
+            private Task mItem;
 
             public ViewHolder(View view) {
                 super(view);
@@ -165,7 +153,7 @@ public class TaskListActivity extends AppCompatActivity {
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
 
-            public void setItem(Todo item) {
+            public void setItem(Task item) {
                 this.mItem = item;
                 mIdView.setText(new DSDDate().toString());
                 mContentView.setText("Description");

@@ -229,10 +229,10 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     public void addNewVisit(View view) {
         mCustomerSelect.setText("");
         FragmentManager fm = getSupportFragmentManager();
-        NewTaskFragment todoFragment = new NewTaskFragment();
+        NewTaskFragment taskFragment = new NewTaskFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(NewTaskFragment.CUSTOMER, mCurrentCustomer);
-        todoFragment.setArguments(bundle);
-        todoFragment.show(fm, ADD_CUSTOMER);
+        taskFragment.setArguments(bundle);
+        taskFragment.show(fm, ADD_CUSTOMER);
     }
 }

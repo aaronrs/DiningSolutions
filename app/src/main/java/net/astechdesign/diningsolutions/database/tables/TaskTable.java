@@ -1,14 +1,10 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 
-import net.astechdesign.diningsolutions.model.Order;
-import net.astechdesign.diningsolutions.model.Todo;
+import net.astechdesign.diningsolutions.model.Task;
 
-import java.util.UUID;
-
-public class TodoTable  extends CMSTable<Todo>{
+public class TaskTable extends CMSTable<Task>{
 
     private static final String TABLE_NAME = "todos";
 
@@ -19,12 +15,12 @@ public class TodoTable  extends CMSTable<Todo>{
             TODO_CONTENT + " TEXT," +
             TODO_DETAILS + " TEXT";
 
-    public TodoTable() {
+    public TaskTable() {
         super(TABLE_NAME, CREATE_TABLE);
     }
 
     @Override
-    protected ContentValues getInsertValues(Todo model) {
+    protected ContentValues getInsertValues(Task model) {
         return null;
     }
 

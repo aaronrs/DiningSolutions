@@ -30,14 +30,14 @@ public class NewTaskFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_todo, null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_task, null);
         mDateText = (TextView) view.findViewById(R.id.task_date_button);
         mTimeText = (TextView) view.findViewById(R.id.task_time_button);
         mTitleText = (TextView) view.findViewById(R.id.task_title);
         mDescText = (TextView) view.findViewById(R.id.task_description);
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle(R.string.new_todo_title)
+                .setTitle(R.string.new_task_title)
                 .setPositiveButton(android.R.string.ok, null)
                 .create();
     }
