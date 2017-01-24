@@ -4,10 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.Product;
-
-import java.util.UUID;
 
 public class ProductTable extends CMSTable<Product> {
 
@@ -28,7 +25,7 @@ public class ProductTable extends CMSTable<Product> {
             "";
 
     public ProductTable() {
-        super(TABLE_NAME, CREATE_TABLE);
+        super(TABLE_NAME, CREATE_TABLE, null);
     }
 
     @Override
@@ -40,11 +37,6 @@ public class ProductTable extends CMSTable<Product> {
         values.put(PRODUCT_BARCODE, product.barcode);
         values.put(PRODUCT_DELETED, product.isDeleted() ? 1 : 0);
         return values;
-    }
-
-    @Override
-    protected String getParentIdColumn() {
-        return null;
     }
 
     public Cursor get(SQLiteDatabase db) {

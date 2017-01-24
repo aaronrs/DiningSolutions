@@ -1,6 +1,7 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
@@ -17,9 +18,16 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
 
     private final String tableName;
     private final String createTable;
+    private final String parentId;
+
     protected CMSTable(String tableName, String createTable) {
+        this(tableName, createTable, null);
+    }
+
+    protected CMSTable(String tableName, String createTable, String parentId) {
         this.tableName = tableName;
         this.createTable = createTable;
+        this.parentId = parentId;
     }
 
     public final void create(SQLiteDatabase db) {
@@ -34,8 +42,6 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
     }
 
     protected abstract ContentValues getInsertValues(T model);
-
-    protected abstract String getParentIdColumn();
 
     public void addOrUpdate(SQLiteDatabase db, T model) {
         if (model.getId() == null) {
@@ -90,7 +96,15 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
     private ContentValues getModelValues(Model parent, T model) {
         ContentValues insertValues = getInsertValues(model);
         insertValues.put(UUID_ID, model.getDbId());
-        insertValues.put(getParentIdColumn(), parent.getDbId());
+        insertValues.put(parentId, parent.getDbId());
         return insertValues;
+    }
+
+    public enum TableType {
+        CUSTOMER,
+        ORDER,
+        ORDERITEM,
+        PRODUCT,
+        TASK
     }
 }

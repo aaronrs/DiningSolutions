@@ -7,9 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.wrappers.AddressCursorWrapper;
 import net.astechdesign.diningsolutions.model.Address;
-import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.Model;
-import net.astechdesign.diningsolutions.model.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +35,7 @@ public class AddressTable extends CMSTable<Address> {
                     "";
 
     protected AddressTable(DBHelper db) {
-        super(TABLE_NAME, CREATE_TABLE);
+        super(TABLE_NAME, CREATE_TABLE, CUSTOMER_ID);
     }
 
     @Override
@@ -51,11 +48,6 @@ public class AddressTable extends CMSTable<Address> {
         values.put(ADDRESS_COUNTY, address.county);
         values.put(ADDRESS_POSTCODE, address.postcode);
         return values;
-    }
-
-    @Override
-    protected String getParentIdColumn() {
-        return CUSTOMER_ID;
     }
 
     public List<Address> get(SQLiteDatabase db) {

@@ -4,21 +4,26 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import net.astechdesign.diningsolutions.database.tables.CMSTable;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.database.tables.ProductTable;
 import net.astechdesign.diningsolutions.database.tables.TaskTable;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import static net.astechdesign.diningsolutions.database.tables.CMSTable.TableType.*;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "orders";
-    private static CustomerTable customerTable;
-    private static OrderTable orderTable;
-    private static OrderItemTable orderItemTable;
-    private static TaskTable taskTable;
-    private static ProductTable productTable;
+
+    private static Map<CMSTable.TableType, CMSTable> tables;
+
     private static DBHelper dbHelper;
 
     private Context mContext;
@@ -26,19 +31,20 @@ public class DBHelper extends SQLiteOpenHelper {
     private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
-        if (customerTable == null) {
-            customerTable = new CustomerTable();
-            orderTable = new OrderTable();
-            orderItemTable = new OrderItemTable();
-            taskTable = new TaskTable();
-            productTable = new ProductTable();
+        if (tables == null) {
+            tables  = new HashMap<>();
+            tables.put(CUSTOMER, new CustomerTable());
+            tables.put(ORDER, new OrderTable());
+            tables.put(ORDERITEM, new OrderItemTable());
+            tables.put(TASK, new TaskTable());
+            tables.put(PRODUCT, new ProductTable());
         }
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        DBLoader.create(db, productTable, customerTable, orderTable, orderItemTable);
-        DBLoader.load(mContext, db, productTable, customerTable, orderTable, orderItemTable);
+        DBLoader.create(db);
+        DBLoader.load(mContext, db);
     }
 
     @Override
@@ -53,22 +59,26 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public static CustomerTable getCustomerTable() {
-        return customerTable;
-    }
-
-    public static OrderItemTable getOrderItemTable() {
-        return orderItemTable;
-    }
-
-    public static TaskTable getTaskTable() {
-        return taskTable;
-    }
-
-    public static ProductTable getProductTable() {
-        return productTable;
+        return (CustomerTable) tables.get(CUSTOMER);
     }
 
     public static OrderTable getOrderTable() {
-        return orderTable;
+        return (OrderTable) tables.get(ORDER);
+    }
+
+    public static OrderItemTable getOrderItemTable() {
+        return (OrderItemTable) tables.get(ORDERITEM);
+    }
+
+    public static TaskTable getTaskTable() {
+        return (TaskTable) tables.get(TASK);
+    }
+
+    public static ProductTable getProductTable() {
+        return (ProductTable) tables.get(PRODUCT);
+    }
+
+    public static Collection<CMSTable> getTables() {
+        return tables.values();
     }
 }

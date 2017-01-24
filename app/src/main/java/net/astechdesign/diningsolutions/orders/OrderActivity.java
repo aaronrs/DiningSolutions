@@ -94,7 +94,9 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
             mOrder = mOrders.get(0);
             initialiseView();
         }
-        showOrder(0);
+        if (mOrders.size() > 0) {
+            showOrder(0);
+        }
     }
 
     private MyAdapter newAdapter() {

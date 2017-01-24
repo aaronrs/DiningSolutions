@@ -18,38 +18,43 @@ import net.astechdesign.diningsolutions.repositories.assets.CustomerAssets;
 import net.astechdesign.diningsolutions.repositories.assets.OrderAssets;
 import net.astechdesign.diningsolutions.repositories.assets.ProductAssets;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import static net.astechdesign.diningsolutions.database.tables.CMSTable.TableType.CUSTOMER;
+import static net.astechdesign.diningsolutions.database.tables.CMSTable.TableType.PRODUCT;
 
 public class DBLoader {
 
 
-    public static void create(SQLiteDatabase db, CMSTable... tables) {
-        for (CMSTable table : tables) {
+    public static void create(SQLiteDatabase db) {
+        for (CMSTable table : DBHelper.getTables()) {
             table.create(db);
         }
     }
 
-    public static void load(Context context, SQLiteDatabase db, ProductTable productTable, CustomerTable customerTable, OrderTable orderTable, OrderItemTable orderItemTable) {
+    public static void load(Context context, SQLiteDatabase db) {
         List<Product> productList = ProductAssets.getProducts(context);
         for (Product product : productList) {
-            productTable.addOrUpdate(db, product);
+            DBHelper.getProductTable().addOrUpdate(db, product);
         }
 
         List<Customer> customerList = CustomerAssets.getCustomers(context);
         for (Customer customer: customerList) {
-            customerTable.addOrUpdate(db, customer);
+            DBHelper.getCustomerTable().addOrUpdate(db, customer);
         }
 
-        Cursor cursor = customerTable.get(db, "Southwell");
+        Cursor cursor = DBHelper.getCustomerTable().get(db, "Southwell");
         cursor.moveToFirst();
         Customer customer = new CustomerCursorWrapper(cursor).getCustomer();
         cursor.close();
         List<Order> orderList = OrderAssets.getOrders(context);
         for (Order order : orderList) {
-            orderTable.addOrUpdate(db, customer, order);
+            DBHelper.getOrderTable().addOrUpdate(db, customer, order);
             for (OrderItem item : order.orderItems) {
-                orderItemTable.addOrUpdate(db, order, item);
+                DBHelper.getOrderItemTable().addOrUpdate(db, order, item);
             }
         }
     }

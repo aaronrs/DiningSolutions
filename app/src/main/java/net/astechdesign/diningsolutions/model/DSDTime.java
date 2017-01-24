@@ -8,6 +8,10 @@ public class DSDTime implements Serializable {
     private static final DSDDateFormatter dateFormatter = DSDDateFormatter.instance();
     private final Date date;
 
+    public DSDTime() {
+        this(new Date());
+    }
+
     public DSDTime(Date date) {
         this.date = date;
     }

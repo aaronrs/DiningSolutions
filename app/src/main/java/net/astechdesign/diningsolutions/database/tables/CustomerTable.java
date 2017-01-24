@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.Order;
-
-import java.util.UUID;
 
 public class CustomerTable extends CMSTable<Customer> {
 
@@ -65,11 +62,6 @@ public class CustomerTable extends CMSTable<Customer> {
         values.put(ADDRESS_COUNTY, address.county);
         values.put(ADDRESS_POSTCODE, address.postcode);
         return values;
-    }
-
-    @Override
-    protected String getParentIdColumn() {
-        return null;
     }
 
     public Cursor get(SQLiteDatabase db) {
