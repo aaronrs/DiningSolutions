@@ -1,6 +1,7 @@
 package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
@@ -20,8 +21,6 @@ public class TaskRepo {
     private final SQLiteDatabase mDatabase;
     private final Context mContext;
 
-    private List<Task> tasks = new ArrayList<>();
-
     public static TaskRepo get(Context context) {
         if (repo == null) {
             repo = new TaskRepo(context.getApplicationContext());
@@ -36,10 +35,15 @@ public class TaskRepo {
     }
 
     public Task get(UUID id) {
-        return new Task(id, new DSDDate(), new DSDTime(), null, "Test", "Data", "Visit");
+        return new Task(id, "Other", new DSDDate(), new DSDTime(), null, null, "Test", "Data");
     }
 
     public List<Task> get() {
+        List<Task> tasks = new ArrayList<>();
+        Cursor cursor = taskTable.getTasks(mDatabase);
+        while (!cursor.isAfterLast()) {
+            cursor.moveToNext();
+        }
         return tasks;
     }
 }

@@ -67,6 +67,10 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
         return output;
     }
 
+    protected String prefix(String value) {
+        return String.format("%s.%s", tableName, value);
+    }
+
     private void add(SQLiteDatabase db, T model) {
         ContentValues insertValues = getModelValues(model);
         db.insert(tableName, null, insertValues);

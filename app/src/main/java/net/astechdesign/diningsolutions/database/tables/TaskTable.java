@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Task;
+import net.astechdesign.diningsolutions.model.TaskType;
 
 public class TaskTable extends CMSTable<Task>{
 
@@ -13,7 +15,8 @@ public class TaskTable extends CMSTable<Task>{
     public static final String TASK_TYPE = "type";
     public static final String TASK_DATE = "date";
     public static final String TASK_TIME = "time";
-    public static final String TASK_CUSTOMER_ID = "customer_id";
+    public static final String TASK_CUSTOMER_NAME = "customer_name";
+    public static final String TASK_CUSTOMER_PHONE = "customer_phone";
     public static final String TASK_TITLE = "title";
     public static final String TASK_DESCRIPTION = "description";
 
@@ -21,7 +24,8 @@ public class TaskTable extends CMSTable<Task>{
             TASK_TYPE + " TEXT," +
             TASK_DATE + " DATE," +
             TASK_TIME + " TIME," +
-            TASK_CUSTOMER_ID + " TEXT," +
+            TASK_CUSTOMER_NAME + " TEXT," +
+            TASK_CUSTOMER_PHONE + " TEXT," +
             TASK_TITLE + " TEXT," +
             TASK_DESCRIPTION + " TEXT";
 
@@ -35,13 +39,25 @@ public class TaskTable extends CMSTable<Task>{
         values.put(TASK_TYPE, task.type.name());
         values.put(TASK_DATE, task.date.dbFormat());
         values.put(TASK_TIME, task.time.toString());
-        values.put(TASK_CUSTOMER_ID, task.customer.getDbId());
+        values.put(TASK_CUSTOMER_NAME, task.customerName);
+        values.put(TASK_CUSTOMER_PHONE, task.customerPhone);
         values.put(TASK_TITLE, task.title);
         values.put(TASK_DESCRIPTION, task.description);
         return values;
     }
 
     public Cursor getTasks(SQLiteDatabase db) {
-        return db.query(TABLE_NAME, null, null, null, null, null, TASK_DATE + " DESC, " + TASK_TIME + " DESC");
+        return db.rawQuery(TASK_LIST, null);
     }
+
+    public String TASK_LIST = "SELECT " +
+            UUID_ID + "," +
+            TASK_TYPE + ", " +
+            TASK_DATE + "," +
+            TASK_TIME + "," +
+            TASK_CUSTOMER_NAME + "," +
+            TASK_CUSTOMER_PHONE + "," +
+            TASK_TITLE + "," +
+            TASK_DESCRIPTION + "" +
+            " FROM " + TABLE_NAME;
 }

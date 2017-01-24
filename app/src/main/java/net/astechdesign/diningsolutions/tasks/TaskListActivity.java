@@ -1,15 +1,14 @@
 package net.astechdesign.diningsolutions.tasks;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,16 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-import net.astechdesign.diningsolutions.admin.SettingsActivity;
-import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.DatePickerFragment;
-import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
+import net.astechdesign.diningsolutions.admin.SettingsActivity;
+import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.DSDTime;
 import net.astechdesign.diningsolutions.model.Task;
+import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.TaskRepo;
 
 import java.util.Date;
@@ -142,26 +140,26 @@ public class TaskListActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             private final View mView;
-            private final TextView mIdView;
-            private final TextView mContentView;
+            private final TextView mDateView;
+            private final TextView mTitleView;
             private Task mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mDateView = (TextView) view.findViewById(R.id.task_date);
+                mTitleView = (TextView) view.findViewById(R.id.task_title);
             }
 
             public void setItem(Task item) {
                 this.mItem = item;
-                mIdView.setText(new DSDDate().toString());
-                mContentView.setText("Description");
+                mDateView.setText(mItem.date.toString());
+                mTitleView.setText(mItem.title);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mTitleView.getText() + "'";
             }
         }
     }
