@@ -109,7 +109,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mCustomer.email.address});
         intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + mOrder.invoiceNumber);
-        intent.putExtra(Intent.EXTRA_TEXT, EmailIntent.text(mOrder));
+        intent.putExtra(Intent.EXTRA_TEXT, new EmailTemplate(mOrder).toString());
 
         try {
             startActivity(Intent.createChooser(intent, "Send mail..."));
@@ -167,7 +167,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     }
 
     private void createNewOrder() {
-        OrderRepo.get(this).create(mCustomer);
+        OrderRepo.get(this).create(this, mCustomer);
         mOrders = OrderRepo.get(this).getOrders(mCustomer);
         spinner.setAdapter(newAdapter());
     }

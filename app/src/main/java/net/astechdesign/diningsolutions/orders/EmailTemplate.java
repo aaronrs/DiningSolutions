@@ -1,15 +1,17 @@
 package net.astechdesign.diningsolutions.orders;
 
-import android.content.Intent;
-import android.net.Uri;
-
-import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
-public class EmailIntent extends Intent {
+public class EmailTemplate {
 
-    public static String text(Order order) {
+    private Order order;
+
+    public EmailTemplate(Order order) {
+        this.order = order;
+    }
+
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format(text1, order.invoiceNumber));
         for (OrderItem item : order.orderItems) {

@@ -1,8 +1,10 @@
 package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
@@ -51,8 +53,14 @@ public class OrderRepo {
         return orders;
     }
 
-    public void create(Customer mCustomer) {
-        int invoiceNumber = orderTable.newInvoiceNumber(mDatabase);
+    public void create(Context context, Customer mCustomer) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        int invoiceNumber = Integer.parseInt(sharedPref.getString("invoice_start_number", "0")) + 1;
+
+        SharedPreferences.Editor ed = sharedPref.edit();
+        ed.putString("invoice_start_number", Integer.toString(invoiceNumber));
+        ed.commit();
+
         Order order = new Order(null, new DSDDate(), Integer.toString(invoiceNumber));
         orderTable.addOrUpdate(mDatabase, mCustomer, order);
     }

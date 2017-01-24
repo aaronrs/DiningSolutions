@@ -9,7 +9,7 @@ public class TaskTable extends CMSTable<Task>{
     private static final String TABLE_NAME = "todos";
 
     public static final String TODO_CONTENT = "content";
-    public static final String TODO_DETAILS = "details";
+    public static final String TODO_DETAILS = "description";
 
     private static final String CREATE_TABLE =
             TODO_CONTENT + " TEXT," +
