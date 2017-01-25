@@ -40,9 +40,11 @@ public class CustomerTable extends CMSTable<Customer> {
             ADDRESS_COUNTY + " TEXT, " +
             ADDRESS_POSTCODE + " TEXT " +
             "";
+    private static CustomerTable instance;
 
     public CustomerTable() {
         super(TABLE_NAME, CREATE_TABLE);
+        instance = this;
     }
 
     protected ContentValues getInsertValues(Customer customer) {
@@ -70,5 +72,9 @@ public class CustomerTable extends CMSTable<Customer> {
 
     public Cursor get(SQLiteDatabase db, String name) {
         return db.query(TABLE_NAME, null, CUSTOMER_NAME + " = ?", new String[]{name}, null, null, CUSTOMER_NAME);
+    }
+
+    public static CustomerTable table() {
+        return instance;
     }
 }

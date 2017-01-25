@@ -30,7 +30,7 @@ public class CustomerRepo {
     private CustomerRepo(Context context) {
         mContext = context;
         mDatabase = DBHelper.get(mContext).getWritableDatabase();
-        mCustomerTable = DBHelper.getCustomerTable();
+        mCustomerTable = CustomerTable.table();
     }
 
     public List<Customer> get() {

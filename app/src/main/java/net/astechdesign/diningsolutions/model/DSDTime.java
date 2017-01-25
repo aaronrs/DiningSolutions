@@ -16,6 +16,10 @@ public class DSDTime implements Serializable {
         this.date = date;
     }
 
+    public DSDTime(String time) {
+        this(dateFormatter.dbParse(time));
+    }
+
     public DSDTime(int hours, int minutes) {
         Date date = new Date();
         date.setHours(hours);

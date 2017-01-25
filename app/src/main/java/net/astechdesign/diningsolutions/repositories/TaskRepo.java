@@ -36,7 +36,7 @@ public class TaskRepo {
     }
 
     public Task get(UUID id) {
-        return new Task(id, "Other", new DSDDate(), new DSDTime(), null, null, "Test", "Data");
+        return new Task(id, new DSDDate(), new DSDTime(), "Test", "Data");
     }
 
     public List<Task> get() {

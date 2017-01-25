@@ -43,7 +43,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        DBLoader.create(db);
+        for (CMSTable table : tables.values()) {
+            table.create(db);
+        }
         DBLoader.load(mContext, db);
     }
 
@@ -56,10 +58,6 @@ public class DBHelper extends SQLiteOpenHelper {
             dbHelper = new DBHelper(context);
         }
         return dbHelper;
-    }
-
-    public static CustomerTable getCustomerTable() {
-        return (CustomerTable) tables.get(CUSTOMER);
     }
 
     public static OrderTable getOrderTable() {

@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
@@ -20,6 +21,7 @@ import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.DSDTime;
 import net.astechdesign.diningsolutions.model.Task;
+import net.astechdesign.diningsolutions.model.TaskType;
 
 
 public class NewTaskFragment extends DialogFragment {
@@ -31,6 +33,9 @@ public class NewTaskFragment extends DialogFragment {
     private TextView mTimeText;
     private TextView mTitleText;
     private TextView mDescText;
+    private RadioButton mVisitRb;
+    private RadioButton mDeliveryRb;
+    private RadioButton mOtherRb;
 
     public interface NewTaskListener {
         void onNewTaskPositiveClick(DialogInterface dialog, Task task);
@@ -52,13 +57,10 @@ public class NewTaskFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         Task task = new Task(
                                 null,
-                                null,
-                                null,
-                                null,
-                                "Name",
-                                "phone",
-                                "Tite",
-                                "Description"
+                                new DSDDate(mDateText.getText().toString()),
+                                new DSDTime(mTimeText.getText().toString()),
+                                mTitleText.getText().toString(),
+                                mDescText.getText().toString()
                         );
                         mListener.onNewTaskPositiveClick(dialog, task);
                     }

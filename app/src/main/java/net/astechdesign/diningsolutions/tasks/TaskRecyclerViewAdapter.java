@@ -55,14 +55,18 @@ public class TaskRecyclerViewAdapter
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final View mView;
         private final TextView mDateView;
+        private final TextView mTimeView;
         private final TextView mTitleView;
+        private final TextView mDescriptionView;
         private Task mTask;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mDateView = (TextView) view.findViewById(R.id.task_date);
+            mTimeView = (TextView) view.findViewById(R.id.task_time);
             mTitleView = (TextView) view.findViewById(R.id.task_title);
+            mDescriptionView = (TextView) view.findViewById(R.id.task_description);
         }
 
         public void setItem(Task item) {
@@ -70,7 +74,11 @@ public class TaskRecyclerViewAdapter
             if (mTask.date != null) {
                 mDateView.setText(mTask.date.toString());
             }
+            if (mTask.time != null) {
+                mTimeView.setText(mTask.time.toString());
+            }
             mTitleView.setText(mTask.title);
+            mDescriptionView.setText(mTask.description);
         }
 
         @Override

@@ -28,25 +28,19 @@ import static net.astechdesign.diningsolutions.database.tables.CMSTable.TableTyp
 
 public class DBLoader {
 
-
-    public static void create(SQLiteDatabase db) {
-        for (CMSTable table : DBHelper.getTables()) {
-            table.create(db);
-        }
-    }
-
     public static void load(Context context, SQLiteDatabase db) {
         List<Product> productList = ProductAssets.getProducts(context);
         for (Product product : productList) {
             DBHelper.getProductTable().addOrUpdate(db, product);
         }
 
+        CustomerTable table = CustomerTable.table();
         List<Customer> customerList = CustomerAssets.getCustomers(context);
         for (Customer customer: customerList) {
-            DBHelper.getCustomerTable().addOrUpdate(db, customer);
+            table.addOrUpdate(db, customer);
         }
 
-        Cursor cursor = DBHelper.getCustomerTable().get(db, "Southwell");
+        Cursor cursor = table.get(db, "Southwell");
         cursor.moveToFirst();
         Customer customer = new CustomerCursorWrapper(cursor).getCustomer();
         cursor.close();

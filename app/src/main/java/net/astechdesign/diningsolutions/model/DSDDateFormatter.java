@@ -16,7 +16,11 @@ public class DSDDateFormatter {
         try {
             return dbDateFormat.parse(dateString);
         } catch (ParseException e) {
-            throw new RuntimeException("Date parse failed: " + dateString);
+            try {
+                return outputDateFormat.parse(dateString);
+            } catch (ParseException ex) {
+                throw new RuntimeException("Date parse failed: " + dateString);
+            }
         }
     }
 
