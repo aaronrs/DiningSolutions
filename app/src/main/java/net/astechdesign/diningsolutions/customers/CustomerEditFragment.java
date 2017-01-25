@@ -2,6 +2,7 @@ package net.astechdesign.diningsolutions.customers;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ import net.astechdesign.diningsolutions.model.Phone;
 
 public class CustomerEditFragment extends DialogFragment {
 
-    private CustomerEditFragment.CustomerEditListener mListener;
+    private CustomerEditListener mListener;
     private Customer mCurrentCustomer;
     private TextView mNameText;
     private TextView mPhoneText;
@@ -112,12 +113,12 @@ public class CustomerEditFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mListener = (CustomerEditFragment.CustomerEditListener) activity;
+            mListener = (CustomerEditListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement NoticeDialogListener");
+            throw new ClassCastException(context.toString() + " must implement CustomerEditListener");
         }
     }
 

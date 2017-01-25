@@ -1,20 +1,17 @@
 package net.astechdesign.diningsolutions.tasks;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
@@ -30,15 +27,15 @@ import net.astechdesign.diningsolutions.repositories.TaskRepo;
 import java.util.Date;
 import java.util.List;
 
-public class TaskListActivity extends AppCompatActivity {
+public class TaskListActivity extends AppCompatActivity implements NewTaskFragment.NewTaskListener {
 
-    private static final String ADD_TASK = "add_task";
+    static final String ADD_TASK = "add_task";
     private static final String DATE_PICKER = "date_picker";
     private static final String TIME_PICKER = "time_picker";
     public static final String TASK = "task";
 
     private NewTaskFragment newTaskFragment;
-    private TaskRepo taskRepo;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +55,8 @@ public class TaskListActivity extends AppCompatActivity {
             }
         });
 
-        View recyclerView = findViewById(R.id.task_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
-
+        recyclerView = (RecyclerView) findViewById(R.id.task_list);
+        setupRecyclerView();
     }
 
     @Override
@@ -95,73 +90,15 @@ public class TaskListActivity extends AppCompatActivity {
         }
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView() {
         List<Task> taskList = TaskRepo.get(this).get();
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(taskList));
+        recyclerView.setAdapter(new TaskRecyclerViewAdapter(getSupportFragmentManager(), taskList));
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final List<Task> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<Task> items) {
-            mValues = items;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.task_list_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.setItem(mValues.get(position));
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    newTaskFragment = new NewTaskFragment();
-                    Bundle args = new Bundle();
-                    args.putSerializable(TASK, mValues.get(position));
-                    newTaskFragment.setArguments(args);
-                    newTaskFragment.show(fm, ADD_TASK);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            private final View mView;
-            private final TextView mDateView;
-            private final TextView mTitleView;
-            private Task mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mDateView = (TextView) view.findViewById(R.id.task_date);
-                mTitleView = (TextView) view.findViewById(R.id.task_title);
-            }
-
-            public void setItem(Task item) {
-                this.mItem = item;
-                mDateView.setText(mItem.date.toString());
-                mTitleView.setText(mItem.title);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mTitleView.getText() + "'";
-            }
-        }
+    @Override
+    public void onNewTaskPositiveClick(DialogInterface dialog, Task task) {
+        TaskRepo.get(this).addOrUpdate(task);
+        setupRecyclerView();
     }
 
     public void getDate(View v) {

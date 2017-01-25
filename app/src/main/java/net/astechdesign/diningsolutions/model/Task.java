@@ -14,7 +14,7 @@ public class Task extends Model {
 
     public Task(UUID id, String type, DSDDate date, DSDTime time, String customerName, String customerPhone, String title, String description) {
         super(id);
-        this.type = TaskType.valueOf(type);
+        this.type = type != null ? TaskType.valueOf(type) : TaskType.Other;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
         this.date = date;

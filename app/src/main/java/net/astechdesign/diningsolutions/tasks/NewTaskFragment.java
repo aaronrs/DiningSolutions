@@ -2,6 +2,8 @@ package net.astechdesign.diningsolutions.tasks;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,18 +16,25 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
+import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.DSDTime;
+import net.astechdesign.diningsolutions.model.Task;
 
 
 public class NewTaskFragment extends DialogFragment {
 
     public static final String CUSTOMER = "customer";
 
+    private NewTaskListener mListener;
     private TextView mDateText;
     private TextView mTimeText;
     private TextView mTitleText;
     private TextView mDescText;
+
+    public interface NewTaskListener {
+        void onNewTaskPositiveClick(DialogInterface dialog, Task task);
+    }
 
     @NonNull
     @Override
@@ -38,7 +47,22 @@ public class NewTaskFragment extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(R.string.new_task_title)
-                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Task task = new Task(
+                                null,
+                                null,
+                                null,
+                                null,
+                                "Name",
+                                "phone",
+                                "Tite",
+                                "Description"
+                        );
+                        mListener.onNewTaskPositiveClick(dialog, task);
+                    }
+                })
                 .create();
     }
 
@@ -56,6 +80,16 @@ public class NewTaskFragment extends DialogFragment {
             DSDTime time = (DSDTime) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
             mTimeText.setText(time.toString());
             return;
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (NewTaskListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement NewTaskListener");
         }
     }
 }

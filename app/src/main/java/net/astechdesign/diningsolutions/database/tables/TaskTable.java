@@ -37,8 +37,8 @@ public class TaskTable extends CMSTable<Task>{
     protected ContentValues getInsertValues(Task task) {
         ContentValues values = new ContentValues();
         values.put(TASK_TYPE, task.type.name());
-        values.put(TASK_DATE, task.date.dbFormat());
-        values.put(TASK_TIME, task.time.toString());
+        values.put(TASK_DATE, task.date == null ? null : task.date.dbFormat());
+        values.put(TASK_TIME, task.time == null ? null : task.time.toString());
         values.put(TASK_CUSTOMER_NAME, task.customerName);
         values.put(TASK_CUSTOMER_PHONE, task.customerPhone);
         values.put(TASK_TITLE, task.title);
@@ -47,7 +47,7 @@ public class TaskTable extends CMSTable<Task>{
     }
 
     public Cursor getTasks(SQLiteDatabase db) {
-        return db.rawQuery(TASK_LIST, null);
+        return db.query(TABLE_NAME, null, null, null, null, null, null);
     }
 
     public String TASK_LIST = "SELECT " +

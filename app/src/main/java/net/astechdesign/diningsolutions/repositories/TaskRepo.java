@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.TaskTable;
+import net.astechdesign.diningsolutions.database.wrappers.TaskCursorWrapper;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.DSDTime;
 import net.astechdesign.diningsolutions.model.Task;
@@ -17,7 +18,7 @@ import java.util.UUID;
 public class TaskRepo {
 
     private static TaskRepo repo;
-    private final TaskTable taskTable;
+    private final TaskTable mTaskTable;
     private final SQLiteDatabase mDatabase;
     private final Context mContext;
 
@@ -31,7 +32,7 @@ public class TaskRepo {
     public TaskRepo(Context context) {
         mContext = context;
         mDatabase = DBHelper.get(mContext).getWritableDatabase();
-        this.taskTable = DBHelper.getTaskTable();
+        this.mTaskTable = DBHelper.getTaskTable();
     }
 
     public Task get(UUID id) {
@@ -40,10 +41,16 @@ public class TaskRepo {
 
     public List<Task> get() {
         List<Task> tasks = new ArrayList<>();
-        Cursor cursor = taskTable.getTasks(mDatabase);
+        Cursor cursor = mTaskTable.getTasks(mDatabase);
+        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
+            tasks.add(new TaskCursorWrapper(cursor).getTask());
             cursor.moveToNext();
         }
         return tasks;
+    }
+
+    public void addOrUpdate(Task task) {
+        mTaskTable.addOrUpdate(mDatabase, task);
     }
 }

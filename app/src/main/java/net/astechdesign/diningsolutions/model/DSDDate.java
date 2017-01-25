@@ -48,7 +48,7 @@ public class DSDDate implements Serializable, Comparable {
     }
 
     public String dbFormat() {
-        return dateFormatter.dbFormat(date);
+        return date != null ? dateFormatter.dbFormat(date) : "";
     }
 
     @Override
