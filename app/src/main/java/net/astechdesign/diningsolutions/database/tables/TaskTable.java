@@ -30,8 +30,7 @@ public class TaskTable extends CMSTable<Task>{
     @Override
     protected ContentValues getInsertValues(Task task) {
         ContentValues values = new ContentValues();
-        values.put(TASK_DATE, task.date == null ? null : task.date.dbFormat());
-        values.put(TASK_TIME, task.time == null ? null : task.time.toString());
+        values.put(TASK_DATE, task.date == null ? null : task.date.getOutput());
         values.put(TASK_TITLE, task.title);
         values.put(TASK_DESCRIPTION, task.description);
         return values;

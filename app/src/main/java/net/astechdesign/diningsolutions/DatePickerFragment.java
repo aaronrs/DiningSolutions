@@ -14,6 +14,9 @@ import android.widget.DatePicker;
 
 import net.astechdesign.diningsolutions.model.DSDDate;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class DatePickerFragment extends DialogFragment {
 
     private static final String ARG_DATE = "date";
@@ -40,7 +43,7 @@ public class DatePickerFragment extends DialogFragment {
                 .inflate(R.layout.dialog_date, null);
 
         mDatePicker = (DatePicker) view.findViewById(R.id.dialog_date_picker);
-        mDatePicker.init(date.year, date.month, date.day, null);
+        mDatePicker.init(date.getYear(), date.getMonth(), date.getDay(), null);
 
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
@@ -48,7 +51,9 @@ public class DatePickerFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        sendResult(Activity.RESULT_OK, DSDDate.create(mDatePicker));
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(mDatePicker.getYear(), mDatePicker.getMonth(), mDatePicker.getDayOfMonth());
+                        sendResult(Activity.RESULT_OK, new DSDDate(cal.getTime()));
                     }
                 })
                 .create();

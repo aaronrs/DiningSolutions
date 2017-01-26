@@ -17,11 +17,8 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
-import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.DSDTime;
 import net.astechdesign.diningsolutions.model.Task;
-import net.astechdesign.diningsolutions.model.TaskType;
 
 
 public class NewTaskFragment extends DialogFragment {
@@ -58,7 +55,6 @@ public class NewTaskFragment extends DialogFragment {
                         Task task = new Task(
                                 null,
                                 new DSDDate(mDateText.getText().toString()),
-                                new DSDTime(mTimeText.getText().toString()),
                                 mTitleText.getText().toString(),
                                 mDescText.getText().toString()
                         );
@@ -79,8 +75,8 @@ public class NewTaskFragment extends DialogFragment {
             return;
         }
         if (requestCode == TimePickerFragment.REQUEST_TIME) {
-            DSDTime time = (DSDTime) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
-            mTimeText.setText(time.toString());
+            DSDDate time = (DSDDate) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
+            mTimeText.setText(time.getDisplayTime());
             return;
         }
     }

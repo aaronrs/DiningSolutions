@@ -11,7 +11,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +39,7 @@ public class CustomerAssets {
         List<Customer> customerList = new ArrayList<>();
         String line;
         try {
+            SimpleDateFormat fileDateFormat = new SimpleDateFormat("dd/MM/yyyy");
             while ((line = br.readLine()) != null) {
                 String[] customerInfo = line.split("\\|");
                 String name = customerInfo[0].trim();
@@ -59,7 +62,8 @@ public class CustomerAssets {
 
                 if (peeps.add(name + postcode)) {
                     Address address = new Address(UUID.randomUUID(), house, line1, line2, town, county, postcode);
-                    customerList.add(new Customer(null, name, email, "", true, DSDDate.fileCreate(created), "", address));
+                    Date createDate = fileDateFormat.parse(created);
+                    customerList.add(new Customer(null, name, email, "", true, new DSDDate(createDate), "", address));
                 }
             }
         } catch (Exception e) {

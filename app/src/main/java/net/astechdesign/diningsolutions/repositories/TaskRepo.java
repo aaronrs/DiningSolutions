@@ -8,7 +8,6 @@ import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.TaskTable;
 import net.astechdesign.diningsolutions.database.wrappers.TaskCursorWrapper;
 import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.DSDTime;
 import net.astechdesign.diningsolutions.model.Task;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class TaskRepo {
     }
 
     public Task get(UUID id) {
-        return new Task(id, new DSDDate(), new DSDTime(), "Test", "Data");
+        return new Task(id, new DSDDate(), "Test", "Data");
     }
 
     public List<Task> get() {

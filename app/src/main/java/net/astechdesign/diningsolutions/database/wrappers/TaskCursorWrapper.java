@@ -23,6 +23,6 @@ public class TaskCursorWrapper extends CursorWrapper {
         DSDDate date = dateString != null ? new DSDDate(dateString) : null;
         String title = getString(getColumnIndex(TaskTable.TASK_TITLE));
         String description = getString(getColumnIndex(TaskTable.TASK_DESCRIPTION));
-        return new Task(id, date, null, title, description);
+        return new Task(id, date, title, description);
     }
 }

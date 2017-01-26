@@ -1,75 +1,91 @@
 package net.astechdesign.diningsolutions.model;
 
-import android.widget.DatePicker;
-
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DSDDate implements Serializable, Comparable {
 
-    private static final DSDDateFormatter dateFormatter = DSDDateFormatter.instance();
-    private final Date date;
-    public final int year;
-    public final int month;
-    public final int day;
+    private static SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS.SSS");
+    private static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE dd MMM yyyy");
+    private static SimpleDateFormat displayTimeFormat = new SimpleDateFormat("HH:mm");
 
-    public static DSDDate create(DatePicker mDatePicker) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(mDatePicker.getYear(), mDatePicker.getMonth(), mDatePicker.getDayOfMonth());
-        return new DSDDate(cal.getTime());
-    }
+    private String dateString;
 
     public DSDDate(String dateString) {
-        this(dateFormatter.dbParse(dateString));
+        this.dateString = dateString;
     }
 
     public DSDDate(Date date) {
-        this.date = date;
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        year = cal.get(Calendar.YEAR);
-        month = cal.get(Calendar.MONTH);
-        day = cal.get(Calendar.DAY_OF_MONTH);
+        this(dbDateFormat.format(date));
     }
 
     public DSDDate() {
         this(new Date());
     }
 
-    @Override
-    public String toString() {
-        return dateFormatter.format(date);
-    }
-
-    public static DSDDate fileCreate(String created) {
-        Date date = dateFormatter.parseFile(created);
-        return new DSDDate();
-    }
-
     public String dbFormat() {
-        return date != null ? dateFormatter.dbFormat(date) : "";
+        return dateString;
+    }
+
+    private Date getDate() {
+        try {
+            return dbDateFormat.parse(dateString);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        return date != null ? date.equals(((DSDDate) o).date) : ((DSDDate) o).date == null;
+    public int compareTo(Object other) {
+        return dateString.compareTo(((DSDDate) other).dateString);
     }
 
-    @Override
-    public int hashCode() {
-        int result = date != null ? date.hashCode() : 0;
-        result = 31 * result + year;
-        result = 31 * result + month;
-        result = 31 * result + day;
-        return result;
+    public int getYear() {
+        return getCalendarVal(Calendar.YEAR);
     }
 
-    @Override
-    public int compareTo(Object another) {
-        return date.compareTo(((DSDDate) another).date);
+    public int getMonth() {
+        return getCalendarVal(Calendar.MONTH);
+    }
+
+    public int getDay() {
+        return getCalendarVal(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getHour() {
+        return getCalendarVal(Calendar.HOUR_OF_DAY);
+    }
+
+    public int getMinute() {
+        return getCalendarVal(Calendar.MINUTE);
+    }
+
+    private int getCalendarVal(int field) {
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(getDate());
+        return cal.get(field);
+    }
+
+    public static DSDDate create(int hour, int min) {
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.set(Calendar.HOUR, hour);
+        cal.set(Calendar.MINUTE, min);
+        return new DSDDate(cal.getTime());
+    }
+
+    public String getDisplayDate() {
+        return displayDateFormat.format(getDate());
+    }
+
+    public String getDisplayTime() {
+        return displayTimeFormat.format(getDate());
+    }
+
+    public String getOutput() {
+        return dateString;
     }
 }

@@ -19,7 +19,6 @@ import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.DSDTime;
 import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.TaskRepo;
@@ -110,7 +109,7 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
 
     public void getTime(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        TimePickerFragment dialog = TimePickerFragment.newInstance(new DSDTime(new Date()));
+        TimePickerFragment dialog = TimePickerFragment.newInstance(new DSDDate());
         dialog.setTargetFragment(newTaskFragment, TimePickerFragment.REQUEST_TIME);
         dialog.show(fm, TIME_PICKER);
     }

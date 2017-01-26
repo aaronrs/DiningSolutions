@@ -72,10 +72,8 @@ public class TaskRecyclerViewAdapter
         public void setItem(Task item) {
             this.mTask = item;
             if (mTask.date != null) {
-                mDateView.setText(mTask.date.toString());
-            }
-            if (mTask.time != null) {
-                mTimeView.setText(mTask.time.toString());
+                mDateView.setText(mTask.date.getDisplayDate());
+                mTimeView.setText(mTask.date.getDisplayTime());
             }
             mTitleView.setText(mTask.title);
             mDescriptionView.setText(mTask.description);

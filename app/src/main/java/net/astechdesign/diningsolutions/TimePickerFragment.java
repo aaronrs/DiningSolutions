@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TimePicker;
 
-import net.astechdesign.diningsolutions.model.DSDTime;
+import net.astechdesign.diningsolutions.model.DSDDate;
 
 public class TimePickerFragment extends DialogFragment {
 
@@ -22,7 +22,7 @@ public class TimePickerFragment extends DialogFragment {
 
     private TimePicker mTimePicker;
 
-    public static TimePickerFragment newInstance(DSDTime time) {
+    public static TimePickerFragment newInstance(DSDDate time) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_TIME, time);
 
@@ -33,14 +33,14 @@ public class TimePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        DSDTime time = (DSDTime) getArguments().getSerializable(ARG_TIME);
+        DSDDate time = (DSDDate) getArguments().getSerializable(ARG_TIME);
 
         View view = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_time, null);
 
         mTimePicker = (TimePicker) view.findViewById(R.id.dialog_time_picker);
-        mTimePicker.setCurrentHour(12);
-        mTimePicker.setCurrentMinute(0);
+        mTimePicker.setCurrentHour(time.getHour());
+        mTimePicker.setCurrentMinute(time.getMinute());
 
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
@@ -48,18 +48,18 @@ public class TimePickerFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        sendResult(Activity.RESULT_OK, new DSDTime(12,0));
+                        sendResult(Activity.RESULT_OK, 12, 0);
                     }
                 })
                 .create();
     }
 
-    private void sendResult(int resultCode, DSDTime time) {
+    private void sendResult(int resultCode, int hour, int min) {
         if (getTargetFragment() == null) {
             return;
         }
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_TIME, time);
+        intent.putExtra(EXTRA_TIME, DSDDate.create(hour, min));
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
