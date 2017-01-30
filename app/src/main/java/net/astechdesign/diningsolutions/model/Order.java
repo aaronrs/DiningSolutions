@@ -41,7 +41,7 @@ public class Order extends Model {
 
     @Override
     public String toString() {
-        return "Invoice No. " + invoiceNumber + " - " + created.toString();
+        return "Invoice No. " + invoiceNumber + " - " + created.getDisplayDate();
     }
 
     public void addItem(Product product, double price, int quantity, String batch, DSDDate deliveryDate) {

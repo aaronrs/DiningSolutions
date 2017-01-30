@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
@@ -44,5 +45,11 @@ public class OrderItemTable extends CMSTable<OrderItem> {
 
     public Cursor getOrderItems(SQLiteDatabase db, Order parent) {
         return db.query(TABLE_NAME, null, PARENT_ID + " = ?", new String[]{parent.getDbId()}, null, null, null);
+    }
+
+    public void updateDelivery(SQLiteDatabase db, OrderItem orderItem, DSDDate date) {
+        ContentValues values = new ContentValues();
+        values.put(DELIVERY_DATE, date.dbFormat());
+        db.update(TABLE_NAME, values, UUID_ID + " = ?", new String[]{orderItem.getDbId()});
     }
 }

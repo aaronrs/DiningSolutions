@@ -11,7 +11,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
@@ -20,6 +19,8 @@ import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Task;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class NewTaskFragment extends DialogFragment {
 
@@ -30,9 +31,6 @@ public class NewTaskFragment extends DialogFragment {
     private TextView mTimeText;
     private TextView mTitleText;
     private TextView mDescText;
-    private RadioButton mVisitRb;
-    private RadioButton mDeliveryRb;
-    private RadioButton mOtherRb;
 
     public interface NewTaskListener {
         void onNewTaskPositiveClick(DialogInterface dialog, Task task);
@@ -46,19 +44,28 @@ public class NewTaskFragment extends DialogFragment {
         mTimeText = (TextView) view.findViewById(R.id.task_time_button);
         mTitleText = (TextView) view.findViewById(R.id.task_title);
         mDescText = (TextView) view.findViewById(R.id.task_description);
+        Calendar cal = GregorianCalendar.getInstance();
+        mDateText.setText(DSDDate.getDisplayDate(cal));
+        mTimeText.setText(DSDDate.getDisplayTime(cal));
+        mDateText.setTag(cal);
+        mTimeText.setTag(cal);
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(R.string.new_task_title)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Task task = new Task(
-                                null,
-                                new DSDDate(mDateText.getText().toString()),
-                                mTitleText.getText().toString(),
-                                mDescText.getText().toString()
-                        );
-                        mListener.onNewTaskPositiveClick(dialog, task);
+                        String title = mTitleText.getText().toString().trim();
+                        String description = mDescText.getText().toString().trim();
+                        if (title.length() > 0 || description.length() > 0) {
+                            Task task = new Task(
+                                    null,
+                                    DSDDate.create((Calendar) mDateText.getTag(), (Calendar) mTimeText.getTag()),
+                                    title,
+                                    description
+                            );
+                            mListener.onNewTaskPositiveClick(dialog, task);
+                        }
                     }
                 })
                 .create();
@@ -70,13 +77,15 @@ public class NewTaskFragment extends DialogFragment {
             return;
         }
         if (requestCode == DatePickerFragment.REQUEST_DATE) {
-            DSDDate date = (DSDDate) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-            mDateText.setText(date.toString());
+            Calendar cal = (Calendar) data.getSerializableExtra(DatePickerFragment.RETURN_DATE);
+            mDateText.setText(DSDDate.getDisplayDate(cal));
+            mDateText.setTag(cal);
             return;
         }
         if (requestCode == TimePickerFragment.REQUEST_TIME) {
-            DSDDate time = (DSDDate) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
-            mTimeText.setText(time.getDisplayTime());
+            Calendar cal = (Calendar) data.getSerializableExtra(TimePickerFragment.RETURN_TIME);
+            mTimeText.setText(DSDDate.getDisplayTime(cal));
+            mTimeText.setTag(cal);
             return;
         }
     }

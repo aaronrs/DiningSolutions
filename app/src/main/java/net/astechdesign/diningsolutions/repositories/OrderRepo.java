@@ -69,7 +69,7 @@ public class OrderRepo {
     public void add(Customer customer, Order order) {
         orderTable.addOrUpdate(mDatabase, customer, order);
         for (OrderItem item : order.orderItems) {
-            itemRepo.add(mDatabase, order, item);
+            itemRepo.add(order, item);
         }
     }
 }

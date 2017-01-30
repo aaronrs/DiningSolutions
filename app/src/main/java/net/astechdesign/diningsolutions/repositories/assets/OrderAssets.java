@@ -11,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +45,15 @@ public class OrderAssets {
 
     private static void addOrder(String info) {
         String[] order = info.split("\\|");
-        DSDDate created = new DSDDate(order[2]);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        DSDDate created = null;
+        try {
+            created = new DSDDate(dateFormat.parse(order[2]));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (!orderMap.containsKey(order[0])) {
             orderMap.put(order[0], new Order(null, created, order[3]));
         }

@@ -10,17 +10,13 @@ import java.util.GregorianCalendar;
 public class DSDDate implements Serializable, Comparable {
 
     private static SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS.SSS");
-    private static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE dd MMM yyyy");
-    private static SimpleDateFormat displayTimeFormat = new SimpleDateFormat("HH:mm");
+    private static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE dd MMMM yyyy");
+    private static SimpleDateFormat displayTimeFormat = new SimpleDateFormat("KK:mm a");
 
-    private String dateString;
-
-    public DSDDate(String dateString) {
-        this.dateString = dateString;
-    }
+    private Date date;
 
     public DSDDate(Date date) {
-        this(dbDateFormat.format(date));
+        this.date = date;
     }
 
     public DSDDate() {
@@ -28,20 +24,16 @@ public class DSDDate implements Serializable, Comparable {
     }
 
     public String dbFormat() {
-        return dateString;
+        return dbDateFormat.format(date);
     }
 
     private Date getDate() {
-        try {
-            return dbDateFormat.parse(dateString);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+        return date;
     }
 
     @Override
     public int compareTo(Object other) {
-        return dateString.compareTo(((DSDDate) other).dateString);
+        return date.compareTo(((DSDDate) other).date);
     }
 
     public int getYear() {
@@ -70,10 +62,22 @@ public class DSDDate implements Serializable, Comparable {
         return cal.get(field);
     }
 
+    public static DSDDate create(String dateString) {
+        try {
+            return new DSDDate(dbDateFormat.parse(dateString));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static DSDDate create(int hour, int min) {
         Calendar cal = GregorianCalendar.getInstance();
         cal.set(Calendar.HOUR, hour);
         cal.set(Calendar.MINUTE, min);
+        return new DSDDate(cal.getTime());
+    }
+
+    public static DSDDate create(Calendar cal) {
         return new DSDDate(cal.getTime());
     }
 
@@ -85,7 +89,25 @@ public class DSDDate implements Serializable, Comparable {
         return displayTimeFormat.format(getDate());
     }
 
-    public String getOutput() {
-        return dateString;
+    public void setTime(Calendar newCal) {
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR, newCal.get(Calendar.HOUR));
+        cal.set(Calendar.MINUTE, newCal.get(Calendar.MINUTE));
+        date = cal.getTime();
+    }
+
+    public static DSDDate create(Calendar dateCal, Calendar timeCal) {
+        dateCal.set(Calendar.HOUR, timeCal.get(Calendar.HOUR));
+        dateCal.set(Calendar.MINUTE, timeCal.get(Calendar.MINUTE));
+        return create(dateCal);
+    }
+
+    public static String getDisplayDate(Calendar cal) {
+        return displayDateFormat.format(cal.getTime());
+    }
+
+    public static String getDisplayTime(Calendar cal) {
+        return displayTimeFormat.format(cal.getTime());
     }
 }

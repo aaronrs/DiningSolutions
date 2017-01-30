@@ -8,7 +8,7 @@ public class OrderItem extends Model {
     public final double price;
     public final int quantity;
     public final String batch;
-    public final DSDDate deliveryDate;
+    public DSDDate deliveryDate;
 
     public OrderItem(UUID id, String name, double price, int quantity, String batch, DSDDate deliveryDate) {
         super(id);
@@ -21,5 +21,9 @@ public class OrderItem extends Model {
 
     public double cost() {
         return price * quantity;
+    }
+
+    public void setDeliveryDate(DSDDate date) {
+        deliveryDate = date;
     }
 }

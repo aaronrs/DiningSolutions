@@ -14,10 +14,13 @@ import android.widget.TimePicker;
 
 import net.astechdesign.diningsolutions.model.DSDDate;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 public class TimePickerFragment extends DialogFragment {
 
     private static final String ARG_TIME = "time";
-    public static final String EXTRA_TIME = "net.astechdesign.diningsolutions.time";
+    public static final String RETURN_TIME = "net.astechdesign.diningsolutions.time";
     public static final int REQUEST_TIME = 1;
 
     private TimePicker mTimePicker;
@@ -59,7 +62,10 @@ public class TimePickerFragment extends DialogFragment {
             return;
         }
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_TIME, DSDDate.create(hour, min));
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.set(Calendar.HOUR, hour);
+        cal.set(Calendar.MINUTE, min);
+        intent.putExtra(RETURN_TIME, cal);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }

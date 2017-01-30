@@ -1,6 +1,7 @@
 package net.astechdesign.diningsolutions.orders;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
@@ -10,14 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
-import java.util.List;
+import java.util.Calendar;
 
 public class OrderDetailFragment extends Fragment {
 
@@ -29,6 +33,8 @@ public class OrderDetailFragment extends Fragment {
     private Customer mCustomer;
     private Order mOrder;
     private OrderItemRepo orderItemRepo;
+    private OrderItem selectedOrderItem;
+    private View rootView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,9 +64,9 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.order_detail, container, false);
+        rootView = inflater.inflate(R.layout.order_detail, container, false);
         TextView totalView = (TextView) rootView.findViewById(R.id.order_detail_total);
-        totalView.setText(Double.toString(mOrder.total()));
+        totalView.setText(String.format("%.2f", mOrder.total()));
         setupRecyclerView(rootView);
 
         return rootView;
@@ -69,72 +75,24 @@ public class OrderDetailFragment extends Fragment {
     private void setupRecyclerView(View rootView) {
         View recyclerView = rootView.findViewById(R.id.order_items_list);
         assert recyclerView != null;
-        ((RecyclerView)recyclerView).setAdapter(new SimpleItemRecyclerViewAdapter(orderItemRepo.getOrderItems(mOrder)));
+        ((RecyclerView)recyclerView).setAdapter(new OrderItemRecyclerViewAdapter(this, orderItemRepo.getOrderItems(mOrder)));
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final List<OrderItem> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<OrderItem> items) {
-            mValues = items;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == DatePickerFragment.REQUEST_DATE) {
+            Calendar cal = (Calendar) data.getSerializableExtra(DatePickerFragment.RETURN_DATE);
+            orderItemRepo.updateDelivery(selectedOrderItem, cal);
+            setupRecyclerView(rootView);
+            return;
         }
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.order_item_list_content, parent, false);
-            return new ViewHolder(view);
-        }
+    }
 
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.setItem(mValues.get(position));
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                        Context context = v.getContext();
-//                        Intent intent = new Intent(context, CustomerDetailActivity.class);
-//                        intent.putExtra(CustomerDetailFragment.ARG_CUSTOMER, holder.getId());
-//                        context.startActivity(intent);
-                    }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues == null ? 0 : mValues.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mNameView;
-            public final TextView mBatchView;
-            public final TextView mPriceView;
-            public final TextView mQuantityView;
-            public final TextView mCostView;
-            public OrderItem mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mNameView = (TextView) view.findViewById(R.id.product_name);
-                mBatchView = (TextView) view.findViewById(R.id.batch_number);
-                mPriceView = (TextView) view.findViewById(R.id.product_price);
-                mQuantityView = (TextView) view.findViewById(R.id.product_quantity);
-                mCostView = (TextView) view.findViewById(R.id.product_cost);
-            }
-
-            public void setItem(OrderItem item) {
-                this.mItem = item;
-                mNameView.setText(mItem.name);
-                mBatchView.setText(mItem.batch);
-                mPriceView.setText(Double.toString(mItem.price));
-                mQuantityView.setText(Integer.toString(mItem.quantity));
-                mCostView.setText(Double.toString(mItem.cost()));
-            }
-        }
+    public void setSelectedOrderItem(OrderItem selectedOrderItem) {
+        this.selectedOrderItem = selectedOrderItem;
     }
 }

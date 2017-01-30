@@ -24,6 +24,7 @@ import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.TaskRepo;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class TaskListActivity extends AppCompatActivity implements NewTaskFragment.NewTaskListener {
@@ -44,15 +45,6 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         recyclerView = (RecyclerView) findViewById(R.id.task_list);
         setupRecyclerView();
@@ -102,7 +94,7 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
 
     public void getDate(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        DatePickerFragment dialog = DatePickerFragment.newInstance(new DSDDate());
+        DatePickerFragment dialog = DatePickerFragment.newInstance(GregorianCalendar.getInstance());
         dialog.setTargetFragment(newTaskFragment, DatePickerFragment.REQUEST_DATE);
         dialog.show(fm, DATE_PICKER);
     }

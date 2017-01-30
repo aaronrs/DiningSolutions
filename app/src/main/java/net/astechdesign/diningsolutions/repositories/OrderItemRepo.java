@@ -7,10 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.OrderItemTable;
 import net.astechdesign.diningsolutions.database.wrappers.OrderItemCursorWrapper;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class OrderItemRepo {
@@ -47,7 +49,11 @@ public class OrderItemRepo {
         return orderItems;
     }
 
-    public void add(SQLiteDatabase mDatabase, Order order, OrderItem item) {
+    public void add(Order order, OrderItem item) {
         orderItemTable.addOrUpdate(mDatabase, order, item);
+    }
+
+    public void updateDelivery(OrderItem orderItem, Calendar cal) {
+        orderItemTable.updateDelivery(mDatabase, orderItem, DSDDate.create(cal));
     }
 }

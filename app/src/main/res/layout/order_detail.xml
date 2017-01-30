@@ -21,34 +21,42 @@
             style="?android:attr/textAppearanceMedium"
             android:layout_height="wrap_content"
             android:text="Produce Purchased"
-            android:layout_width="500dp" />
+            android:layout_width="400dp"
+            android:layout_marginEnd="8dp"/>
 
         <TextView
             style="?android:attr/textAppearanceMedium"
-            android:layout_width="120dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Batch No." />
 
         <TextView
             style="?android:attr/textAppearanceMedium"
-            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="Price" />
+            android:text="Price"
+            android:layout_width="80dp" />
 
         <TextView
             style="?android:attr/textAppearanceMedium"
-            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="Quantity" />
+            android:text="Quantity"
+            android:layout_width="80dp" />
 
         <TextView
             style="?android:attr/textAppearanceMedium"
             android:layout_height="wrap_content"
             android:text="Cost"
             android:gravity="right"
-            android:layout_width="100dp" />
+            android:layout_width="80dp" />
+
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_height="wrap_content"
+            android:text="Delivery Date"
+            android:gravity="right"
+            android:layout_width="120dp" />
 
     </LinearLayout>
 
@@ -72,22 +80,22 @@
         android:layout_margin="16dp">
 
         <TextView
-            android:layout_width="740dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_width="532dp" />
 
         <TextView
             style="?android:attr/textAppearanceMedium"
             android:layout_height="wrap_content"
             android:text="Total"
-            android:layout_width="100dp" />
+            android:layout_width="120dp" />
 
         <TextView
             android:id="@+id/order_detail_total"
             style="?android:attr/textAppearanceMedium"
-            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:gravity="right" />
+            android:gravity="right"
+            android:layout_width="80dp" />
 
     </LinearLayout>
 </LinearLayout>

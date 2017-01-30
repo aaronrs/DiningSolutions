@@ -25,14 +25,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
+import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
@@ -41,6 +45,7 @@ import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 public class OrderActivity extends AppCompatActivity implements OrderAddProductFragment.ProductAddListener {
 
     private static final String ADD_PRODUCT = "add_product";
+    private static final String DATE_PICKER = "delivery_date";
     private Customer mCustomer;
     private List<Order> mOrders;
     private Order mOrder;
@@ -99,8 +104,8 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         }
     }
 
-    private MyAdapter newAdapter() {
-        return new MyAdapter(toolbar.getContext(), mOrders);
+    private MyOrderAdapter newAdapter() {
+        return new MyOrderAdapter(toolbar.getContext(), mOrders);
     }
 
     private void sendEmail() {
@@ -177,8 +182,8 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     @Override
     public void onAddProductPositiveClick(DialogInterface dialog, Product product, double price, int quantity, String batch) {
         DSDDate deliveryDate = new DSDDate();
-        mOrder.addItem(product, price, quantity, batch, deliveryDate);
-        OrderRepo.get(this).add(mCustomer, mOrder);
+        OrderItem item = new OrderItem(null, product.name, price, quantity, batch, deliveryDate);
+        OrderItemRepo.get(this).add(mOrder, item);
         mOrders = OrderRepo.get(this).getOrders(mCustomer);
 
         spinner.setAdapter(newAdapter());
@@ -193,10 +198,10 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
                 .setAction("Action", null).show();
     }
 
-    private static class MyAdapter extends ArrayAdapter<Order> implements ThemedSpinnerAdapter {
+    private static class MyOrderAdapter extends ArrayAdapter<Order> implements ThemedSpinnerAdapter {
         private final ThemedSpinnerAdapter.Helper mDropDownHelper;
 
-        public MyAdapter(Context context, List<Order> orders) {
+        public MyOrderAdapter(Context context, List<Order> orders) {
             super(context, android.R.layout.simple_list_item_1, orders);
             mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
         }
@@ -215,7 +220,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
             TextView textView = (TextView) view.findViewById(android.R.id.text1);
             Order order = getItem(position);
-            textView.setText("Invoice No. " + order.invoiceNumber + " - " + order.created.toString());
+            textView.setText("Invoice No. " + order.invoiceNumber + " - " + order.created.getDisplayDate());
 
             return view;
         }

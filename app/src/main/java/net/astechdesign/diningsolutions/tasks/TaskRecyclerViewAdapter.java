@@ -1,5 +1,6 @@
 package net.astechdesign.diningsolutions.tasks;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -71,6 +72,11 @@ public class TaskRecyclerViewAdapter
 
         public void setItem(Task item) {
             this.mTask = item;
+            if (mTask.title.startsWith("Visit")) {
+                mView.setBackgroundColor(Color.parseColor("#aaaaee"));
+            } else if (mTask.title.startsWith("Delivery")) {
+                mView.setBackgroundColor(Color.parseColor("#8888be"));
+            } else
             if (mTask.date != null) {
                 mDateView.setText(mTask.date.getDisplayDate());
                 mTimeView.setText(mTask.date.getDisplayTime());
