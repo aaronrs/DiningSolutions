@@ -21,7 +21,8 @@ public class Address extends Model {
         this.postcode = postcode;
     }
 
-    public String getHeader() {
+    @Override
+    public String toString() {
         return String.format("%s %s %s, %s", name, line1, town, postcode);
     }
 }

@@ -36,4 +36,9 @@ public class OrderTable extends CMSTable<Order> {
         String orderBy = ORDER_DATE + " DESC, " + INVOICE_NO + " DESC";
         return db.query(TABLE_NAME, null, CUSTOMER_ID + " = ?", new String[]{parent.getDbId()}, null, null, orderBy);
     }
+
+    public Cursor get(SQLiteDatabase db) {
+        String orderBy = ORDER_DATE + " DESC, " + INVOICE_NO + " DESC";
+        return db.query(TABLE_NAME, null, null, null, null, null, orderBy);
+    }
 }

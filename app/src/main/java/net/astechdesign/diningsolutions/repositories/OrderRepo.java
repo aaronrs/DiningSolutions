@@ -15,7 +15,6 @@ import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class OrderRepo {
@@ -62,7 +61,7 @@ public class OrderRepo {
         ed.putString("invoice_start_number", Integer.toString(invoiceNumber));
         ed.commit();
 
-        Order order = new Order(null, new DSDDate(), Integer.toString(invoiceNumber));
+        Order order = new Order(null, mCustomer.getId(), new DSDDate(), Integer.toString(invoiceNumber));
         orderTable.addOrUpdate(mDatabase, mCustomer, order);
     }
 
@@ -71,5 +70,19 @@ public class OrderRepo {
         for (OrderItem item : order.orderItems) {
             itemRepo.add(order, item);
         }
+    }
+
+    public List<Order> get() {
+        Cursor cursor = orderTable.get(mDatabase);
+        List<Order> orders = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast() && cursor.getCount() > 0) {
+            Order order = new OrderCursorWrapper(cursor).getOrder();
+            List<OrderItem> orderItems = itemRepo.getOrderItems(order);
+            order.orderItems.addAll(orderItems);
+            orders.add(order);
+            cursor.moveToNext();
+        }
+        return orders;
     }
 }

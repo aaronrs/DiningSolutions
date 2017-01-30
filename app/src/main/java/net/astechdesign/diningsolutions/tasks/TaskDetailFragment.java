@@ -47,7 +47,7 @@ public class TaskDetailFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
-            // to create content from a content provider.
+            // to deliveryTask content from a content provider.
             UUID uuid = UUID.randomUUID();
             mItem = TaskRepo.get(getContext()).get(uuid);
 

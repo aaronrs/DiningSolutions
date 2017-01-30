@@ -110,4 +110,8 @@ public class DSDDate implements Serializable, Comparable {
     public static String getDisplayTime(Calendar cal) {
         return displayTimeFormat.format(cal.getTime());
     }
+
+    public boolean futureDate(Date date) {
+        return date.compareTo(new Date()) >= 0;
+    }
 }

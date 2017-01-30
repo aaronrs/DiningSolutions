@@ -7,7 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.TaskTable;
 import net.astechdesign.diningsolutions.database.wrappers.TaskCursorWrapper;
+import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
+import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.model.Task;
 
 import java.util.ArrayList;
@@ -46,6 +49,16 @@ public class TaskRepo {
             tasks.add(new TaskCursorWrapper(cursor).getTask());
             cursor.moveToNext();
         }
+
+        List<Order> orders = OrderRepo.get(mContext).get();
+        for (Order order : orders) {
+            List<OrderItem> items = order.getDeliveryItems();
+            if (!items.isEmpty()) {
+                Customer customer = CustomerRepo.get(mContext).get(order.customerId);
+                tasks.add(Task.deliveryTask(customer, items));
+            }
+        }
+
         return tasks;
     }
 

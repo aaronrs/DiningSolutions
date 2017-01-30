@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.Order;
+
+import java.util.UUID;
 
 public class CustomerTable extends CMSTable<Customer> {
 
@@ -68,6 +71,10 @@ public class CustomerTable extends CMSTable<Customer> {
 
     public Cursor get(SQLiteDatabase db) {
         return db.query(TABLE_NAME, null, null, null, null, null, CUSTOMER_NAME);
+    }
+
+    public Cursor get(SQLiteDatabase db, UUID customerId) {
+        return db.query(TABLE_NAME, null, UUID_ID + " = ?", new String[]{customerId.toString()}, null, null, null);
     }
 
     public Cursor get(SQLiteDatabase db, String name) {

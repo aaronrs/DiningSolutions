@@ -1,17 +1,20 @@
 package net.astechdesign.diningsolutions.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public class Order extends Model {
 
     public String invoiceNumber;
+    public final UUID customerId;
     public final DSDDate created;
     public List<OrderItem> orderItems = new ArrayList<>();
 
-    public Order(UUID id, DSDDate created, String invoiceNumber) {
+    public Order(UUID id, UUID customerId, DSDDate created, String invoiceNumber) {
         super(id);
+        this.customerId = customerId;
         this.created = created;
         this.invoiceNumber = invoiceNumber;
     }
@@ -54,5 +57,15 @@ public class Order extends Model {
             total += item.price * item.quantity;
         }
         return total;
+    }
+
+    public List<OrderItem> getDeliveryItems() {
+        List<OrderItem> deliveryItems = new ArrayList<>();
+        for (OrderItem item : orderItems ) {
+            if (item.deliveryDate.futureDate(new Date())) {
+                deliveryItems.add(item);
+            }
+        }
+        return deliveryItems;
     }
 }

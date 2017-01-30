@@ -8,9 +8,11 @@ import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.database.wrappers.CustomerCursorWrapper;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.Order;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CustomerRepo {
 
@@ -49,5 +51,15 @@ public class CustomerRepo {
 
     public void addOrUpdate(Customer customer) {
         mCustomerTable.addOrUpdate(mDatabase, customer);
+    }
+
+    public Customer get(UUID customerId) {
+        Cursor cursor = mCustomerTable.get(mDatabase, customerId);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            CustomerCursorWrapper customerCursorWrapper = new CustomerCursorWrapper(cursor);
+            return customerCursorWrapper.getCustomer();
+        }
+        throw new RuntimeException("unable to find customer:" + customerId);
     }
 }
