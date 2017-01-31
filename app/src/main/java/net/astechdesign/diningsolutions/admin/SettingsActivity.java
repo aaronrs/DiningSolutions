@@ -182,6 +182,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference("distributor_name"));
             bindPreferenceSummaryToValue(findPreference("distributor_number"));
             bindPreferenceSummaryToValue(findPreference("distributor_mobile"));
+            bindPreferenceSummaryToValue(findPreference("distributor_email"));
             bindPreferenceSummaryToValue(findPreference("invoice_start_number"));
         }
 

@@ -1,0 +1,19 @@
+DINING SOLUTIONS DIRECT.COM                    Invoice Number : #INVOICE_NUMBER
+                                                         Date : #DATE
+
+Customer Details
+    Name : #CUSTOMER_NAME
+ Address : #ADDRESS
+Postcode : #POSTCODE
+   Email : #EMAIL
+
+#ORDER_ITEMS
+
+Distributor
+Number : #DISTRIBUTOR_NUMBER
+  Name : #DISTRIBUTOR_NAME
+Mobile : #DISTRIBUTOR_MOBILE
+
+Unit 11 and 12, Rose Mills Industrial Estate, Hort Bridge, Ilminster, Somerset, TA19 9PS
+Email : customersupport@diningsolutionsdirect.com
+Customer Services Number : 0844 884 111

@@ -111,7 +111,7 @@ public class DSDDate implements Serializable, Comparable {
         return displayTimeFormat.format(cal.getTime());
     }
 
-    public boolean futureDate(Date date) {
-        return date.compareTo(new Date()) >= 0;
+    public boolean futureDate() {
+        return this.date.compareTo(new Date()) >= 0;
     }
 }

@@ -1,8 +1,8 @@
 package net.astechdesign.diningsolutions.tasks;
 
+import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.model.Task;
 
 import java.util.List;
@@ -17,11 +18,11 @@ import java.util.List;
 public class TaskRecyclerViewAdapter
         extends RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder> {
 
-    private FragmentManager fragmentManager;
     private final List<Task> mValues;
+    private FragmentActivity activity;
 
-    public TaskRecyclerViewAdapter(FragmentManager fragmentManager, List<Task> items) {
-        this.fragmentManager = fragmentManager;
+    public TaskRecyclerViewAdapter(FragmentActivity activity, List<Task> items) {
+        this.activity = activity;
         mValues = items;
     }
 
@@ -39,11 +40,9 @@ public class TaskRecyclerViewAdapter
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewTaskFragment newTaskFragment = new NewTaskFragment();
-                Bundle args = new Bundle();
-                args.putSerializable(TaskListActivity.TASK, mValues.get(position));
-                newTaskFragment.setArguments(args);
-                newTaskFragment.show(fragmentManager, TaskListActivity.ADD_TASK);
+                Intent intent = new Intent(activity, CustomerListActivity.class);
+                intent.putExtra(CustomerListActivity.CUSTOMER_ID, holder.mTask.customerId);
+                activity.startActivity(intent);
             }
         });
     }
@@ -76,11 +75,9 @@ public class TaskRecyclerViewAdapter
                 mView.setBackgroundColor(Color.parseColor("#aaaaee"));
             } else if (mTask.title.startsWith("Delivery")) {
                 mView.setBackgroundColor(Color.parseColor("#8888be"));
-            } else
-            if (mTask.date != null) {
-                mDateView.setText(mTask.date.getDisplayDate());
-                mTimeView.setText(mTask.date.getDisplayTime());
             }
+            mDateView.setText(mTask.date.getDisplayDate());
+            mTimeView.setText(mTask.date.getDisplayTime());
             mTitleView.setText(mTask.title);
             mDescriptionView.setText(mTask.description);
         }

@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
@@ -32,11 +33,13 @@ import net.astechdesign.diningsolutions.tasks.NewTaskFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
 
     private static final String ADD_CUSTOMER = "add_customer";
     private static final String EDIT_CUSTOMER = "edit_customer";
+    public static final String CUSTOMER_ID = "net.astechdesign.diningsolutions.customer_id";
 
     private CustomerEditFragment newCustomerFragment;
     private CustomerEditFragment customerEditFragment;
@@ -50,6 +53,8 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_list);
+
+        UUID customerId = (UUID) getIntent().getSerializableExtra(CUSTOMER_ID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -93,6 +98,12 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
         });
         mRecyclerView = (RecyclerView) findViewById(R.id.customer_list);
         setupRecyclerView();
+        for (Customer customer : mFilteredCustomerList) {
+            if (customerId !=  null && customerId.equals(customer.getId())) {
+                showCustomerDetails(customer);
+                break;
+            }
+        }
     }
 
     private void updateRecycler(String value) {
@@ -127,6 +138,10 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 Intent intent = new Intent(this, ProductListActivity.class);
                 this.startActivity(intent);
                 return true;
+            case R.id.action_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                this.startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -144,15 +159,15 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     }
 
     private void setupRecyclerView() {
-        mRecyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(mFilteredCustomerList));
+        mRecyclerView.setAdapter(new CustomerListRecyclerViewAdapter(mFilteredCustomerList));
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class CustomerListRecyclerViewAdapter
+            extends RecyclerView.Adapter<CustomerListRecyclerViewAdapter.ViewHolder> {
 
         private final List<Customer> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Customer> items) {
+        public CustomerListRecyclerViewAdapter(List<Customer> items) {
             mValues = items;
         }
 
@@ -170,9 +185,8 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCustomerSelect.setText("");
                     showCustomerDetails(holder.mItem);
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(holder.mView.getWindowToken(), 0);
                 }
             });
@@ -210,10 +224,11 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     }
 
     private void showCustomerDetails(Customer customer) {
+        mCustomerSelect.setText("");
         Bundle arguments = new Bundle();
         mCurrentCustomer = customer;
         arguments.putSerializable(CustomerDetailFragment.ARG_CUSTOMER, mCurrentCustomer);
-        CustomerDetailFragment fragment = new CustomerDetailFragment ();
+        CustomerDetailFragment fragment = new CustomerDetailFragment();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.customer_detail_container, fragment)

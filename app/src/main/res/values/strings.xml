@@ -107,6 +107,7 @@
     <string name="pref_title_distributor_name">Distributor Name</string>
     <string name="pref_title_distributor_number">Distributor Number</string>
     <string name="pref_title_distributor_mobile">Distributor Mobile</string>
+    <string name="pref_title_distributor_email">Distributor Email</string>
     <string name="pref_title_invoice_start_number">Invoice start number</string>
     <string name="title_activity_login">Sign in</string>
 

@@ -85,7 +85,7 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
 
     private void setupRecyclerView() {
         List<Task> taskList = TaskRepo.get(this).get();
-        recyclerView.setAdapter(new TaskRecyclerViewAdapter(getSupportFragmentManager(), taskList));
+        recyclerView.setAdapter(new TaskRecyclerViewAdapter(this, taskList));
     }
 
     @Override

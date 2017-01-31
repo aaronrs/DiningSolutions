@@ -25,8 +25,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
@@ -35,8 +35,8 @@ import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
+import net.astechdesign.diningsolutions.repositories.assets.TemplateAssets;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
@@ -52,12 +52,14 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     private OrderAddProductFragment newProductFragment;
     private Toolbar toolbar;
     private Spinner spinner;
+    private String template;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
+        template = TemplateAssets.getTemplate(this, "emailTemplate.txt");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -110,16 +112,18 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
     private void sendEmail() {
 
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setData(Uri.parse("mailto:"));
-        intent.setType("text/plain");
+        String mailto = new EmailTemplate(this, template, mCustomer, mOrder).toString();
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse(mailto));
 
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mCustomer.email.address});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + mOrder.invoiceNumber);
-        intent.putExtra(Intent.EXTRA_TEXT, new EmailTemplate(mOrder).toString());
+//        intent.setType("text/plain");
+//
+//        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mCustomer.email.address});
+//        intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + mOrder.invoiceNumber);
+//        intent.putExtra(Intent.EXTRA_TEXT, new EmailTemplate(this, template, mCustomer, mOrder).toString());
 
         try {
-            startActivity(Intent.createChooser(intent, "Send mail..."));
+            startActivity(intent);
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(OrderActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
@@ -166,6 +170,10 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
                 return true;
             case R.id.menu_item_products:
                 Intent intent = new Intent(this, ProductListActivity.class);
+                this.startActivity(intent);
+                return true;
+            case R.id.action_settings:
+                intent = new Intent(this, SettingsActivity.class);
                 this.startActivity(intent);
                 return true;
             default:
