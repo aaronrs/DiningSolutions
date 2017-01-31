@@ -35,6 +35,7 @@ public class EmailTemplate {
 
     public String toString() {
         Distributor distributor = Distributor.get(context);
+        template = template.replaceAll("#TAB", "/t");
         template = template.replace(INVOICE_NUMBER, order.invoiceNumber);
         template = template.replace(INVOICE_DATE, order.created.getDisplayDate());
         template = template.replace(CUSTOMER_NAME, customer.name);
@@ -62,6 +63,6 @@ public class EmailTemplate {
     }
 
     private static String newLine = System.getProperty("line.separator");
-    private static String text2 = "%1$-60s %2$-9s %3$8s £%4$8s " + newLine + newLine;
+    private static String text2 = "%1$-60s %2$-9s %3$8s £%4$8s " + newLine;
     private static String text3 = "                            Total : %s" + newLine;
 }

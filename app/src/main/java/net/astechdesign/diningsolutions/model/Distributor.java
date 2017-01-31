@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class Distributor {
-    private static Distributor distributor;
+
     public final String number;
     public final String name;
     public final String mobile;
@@ -19,14 +19,11 @@ public class Distributor {
     }
 
     public static Distributor get(Context context) {
-        if (distributor == null) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             String name = preferences.getString("distributor_name", "");
             String number = preferences.getString("distributor_number", "");
             String mobile = preferences.getString("distributor_mobile", "");
             String email = preferences.getString("distributor_email", "");
-            distributor = new Distributor(number, name, mobile, email);
-        }
-        return distributor;
+            return new Distributor(number, name, mobile, email);
     }
 }
