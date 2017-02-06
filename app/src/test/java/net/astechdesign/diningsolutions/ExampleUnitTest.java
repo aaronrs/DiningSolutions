@@ -9,6 +9,14 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import net.astechdesign.diningsolutions.model.Address;
+import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
+import net.astechdesign.diningsolutions.model.Distributor;
+import net.astechdesign.diningsolutions.model.Email;
+import net.astechdesign.diningsolutions.model.Order;
+import net.astechdesign.diningsolutions.model.Phone;
+
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -33,20 +41,42 @@ public class ExampleUnitTest {
         assertEquals(4, 2 + 2);
     }
 
+    private static String INVOICE_NUMBER = "#INVOICE_NUMBER";
+    private static String INVOICE_DATE = "#DATE";
+    private static String CUSTOMER_NAME = "#CUSTOMER_NAME";
+    private static String CUSTOMER_ADDRESS = "#ADDRESS";
+    private static String CUSTOMER_POSTCODE = "#POSTCODE";
+    private static String CUSTOMER_EMAIL = "#EMAIL";
+    private static String DISTRIBUTOR_NUMBER = "#DISTRIBUTOR_NUMBER";
+    private static String DISTRIBUTOR_NAME = "#DISTRIBUTOR_NAME";
+    private static String DISTRIBUTOR_MOBILE = "#DISTRIBUTOR_MOBILE";
+
     @Test
     public void pdfTest() throws Exception {
+
+        Customer customer = new Customer(null, "Name",
+                Email.create("me@gmail.com"),
+                Phone.create("09876543"),
+                true,
+                new DSDDate(),
+                "",
+                new Address(null, "Potters Barn", "The Street", "", "The Town", "County", "AB1 1AB"));
+        Order order = new Order(null, null, new DSDDate(), "1234567890");
+        Distributor distributor = new Distributor("5555", "Tom Jones", "0987654321", "tom@gmail.com");
+
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, output);
         document.open();
         
-        document.add(new Paragraph(l01));
-        document.add(new Paragraph(l02));
-        document.add(new Paragraph(l03));
-        document.add(new Paragraph(l04));
-        document.add(new Paragraph(l05));
-        document.add(new Paragraph(l06));
-        document.add(new Paragraph(l07));
+        document.add(new Paragraph(t01));
+        document.add(new Paragraph(t02.replace(INVOICE_NUMBER, order.invoiceNumber).replace(INVOICE_DATE, order.created.getDisplayDate())));
+
+        document.add(new Paragraph(c01));
+        document.add(new Paragraph(c02.replace(CUSTOMER_NAME, customer.name)));
+        document.add(new Paragraph(c03.replace(CUSTOMER_ADDRESS, customer.address.toString())));
+        document.add(new Paragraph(c04.replace(CUSTOMER_POSTCODE, customer.address.postcode)));
+        document.add(new Paragraph(c05.replace(CUSTOMER_EMAIL, customer.email.address)));
         document.add(new Paragraph(" "));
 
         PdfPTable table = new PdfPTable(5);
@@ -73,13 +103,14 @@ public class ExampleUnitTest {
 
         document.add(table);
 
-        document.add(new Paragraph(l09));
-        document.add(new Paragraph(l10));
-        document.add(new Paragraph(l11));
-        document.add(new Paragraph(l12));
-        document.add(new Paragraph(l13));
-        document.add(new Paragraph(l14));
-        document.add(new Paragraph(l15));
+        document.add(new Paragraph(d01));
+        document.add(new Paragraph(d02.replace(DISTRIBUTOR_NUMBER, distributor.number)));
+        document.add(new Paragraph(d03.replace(DISTRIBUTOR_NAME, distributor.name)));
+        document.add(new Paragraph(d04.replace(DISTRIBUTOR_MOBILE, distributor.mobile)));
+
+        document.add(new Paragraph(f01));
+        document.add(new Paragraph(f02));
+        document.add(new Paragraph(f03));
 
         document.close();
 
@@ -113,21 +144,23 @@ public class ExampleUnitTest {
         table.addCell(c1);
     }
 
-    String l01 = "DINING SOLUTIONS DIRECT.COM                               Invoice Number : #INVOICE_NUMBER";
-    String l02 = "                                                                    Date : #DATE";
-    String l03 = "Customer Details" ;
-    String l04 = "Name : #CUSTOMER_NAME";
-    String l05 = "Address : #ADDRESS";
-    String l06 = "Postcode : #POSTCODE";
-    String l07 = "Email : #EMAIL";
+    String t01 = "DINING SOLUTIONS DIRECT.COM";
+    String t02 = "Invoice Number : #INVOICE_NUMBER                       Date : #DATE";
 
-    String l09 = "Distributor";
-    String l10 = "Number : #DISTRIBUTOR_NUMBER";
-    String l11 = "Name : #DISTRIBUTOR_NAME";
-    String l12 = "Mobile : #DISTRIBUTOR_MOBILE";
-    String l13 = "Unit 11 and 12, Rose Mills Industrial Estate, Hort Bridge, Ilminster, Somerset, TA19 9PS";
-    String l14 = "Email : customersupport@diningsolutionsdirect.com";
-    String l15 = "Customer Services Number : 0844 884 111";
+    String c01 = "Customer Details" ;
+    String c02 = "Name : #CUSTOMER_NAME";
+    String c03 = "Address : #ADDRESS";
+    String c04 = "Postcode : #POSTCODE";
+    String c05 = "Email : #EMAIL";
+
+    String d01 = "Distributor";
+    String d02 = "Number : #DISTRIBUTOR_NUMBER";
+    String d03 = "Name : #DISTRIBUTOR_NAME";
+    String d04 = "Mobile : #DISTRIBUTOR_MOBILE";
+
+    String f01 = "Unit 11 and 12, Rose Mills Industrial Estate, Hort Bridge, Ilminster, Somerset, TA19 9PS";
+    String f02 = "Email : customersupport@diningsolutionsdirect.com";
+    String f03 = "Customer Services Number : 0844 884 111";
     
     
     @Test

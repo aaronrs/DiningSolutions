@@ -56,14 +56,11 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     private OrderAddProductFragment newProductFragment;
     private Toolbar toolbar;
     private Spinner spinner;
-    private String template;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
-
-        template = TemplateAssets.getTemplate(this, "emailTemplate.txt");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -124,7 +121,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         intent.putExtra(Intent.EXTRA_TEXT, "Attached please find Invoice No. " + mOrder.invoiceNumber);
 
         try {
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new EmailTemplate(this, template, mCustomer, mOrder).createPdf()));
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new EmailTemplate(this, mCustomer, mOrder).createPdf()));
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);

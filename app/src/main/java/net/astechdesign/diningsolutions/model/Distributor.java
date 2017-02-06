@@ -11,7 +11,7 @@ public class Distributor {
     public final String mobile;
     public final String email;
 
-    private Distributor(String number, String name, String mobile, String email) {
+    public Distributor(String number, String name, String mobile, String email) {
         this.number = number;
         this.name = name;
         this.mobile = mobile;

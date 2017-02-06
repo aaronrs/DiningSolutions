@@ -39,16 +39,13 @@ public class EmailTemplate {
     private static String DISTRIBUTOR_NUMBER = "#DISTRIBUTOR_NUMBER";
     private static String DISTRIBUTOR_NAME = "#DISTRIBUTOR_NAME";
     private static String DISTRIBUTOR_MOBILE = "#DISTRIBUTOR_MOBILE";
-    private static String ORDER_ITEMS = "#ORDER_ITEMS";
 
-    private String template;
     private Customer customer;
     private Order order;
     private Context context;
 
-    public EmailTemplate(Context context, String template, Customer customer, Order order) {
+    public EmailTemplate(Context context, Customer customer, Order order) {
         this.context = context;
-        this.template = template;
         this.customer = customer;
         this.order = order;
     }
@@ -83,13 +80,14 @@ public class EmailTemplate {
     private void buildInvoice(Document document) throws DocumentException {
         Distributor distributor = Distributor.get(context);
 
-        document.add(new Paragraph(l01.replace(INVOICE_NUMBER, order.invoiceNumber)));
-        document.add(new Paragraph(l02.replace(INVOICE_DATE, order.created.getDisplayDate())));
-        document.add(new Paragraph(l03));
-        document.add(new Paragraph(l04.replace(CUSTOMER_NAME, customer.name)));
-        document.add(new Paragraph(l05.replace(CUSTOMER_ADDRESS, customer.address.toString())));
-        document.add(new Paragraph(l06.replace(CUSTOMER_POSTCODE, customer.address.postcode)));
-        document.add(new Paragraph(l07.replace(CUSTOMER_EMAIL, customer.email.address)));
+        document.add(new Paragraph(t01));
+        document.add(new Paragraph(t02.replace(INVOICE_NUMBER, order.invoiceNumber).replace(INVOICE_DATE, order.created.getDisplayDate())));
+
+        document.add(new Paragraph(c01));
+        document.add(new Paragraph(c02.replace(CUSTOMER_NAME, customer.name)));
+        document.add(new Paragraph(c03.replace(CUSTOMER_ADDRESS, customer.address.toString())));
+        document.add(new Paragraph(c04.replace(CUSTOMER_POSTCODE, customer.address.postcode)));
+        document.add(new Paragraph(c05.replace(CUSTOMER_EMAIL, customer.email.address)));
         document.add(new Paragraph(" "));
 
         PdfPTable table = new PdfPTable(5);
@@ -117,31 +115,33 @@ public class EmailTemplate {
 
         document.add(table);
 
-        document.add(new Paragraph(l09));
-        document.add(new Paragraph(l10.replace(DISTRIBUTOR_NUMBER, distributor.number)));
-        document.add(new Paragraph(l11.replace(DISTRIBUTOR_NAME, distributor.name)));
-        document.add(new Paragraph(l12.replace(DISTRIBUTOR_MOBILE, distributor.mobile)));
-        document.add(new Paragraph(l13));
-        document.add(new Paragraph(l14));
-        document.add(new Paragraph(l15));
+        document.add(new Paragraph(d01));
+        document.add(new Paragraph(d02.replace(DISTRIBUTOR_NUMBER, distributor.number)));
+        document.add(new Paragraph(d03.replace(DISTRIBUTOR_NAME, distributor.name)));
+        document.add(new Paragraph(d04.replace(DISTRIBUTOR_MOBILE, distributor.mobile)));
 
+        document.add(new Paragraph(f01));
+        document.add(new Paragraph(f02));
+        document.add(new Paragraph(f03));
     }
 
-    private String l01 = "DINING SOLUTIONS DIRECT.COM                               Invoice Number : #INVOICE_NUMBER";
-    private String l02 = "                                                                    Date : #DATE";
-    private String l03 = "Customer Details" ;
-    private String l04 = "Name : #CUSTOMER_NAME";
-    private String l05 = "Address : #ADDRESS";
-    private String l06 = "Postcode : #POSTCODE";
-    private String l07 = "Email : #EMAIL";
+    String t01 = "DINING SOLUTIONS DIRECT.COM";
+    String t02 = "Invoice Number : #INVOICE_NUMBER                       Date : #DATE";
 
-    private String l09 = "Distributor";
-    private String l10 = "Number : #DISTRIBUTOR_NUMBER";
-    private String l11 = "Name : #DISTRIBUTOR_NAME";
-    private String l12 = "Mobile : #DISTRIBUTOR_MOBILE";
-    private String l13 = "Unit 11 and 12, Rose Mills Industrial Estate, Hort Bridge, Ilminster, Somerset, TA19 9PS";
-    private String l14 = "Email : customersupport@diningsolutionsdirect.com";
-    private String l15 = "Customer Services Number : 0844 884 111";
+    String c01 = "Customer Details" ;
+    String c02 = "Name : #CUSTOMER_NAME";
+    String c03 = "Address : #ADDRESS";
+    String c04 = "Postcode : #POSTCODE";
+    String c05 = "Email : #EMAIL";
+
+    String d01 = "Distributor";
+    String d02 = "Number : #DISTRIBUTOR_NUMBER";
+    String d03 = "Name : #DISTRIBUTOR_NAME";
+    String d04 = "Mobile : #DISTRIBUTOR_MOBILE";
+
+    String f01 = "Unit 11 and 12, Rose Mills Industrial Estate, Hort Bridge, Ilminster, Somerset, TA19 9PS";
+    String f02 = "Email : customersupport@diningsolutionsdirect.com";
+    String f03 = "Customer Services Number : 0844 884 111";
 
     private void addProduct(PdfPTable table, String product, String batch, double price, int quantity, double cost) {
         addCellLeft(table, product);
