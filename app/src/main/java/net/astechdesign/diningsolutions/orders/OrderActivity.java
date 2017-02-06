@@ -25,8 +25,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itextpdf.text.DocumentException;
+
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
+import net.astechdesign.diningsolutions.invoices.PDFInvoice;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
@@ -37,6 +40,7 @@ import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 import net.astechdesign.diningsolutions.repositories.assets.TemplateAssets;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
@@ -112,15 +116,19 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
     private void sendEmail() {
 
-        String mailto = new EmailTemplate(this, template, mCustomer, mOrder).toString();
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse(mailto));
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822");
 
-//        intent.setType("text/plain");
-//
-//        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mCustomer.email.address});
-//        intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + mOrder.invoiceNumber);
-//        intent.putExtra(Intent.EXTRA_TEXT, new EmailTemplate(this, template, mCustomer, mOrder).toString());
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mCustomer.email.address});
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + mOrder.invoiceNumber);
+        intent.putExtra(Intent.EXTRA_TEXT, "Attached please find Invoice No. " + mOrder.invoiceNumber);
+
+        try {
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new EmailTemplate(this, template, mCustomer, mOrder).createPdf()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
         try {
             startActivity(intent);

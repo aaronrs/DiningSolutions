@@ -7,11 +7,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TemplateAssets {
 
     private static String template;
-    private static String newLine = System.getProperty("line.separator");
 
 
     public static String getTemplate(Context context, String templateName) {
@@ -24,11 +25,11 @@ public class TemplateAssets {
             throw new RuntimeException(e);
         }
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        template =  "";
+        template = "";
         String line;
         try {
             while ((line = br.readLine()) != null) {
-                template += line + newLine;
+                template += line + "|";
             }
         } catch (IOException e) {
             e.printStackTrace();
