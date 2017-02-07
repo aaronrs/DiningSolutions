@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
@@ -21,15 +22,20 @@ import net.astechdesign.diningsolutions.model.Task;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.UUID;
 
 public class NewTaskFragment extends DialogFragment {
 
+    public static final String ADD_TASK = "add_task";
     public static final String CUSTOMER = "customer";
+    public static final String HEADER = "task_header";
+    public static final String TITLE = "task_title";
+    public static final String CUSTOMER_ID = "customer_id";
 
     private NewTaskListener mListener;
     private TextView mDateText;
     private TextView mTimeText;
-    private TextView mTitleText;
+    private EditText mTitleText;
     private TextView mDescText;
 
     public interface NewTaskListener {
@@ -39,11 +45,27 @@ public class NewTaskFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Bundle arguments = getArguments();
+        String header = "New Task";
+        String title = null;
+        final UUID customer_id;
+        if (arguments != null) {
+            header = arguments.getString(HEADER, "New Task");
+            title = arguments.getString(TITLE, null);
+            customer_id = (UUID) arguments.getSerializable(CUSTOMER_ID);
+        } else {
+            customer_id = null;
+        }
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_task, null);
         mDateText = (TextView) view.findViewById(R.id.task_date_button);
         mTimeText = (TextView) view.findViewById(R.id.task_time_button);
-        mTitleText = (TextView) view.findViewById(R.id.task_title);
+        mTitleText = (EditText) view.findViewById(R.id.task_title);
         mDescText = (TextView) view.findViewById(R.id.task_description);
+
+        if (title != null) {
+            mTitleText.setText(title);
+            mTitleText.setFocusable(false);
+        }
         Calendar cal = GregorianCalendar.getInstance();
         mDateText.setText(DSDDate.getDisplayDate(cal));
         mTimeText.setText(DSDDate.getDisplayTime(cal));
@@ -51,7 +73,7 @@ public class NewTaskFragment extends DialogFragment {
         mTimeText.setTag(cal);
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle(R.string.new_task_title)
+                .setTitle(header)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -62,7 +84,8 @@ public class NewTaskFragment extends DialogFragment {
                                     null,
                                     DSDDate.create((Calendar) mDateText.getTag(), (Calendar) mTimeText.getTag()),
                                     title,
-                                    description
+                                    description,
+                                    customer_id
                             );
                             mListener.onNewTaskPositiveClick(dialog, task);
                         }

@@ -25,17 +25,21 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
+import net.astechdesign.diningsolutions.repositories.TaskRepo;
 import net.astechdesign.diningsolutions.tasks.NewTaskFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
+import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
+
+public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener, NewTaskFragment.NewTaskListener  {
 
     private static final String ADD_CUSTOMER = "add_customer";
     private static final String EDIT_CUSTOMER = "edit_customer";
@@ -48,6 +52,8 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     private List<Customer> mCustomerList;
     private List<Customer> mFilteredCustomerList;
     private TextView mCustomerSelect;
+    private CustomerDetailFragment customerDetailFragment;
+    private NewTaskFragment newTaskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,10 +234,10 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
         Bundle arguments = new Bundle();
         mCurrentCustomer = customer;
         arguments.putSerializable(CustomerDetailFragment.ARG_CUSTOMER, mCurrentCustomer);
-        CustomerDetailFragment fragment = new CustomerDetailFragment();
-        fragment.setArguments(arguments);
+        customerDetailFragment = new CustomerDetailFragment();
+        customerDetailFragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.customer_detail_container, fragment)
+                .replace(R.id.customer_detail_container, customerDetailFragment)
                 .commit();
     }
 
@@ -242,12 +248,22 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     }
 
     public void addNewVisit(View view) {
-        mCustomerSelect.setText("");
+        Customer customer = (Customer) view.getTag();
         FragmentManager fm = getSupportFragmentManager();
-        NewTaskFragment taskFragment = new NewTaskFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(NewTaskFragment.CUSTOMER, mCurrentCustomer);
-        taskFragment.setArguments(bundle);
-        taskFragment.show(fm, ADD_CUSTOMER);
+        newTaskFragment = new NewTaskFragment();
+        Bundle args = new Bundle();
+        args.putString(NewTaskFragment.HEADER, "Next Visit");
+        args.putString(NewTaskFragment.TITLE, "Visit - " + customer.name);
+        args.putSerializable(NewTaskFragment.CUSTOMER_ID, customer.getId());
+        newTaskFragment.setArguments(args);
+        newTaskFragment.show(fm, ADD_TASK);
     }
+
+    @Override
+    public void onNewTaskPositiveClick(DialogInterface dialog, Task task) {
+        TaskRepo.get(this).addOrUpdate(task);
+        setupRecyclerView();
+    }
+
+
 }

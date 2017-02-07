@@ -30,9 +30,6 @@
             android:label="@string/title_customer_list"
             android:parentActivityName=".tasks.TaskListActivity" />
         <activity
-            android:name=".customers.CustomerDetailActivity"
-            android:parentActivityName=".customers.CustomerListActivity" />
-        <activity
             android:name=".orders.OrderActivity"
             android:label="@string/title_activity_order"
             android:parentActivityName=".customers.CustomerListActivity"

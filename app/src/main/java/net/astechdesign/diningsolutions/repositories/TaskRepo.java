@@ -14,6 +14,7 @@ import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.model.Task;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,5 +65,15 @@ public class TaskRepo {
 
     public void addOrUpdate(Task task) {
         mTaskTable.addOrUpdate(mDatabase, task);
+    }
+
+    public void addVisitDate(Customer customer, Calendar cal) {
+        Task visit = new Task(null, DSDDate.create(cal), "Visit", "Customer visit : " + customer.name, customer.getId());
+        addOrUpdate(visit);
+    }
+
+    public void addVisitTime(Customer customer, Calendar cal) {
+        Task visit = new Task(null, DSDDate.create(cal), "Visit", "Customer visit : " + customer.name, customer.getId());
+        addOrUpdate(visit);
     }
 }

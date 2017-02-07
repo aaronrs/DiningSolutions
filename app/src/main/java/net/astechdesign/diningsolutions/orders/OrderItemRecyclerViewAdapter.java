@@ -15,10 +15,11 @@ import net.astechdesign.diningsolutions.model.OrderItem;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
+
 public class OrderItemRecyclerViewAdapter
         extends RecyclerView.Adapter<OrderItemRecyclerViewAdapter.ViewHolder> {
 
-    private static final String DATE_PICKER = "delivery_date_picker";
     private FragmentManager fm;
     private final List<OrderItem> mValues;
     private OrderDetailFragment fragment;

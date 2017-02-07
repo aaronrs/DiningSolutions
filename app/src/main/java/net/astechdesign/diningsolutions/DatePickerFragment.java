@@ -16,6 +16,7 @@ import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment {
 
+    public static final String DATE_PICKER = "delivery_date_picker";
     private static final String TASK_DATE = "date";
     public static final String RETURN_DATE = "net.astechdesign.diningsolutions.date";
     public static final int REQUEST_DATE = 0;

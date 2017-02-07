@@ -29,9 +29,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
+
 public class TaskListActivity extends AppCompatActivity implements NewTaskFragment.NewTaskListener {
 
-    static final String ADD_TASK = "add_task";
     private static final String DATE_PICKER = "date_picker";
     private static final String TIME_PICKER = "time_picker";
     public static final String TASK = "task";
