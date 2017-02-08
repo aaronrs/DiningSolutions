@@ -29,6 +29,7 @@ import java.io.Writer;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -54,7 +55,7 @@ public class ExampleUnitTest {
     @Test
     public void pdfTest() throws Exception {
 
-        Customer customer = new Customer(null, "Name",
+        Customer customer = Customer.create(null, "Name",
                 Email.create("me@gmail.com"),
                 Phone.create("09876543"),
                 true,

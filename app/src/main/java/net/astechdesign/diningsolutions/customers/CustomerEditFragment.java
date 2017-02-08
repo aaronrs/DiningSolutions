@@ -91,7 +91,7 @@ public class CustomerEditFragment extends DialogFragment {
                                 getText(mAddressCountyText),
                                 getText(mAddressPostcodeText)
                                 );
-                        Customer newCustomer = new Customer(
+                        Customer newCustomer = Customer.create(
                                 customer == null ? null : customer.getId(),
                                 getText(mNameText),
                                 getText(mEmailText1) + "@" + getText(mEmailText2),

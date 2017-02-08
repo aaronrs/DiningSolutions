@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.Order;
 
 import java.util.UUID;
 

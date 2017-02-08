@@ -15,22 +15,11 @@ public class Customer extends Model {
     public final Address address;
     public final List<Order> orderList = new ArrayList<>();
 
-    public Customer(UUID id, String name, Email email, Phone phone, boolean current, DSDDate created, String referral, Address address) {
+    private Customer(UUID id, String name, Email email, Phone phone, boolean current, DSDDate created, String referral, Address address) {
         super(id);
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.current = current;
-        this.created = created;
-        this.referral = referral;
-        this.address = address;
-    }
-
-    public Customer(UUID id, String name, String email, String phone, boolean current, DSDDate created, String referral, Address address) {
-        super(id);
-        this.name = name;
-        this.email = new Email(email);
-        this.phone = new Phone(phone);
         this.current = current;
         this.created = created;
         this.referral = referral;
@@ -52,5 +41,13 @@ public class Customer extends Model {
                 return true;
         }
         return false;
+    }
+
+    public static Customer create(UUID id, String name, Email email, Phone phone, boolean current, DSDDate created, String referral, Address address) {
+        return new Customer(id, name, email, phone, current, created, referral, address);
+    }
+
+    public static Customer create(UUID id, String name, String email, String phone, boolean current, DSDDate created, String referral, Address address) {
+        return create(id, name, new Email(email), new Phone(phone), current, created, referral, address);
     }
 }

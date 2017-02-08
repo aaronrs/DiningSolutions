@@ -35,6 +35,6 @@ public class CustomerCursorWrapper extends CursorWrapper {
         boolean current = getInt(getColumnIndex(CustomerTable.CUSTOMER_CURRENT)) == 0;
         DSDDate created = DSDDate.create(getString(getColumnIndex(CustomerTable.CUSTOMER_CREATED)));
         String referral = getString(getColumnIndex(CustomerTable.CUSTOMER_REFERRAL));
-        return new Customer(id, name, email, phone, current, created, referral, address);
+        return Customer.create(id, name, email, phone, current, created, referral, address);
     }
 }
