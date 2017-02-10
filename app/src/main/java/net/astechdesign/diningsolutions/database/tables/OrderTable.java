@@ -17,7 +17,7 @@ public class OrderTable extends CMSTable<Order> {
 
     private static String CREATE_TABLE =
             CUSTOMER_ID + " TEXT, " +
-            ORDER_DATE + " DATE, " +
+            ORDER_DATE + " INTEGER, " +
             INVOICE_NO + " TEXT" +
             "";
 

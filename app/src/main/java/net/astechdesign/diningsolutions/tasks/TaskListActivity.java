@@ -29,12 +29,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
+import static net.astechdesign.diningsolutions.TimePickerFragment.TIME_PICKER;
 import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
 public class TaskListActivity extends AppCompatActivity implements NewTaskFragment.NewTaskListener {
 
-    private static final String DATE_PICKER = "date_picker";
-    private static final String TIME_PICKER = "time_picker";
     public static final String TASK = "task";
 
     private NewTaskFragment newTaskFragment;
@@ -90,8 +90,8 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
     }
 
     @Override
-    public void onNewTaskPositiveClick(DialogInterface dialog, Task task) {
-        TaskRepo.get(this).addOrUpdate(task);
+    public void onNewTaskPositiveClick(DialogInterface dialog, DSDDate date, String title, String description) {
+        TaskRepo.get(this).addOrUpdate(Task.create(date, title, description));
         setupRecyclerView();
     }
 

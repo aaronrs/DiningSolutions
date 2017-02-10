@@ -61,6 +61,7 @@ public class CustomerDetailFragment extends Fragment {
             setText(rootView, R.id.customer_name, mItem.name);
             setText(rootView, R.id.customer_email, mItem.email.address);
             setText(rootView, R.id.customer_phone, mItem.phone.number);
+            setText(rootView, R.id.visit_date_time, mItem.visit.getDisplayDateTime());
             Address address = mItem.address;
             if (address != null) {
                 setText(rootView, R.id.address_name, address.name);
@@ -81,23 +82,6 @@ public class CustomerDetailFragment extends Fragment {
             view.setVisibility(View.GONE);
         } else {
             view.setText(value);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-        if (requestCode == DatePickerFragment.REQUEST_DATE) {
-            Calendar cal = (Calendar) data.getSerializableExtra(DatePickerFragment.RETURN_DATE);
-            taskRepo.addVisitDate(mItem, cal);
-            return;
-        }
-        if (requestCode == TimePickerFragment.REQUEST_TIME) {
-            Calendar cal = (Calendar) data.getSerializableExtra(TimePickerFragment.RETURN_TIME);
-            taskRepo.addVisitDate(mItem, cal);
-            return;
         }
     }
 

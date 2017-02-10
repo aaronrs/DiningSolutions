@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
 
 import java.util.UUID;
 
@@ -26,14 +27,18 @@ public class CustomerTable extends CMSTable<Customer> {
     public static final String ADDRESS_TOWN = "town";
     public static final String ADDRESS_COUNTY = "county";
     public static final String ADDRESS_POSTCODE = "postcode";
+    public static final String VISIT_DATE = "visit_date";
+    public static final String VISIT_DESCRIPTION = "visit_description";
 
     private static String CREATE_TABLE =
             CUSTOMER_NAME + " INTEGER, " +
             CUSTOMER_EMAIL + " TEXT, " +
             CUSTOMER_PHONE + " TEXT, " +
             CUSTOMER_CURRENT + " INTEGER, " +
-            CUSTOMER_CREATED + " TEXT, " +
+            CUSTOMER_CREATED + " INTEGER, " +
             CUSTOMER_REFERRAL + " TEXT, " +
+            VISIT_DATE + " INTEGER, " +
+            VISIT_DESCRIPTION + " TEXT, " +
             ADDRESS_ID + " TEXT, " +
             ADDRESS_NAME + " TEXT, " +
             ADDRESS_LINE1 + " TEXT, " +
@@ -57,6 +62,10 @@ public class CustomerTable extends CMSTable<Customer> {
         values.put(CUSTOMER_CURRENT, customer.current);
         values.put(CUSTOMER_CREATED, customer.created.dbFormat());
         values.put(CUSTOMER_REFERRAL, customer.referral);
+        if (customer.visit != null) {
+            values.put(VISIT_DATE, customer.visit.dbFormat());
+        }
+        values.put(VISIT_DESCRIPTION, customer.visitDescription);
         Address address = customer.address;
         values.put(ADDRESS_ID, address.getDbId());
         values.put(ADDRESS_NAME, address.name);
@@ -82,5 +91,12 @@ public class CustomerTable extends CMSTable<Customer> {
 
     public static CustomerTable table() {
         return instance;
+    }
+
+    public void updateVisit(SQLiteDatabase db, Customer mCurrentCustomer, DSDDate date, String description) {
+        ContentValues values = new ContentValues();
+        values.put(VISIT_DATE, date.dbFormat());
+        values.put(VISIT_DESCRIPTION, description);
+        db.update(TABLE_NAME, values, UUID_ID + " = ?", new String[]{mCurrentCustomer.getDbId()});
     }
 }

@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 
 public class TimePickerFragment extends DialogFragment {
 
+    public static final String TIME_PICKER = "time_picker";
     private static final String ARG_TIME = "time";
     public static final String RETURN_TIME = "net.astechdesign.diningsolutions.time";
     public static final int REQUEST_TIME = 1;

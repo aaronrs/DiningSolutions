@@ -99,7 +99,9 @@ public class CustomerEditFragment extends DialogFragment {
                                 true,
                                 customer == null ? new DSDDate() : customer.created,
                                 "",
-                                address
+                                address,
+                                null,
+                                null
                                 );
                         mListener.onDialogPositiveClick(dialog, newCustomer);
                     }

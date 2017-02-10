@@ -17,6 +17,7 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
+import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Task;
 
@@ -39,7 +40,7 @@ public class NewTaskFragment extends DialogFragment {
     private TextView mDescText;
 
     public interface NewTaskListener {
-        void onNewTaskPositiveClick(DialogInterface dialog, Task task);
+        void onNewTaskPositiveClick(DialogInterface dialog, DSDDate date, String title, String description);
     }
 
     @NonNull
@@ -48,14 +49,13 @@ public class NewTaskFragment extends DialogFragment {
         Bundle arguments = getArguments();
         String header = "New Task";
         String title = null;
-        final UUID customer_id;
+        Customer customer = null;
         if (arguments != null) {
             header = arguments.getString(HEADER, "New Task");
             title = arguments.getString(TITLE, null);
-            customer_id = (UUID) arguments.getSerializable(CUSTOMER_ID);
-        } else {
-            customer_id = null;
+            customer = (Customer) arguments.getSerializable(CUSTOMER_ID);
         }
+        final UUID customerId = customer == null ? null : customer.getId();
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_task, null);
         mDateText = (TextView) view.findViewById(R.id.task_date_button);
         mTimeText = (TextView) view.findViewById(R.id.task_time_button);
@@ -80,14 +80,8 @@ public class NewTaskFragment extends DialogFragment {
                         String title = mTitleText.getText().toString().trim();
                         String description = mDescText.getText().toString().trim();
                         if (title.length() > 0 || description.length() > 0) {
-                            Task task = new Task(
-                                    null,
-                                    DSDDate.create((Calendar) mDateText.getTag(), (Calendar) mTimeText.getTag()),
-                                    title,
-                                    description,
-                                    customer_id
-                            );
-                            mListener.onNewTaskPositiveClick(dialog, task);
+                            DSDDate date = DSDDate.create((Calendar) mDateText.getTag(), (Calendar) mTimeText.getTag());
+                            mListener.onNewTaskPositiveClick(dialog, date, title, description);
                         }
                     }
                 })

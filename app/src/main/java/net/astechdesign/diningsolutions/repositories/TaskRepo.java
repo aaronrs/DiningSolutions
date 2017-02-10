@@ -3,6 +3,7 @@ package net.astechdesign.diningsolutions.repositories;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.util.SortedList;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.TaskTable;
@@ -15,6 +16,9 @@ import net.astechdesign.diningsolutions.model.Task;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,10 +42,6 @@ public class TaskRepo {
         this.mTaskTable = DBHelper.getTaskTable();
     }
 
-    public Task get(UUID id) {
-        return new Task(id, new DSDDate(), "Test", "Data");
-    }
-
     public List<Task> get() {
         List<Task> tasks = new ArrayList<>();
         Cursor cursor = mTaskTable.getTasks(mDatabase);
@@ -59,7 +59,12 @@ public class TaskRepo {
                 tasks.add(Task.deliveryTask(customer, items));
             }
         }
-
+        Collections.sort(tasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task lhs, Task rhs) {
+                return lhs.date.compareTo(rhs.date);
+            }
+        });
         return tasks;
     }
 
@@ -67,13 +72,13 @@ public class TaskRepo {
         mTaskTable.addOrUpdate(mDatabase, task);
     }
 
-    public void addVisitDate(Customer customer, Calendar cal) {
-        Task visit = new Task(null, DSDDate.create(cal), "Visit", "Customer visit : " + customer.name, customer.getId());
-        addOrUpdate(visit);
-    }
-
-    public void addVisitTime(Customer customer, Calendar cal) {
-        Task visit = new Task(null, DSDDate.create(cal), "Visit", "Customer visit : " + customer.name, customer.getId());
-        addOrUpdate(visit);
+    public String getNextVisit(String customerId) {
+        Cursor cursor = mTaskTable.getVisitTask(mDatabase, customerId);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            Task task = new TaskCursorWrapper(cursor).getTask();
+            return task.date.getDisplayDateTime();
+        }
+        return "";
     }
 }

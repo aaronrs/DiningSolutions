@@ -22,9 +22,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
@@ -34,9 +37,12 @@ import net.astechdesign.diningsolutions.repositories.TaskRepo;
 import net.astechdesign.diningsolutions.tasks.NewTaskFragment;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
+import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
+import static net.astechdesign.diningsolutions.TimePickerFragment.TIME_PICKER;
 import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
 public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener, NewTaskFragment.NewTaskListener  {
@@ -82,9 +88,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             }
         });
 
-        mCustomerList = CustomerRepo.get(this).get();
-        mFilteredCustomerList = new ArrayList<>();
-        mFilteredCustomerList.addAll(mCustomerList);
+        setupCustomerList();
 
         mCustomerSelect = (EditText) findViewById(R.id.customer_select);
         mCustomerSelect.addTextChangedListener(new TextWatcher() {
@@ -110,6 +114,12 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 break;
             }
         }
+    }
+
+    private void setupCustomerList() {
+        mCustomerList = CustomerRepo.get(this).get();
+        mFilteredCustomerList = new ArrayList<>();
+        mFilteredCustomerList.addAll(mCustomerList);
     }
 
     private void updateRecycler(String value) {
@@ -254,15 +264,30 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
         Bundle args = new Bundle();
         args.putString(NewTaskFragment.HEADER, "Next Visit");
         args.putString(NewTaskFragment.TITLE, "Visit - " + customer.name);
-        args.putSerializable(NewTaskFragment.CUSTOMER_ID, customer.getId());
+        args.putSerializable(NewTaskFragment.CUSTOMER_ID, customer);
         newTaskFragment.setArguments(args);
         newTaskFragment.show(fm, ADD_TASK);
     }
 
     @Override
-    public void onNewTaskPositiveClick(DialogInterface dialog, Task task) {
-        TaskRepo.get(this).addOrUpdate(task);
-        setupRecyclerView();
+    public void onNewTaskPositiveClick(DialogInterface dialog, DSDDate date, String title, String description) {
+        CustomerRepo.get(this).updateVisit(mCurrentCustomer, date, description);
+        mCurrentCustomer = CustomerRepo.get(this).get(mCurrentCustomer.getId());
+        showCustomerDetails(mCurrentCustomer);
+    }
+
+    public void getDate(View v) {
+        FragmentManager fm = getSupportFragmentManager();
+        DatePickerFragment dialog = DatePickerFragment.newInstance(GregorianCalendar.getInstance());
+        dialog.setTargetFragment(newTaskFragment, DatePickerFragment.REQUEST_DATE);
+        dialog.show(fm, DATE_PICKER);
+    }
+
+    public void getTime(View v) {
+        FragmentManager fm = getSupportFragmentManager();
+        TimePickerFragment dialog = TimePickerFragment.newInstance(new DSDDate());
+        dialog.setTargetFragment(newTaskFragment, TimePickerFragment.REQUEST_TIME);
+        dialog.show(fm, TIME_PICKER);
     }
 
 

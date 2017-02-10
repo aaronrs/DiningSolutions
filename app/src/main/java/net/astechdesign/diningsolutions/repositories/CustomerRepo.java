@@ -8,6 +8,7 @@ import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.database.wrappers.CustomerCursorWrapper;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 
 import java.util.ArrayList;
@@ -61,5 +62,9 @@ public class CustomerRepo {
             return customerCursorWrapper.getCustomer();
         }
         throw new RuntimeException("unable to find customer:" + customerId);
+    }
+
+    public void updateVisit(Customer customer, DSDDate date, String description) {
+        mCustomerTable.updateVisit(mDatabase, customer, date, description);
     }
 }

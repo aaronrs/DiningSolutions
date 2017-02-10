@@ -19,10 +19,10 @@ public class TaskCursorWrapper extends CursorWrapper {
 
     public Task getTask() {
         UUID id = UUID.fromString(getString(getColumnIndex(CMSTable.UUID_ID)));
-        String dateString = getString(getColumnIndex(TaskTable.TASK_DATE));
-        DSDDate date = dateString != null ? DSDDate.create(dateString) : null;
+        Long dateLong = getLong(getColumnIndex(TaskTable.TASK_DATE));
+        DSDDate date = dateLong != null ? DSDDate.create(dateLong) : null;
         String title = getString(getColumnIndex(TaskTable.TASK_TITLE));
         String description = getString(getColumnIndex(TaskTable.TASK_DESCRIPTION));
-        return new Task(id, date, title, description);
+        return Task.create(id, date, title, description);
     }
 }

@@ -24,7 +24,7 @@ public class OrderItemCursorWrapper extends CursorWrapper {
         String itemBatch = getString(getColumnIndex(OrderItemTable.PRODUCT_BATCH));
         int itemQuantity = getInt(getColumnIndex(OrderItemTable.PRODUCT_QUANTITY));
         double itemPrice = getDouble(getColumnIndex(OrderItemTable.PRODUCT_PRICE));
-        DSDDate deliveryDate = DSDDate.create(getString(getColumnIndex(OrderItemTable.DELIVERY_DATE)));
+        DSDDate deliveryDate = DSDDate.create(getLong(getColumnIndex(OrderItemTable.DELIVERY_DATE)));
 
         return new OrderItem(id, itemName, itemPrice, itemQuantity, itemBatch, deliveryDate);
     }

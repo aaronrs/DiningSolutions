@@ -24,7 +24,7 @@ public class DSDDate implements Serializable, Comparable {
     }
 
     public String dbFormat() {
-        return dbDateFormat.format(date);
+        return date != null ? Long.toString(date.getTime()) : null;
     }
 
     private Date getDate() {
@@ -60,6 +60,10 @@ public class DSDDate implements Serializable, Comparable {
         Calendar cal = GregorianCalendar.getInstance();
         cal.setTime(getDate());
         return cal.get(field);
+    }
+
+    public static DSDDate create(Long date) {
+        return new DSDDate(new Date(date));
     }
 
     public static DSDDate create(String dateString) {
@@ -113,5 +117,9 @@ public class DSDDate implements Serializable, Comparable {
 
     public boolean futureDate() {
         return this.date.compareTo(new Date()) >= 0;
+    }
+
+    public String getDisplayDateTime() {
+        return getDisplayDate() + " - " + getDisplayTime();
     }
 }

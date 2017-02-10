@@ -25,7 +25,7 @@ public class OrderItemTable extends CMSTable<OrderItem> {
             PRODUCT_BATCH + " TEXT, " +
             PRODUCT_QUANTITY + " NUMBER, " +
             PRODUCT_PRICE + " NUMBER, " +
-            DELIVERY_DATE + " DATE" +
+            DELIVERY_DATE + " INTEGER" +
             "";
 
     public OrderItemTable() {
