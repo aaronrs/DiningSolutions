@@ -29,7 +29,11 @@ public class Task extends Model {
             delim = ", ";
         }
         String description = String.format("%s : %s", customer.name, items);
-        return new Task(null, orderItems.get(0).deliveryDate, "Delivery", description, customer.getId());
+        return create(orderItems.get(0).deliveryDate, "Delivery", description, customer.getId());
+    }
+
+    public static Task visitTask(Customer customer) {
+        return create(customer.visit, "Visit - " + customer.name, customer.visitDescription, customer.getId());
     }
 
     public static Task create(DSDDate date, String title, String description) {

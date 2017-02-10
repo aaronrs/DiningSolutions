@@ -35,15 +35,13 @@ public class TaskTable extends CMSTable<Task>{
         values.put(TASK_DATE, task.date == null ? null : task.date.dbFormat());
         values.put(TASK_TITLE, task.title);
         values.put(TASK_DESCRIPTION, task.description);
-        values.put(CUSTOMER_ID, task.customerId.toString());
+        if (task.customerId != null) {
+            values.put(CUSTOMER_ID, task.customerId.toString());
+        }
         return values;
     }
 
     public Cursor getTasks(SQLiteDatabase db) {
         return db.query(TABLE_NAME, null, null, null, null, null, null);
-    }
-
-    public Cursor getVisitTask(SQLiteDatabase db, String customerId) {
-        return db.query(TABLE_NAME, null, CUSTOMER_ID + " = ?", new String[]{customerId}, null, null, null, "1");
     }
 }

@@ -36,7 +36,7 @@ public class TaskRepo {
         return repo;
     }
 
-    public TaskRepo(Context context) {
+    private TaskRepo(Context context) {
         mContext = context;
         mDatabase = DBHelper.get(mContext).getWritableDatabase();
         this.mTaskTable = DBHelper.getTaskTable();
@@ -59,6 +59,13 @@ public class TaskRepo {
                 tasks.add(Task.deliveryTask(customer, items));
             }
         }
+        List<Customer> customers = CustomerRepo.get(mContext).get();
+        for (Customer customer : customers) {
+            if (customer.visit.isCurrent()) {
+                tasks.add(Task.visitTask(customer));
+            }
+        }
+
         Collections.sort(tasks, new Comparator<Task>() {
             @Override
             public int compare(Task lhs, Task rhs) {
@@ -70,15 +77,5 @@ public class TaskRepo {
 
     public void addOrUpdate(Task task) {
         mTaskTable.addOrUpdate(mDatabase, task);
-    }
-
-    public String getNextVisit(String customerId) {
-        Cursor cursor = mTaskTable.getVisitTask(mDatabase, customerId);
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            Task task = new TaskCursorWrapper(cursor).getTask();
-            return task.date.getDisplayDateTime();
-        }
-        return "";
     }
 }

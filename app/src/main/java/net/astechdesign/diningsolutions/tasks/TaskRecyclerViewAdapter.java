@@ -72,9 +72,9 @@ public class TaskRecyclerViewAdapter
         public void setItem(Task item) {
             this.mTask = item;
             if (mTask.title.startsWith("Visit")) {
-                mView.setBackgroundColor(Color.parseColor("#aaaaee"));
+                mView.setBackgroundColor(Color.parseColor("#ADC8FA"));
             } else if (mTask.title.startsWith("Delivery")) {
-                mView.setBackgroundColor(Color.parseColor("#8888be"));
+                mView.setBackgroundColor(Color.parseColor("#F0CBCB"));
             }
             mDateView.setText(mTask.date.getDisplayDate());
             mTimeView.setText(mTask.date.getDisplayTime());
