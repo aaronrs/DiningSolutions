@@ -3,6 +3,7 @@ package net.astechdesign.diningsolutions;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import net.astechdesign.diningsolutions.model.DSDDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class TimePickerFragment extends DialogFragment {
+public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
     public static final String TIME_PICKER = "time_picker";
     private static final String ARG_TIME = "time";
@@ -38,36 +39,17 @@ public class TimePickerFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         DSDDate time = (DSDDate) getArguments().getSerializable(ARG_TIME);
-
-        View view = LayoutInflater.from(getActivity())
-                .inflate(R.layout.dialog_time, null);
-
-        mTimePicker = (TimePicker) view.findViewById(R.id.dialog_time_picker);
-        mTimePicker.setCurrentHour(time.getHour());
-        mTimePicker.setCurrentMinute(time.getMinute());
-
-        return new AlertDialog.Builder(getActivity())
-                .setView(view)
-                .setTitle(R.string.time_picker_title)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sendResult(Activity.RESULT_OK, 12, 0);
-                    }
-                })
-                .create();
+        return new TimePickerDialog(getActivity(), this, time.getHour(), time.getMinute(), false);
     }
 
-    private void sendResult(int resultCode, int hour, int min) {
-        if (getTargetFragment() == null) {
-            return;
-        }
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Intent intent = new Intent();
         Calendar cal = GregorianCalendar.getInstance();
-        cal.set(Calendar.HOUR, hour);
-        cal.set(Calendar.MINUTE, min);
-        intent.putExtra(RETURN_TIME, cal);
+        cal.set(Calendar.HOUR, hourOfDay);
+        cal.set(Calendar.MINUTE, minute);
+        intent.putExtra(RETURN_TIME, DSDDate.create(cal));
 
-        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), TimePickerFragment.REQUEST_TIME, intent);
     }
 }

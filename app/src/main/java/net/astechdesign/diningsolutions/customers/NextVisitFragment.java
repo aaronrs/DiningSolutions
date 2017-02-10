@@ -1,4 +1,4 @@
-package net.astechdesign.diningsolutions.tasks;
+package net.astechdesign.diningsolutions.customers;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,7 +11,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
@@ -20,47 +19,31 @@ import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 
-import java.util.Calendar;
+public class NextVisitFragment extends DialogFragment {
 
-public class NewTaskFragment extends DialogFragment {
-
-    public static final String ADD_TASK = "add_task";
     public static final String CUSTOMER = "customer";
     public static final String HEADER = "task_header";
-    public static final String TITLE = "task_title";
 
-    private NewTaskListener mListener;
+    private NextVisitListener mListener;
     private TextView mDateText;
     private TextView mTimeText;
-    private EditText mTitleText;
-    private TextView mDescText;
 
-    public interface NewTaskListener {
-        void onNewTaskPositiveClick(DialogInterface dialog, DSDDate date, String title, String description);
+    public interface NextVisitListener {
+        void onPositiveClick(DialogInterface dialog, DSDDate date);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle arguments = getArguments();
-        String header = arguments.getString(HEADER, "New Task");
-        String title = arguments.getString(TITLE, null);
-        Customer customer = null;
-        if (arguments.containsKey(CUSTOMER)) {
-            customer = (Customer) arguments.getSerializable(CUSTOMER);
-        }
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_task, null);
-        mDateText = (TextView) view.findViewById(R.id.task_date_button);
-        mTimeText = (TextView) view.findViewById(R.id.task_time_button);
-        mTitleText = (EditText) view.findViewById(R.id.task_title);
-        mDescText = (TextView) view.findViewById(R.id.task_description);
+        Customer customer = (Customer) arguments.getSerializable(CUSTOMER);
+        String header = arguments.getString(HEADER, "Next visit for: " + customer.name);
 
-        if (title != null) {
-            mTitleText.setText(title);
-            mTitleText.setFocusable(false);
-        }
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_next_visit, null);
+        mDateText = (TextView) view.findViewById(R.id.visit_date_button);
+        mTimeText = (TextView) view.findViewById(R.id.visit_time_button);
 
-        DSDDate date = customer == null ? DSDDate.create() : customer.visit;
+        DSDDate date = customer.visit;
         mDateText.setText(date.getDisplayDate());
         mTimeText.setText(date.getDisplayTime());
         mDateText.setTag(date);
@@ -71,13 +54,9 @@ public class NewTaskFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String title = mTitleText.getText().toString().trim();
-                        String description = mDescText.getText().toString().trim();
-                        if (title.length() > 0 || description.length() > 0) {
                             DSDDate date = (DSDDate) mDateText.getTag();
                             date = DSDDate.withTime(date, (DSDDate) mTimeText.getTag());
-                            mListener.onNewTaskPositiveClick(dialog, date, title, description);
-                        }
+                            mListener.onPositiveClick(dialog, date);
                     }
                 })
                 .create();
@@ -106,9 +85,9 @@ public class NewTaskFragment extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mListener = (NewTaskListener) context;
+            mListener = (NextVisitListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement NewTaskListener");
+            throw new ClassCastException(context.toString() + " must implement NextVisitListener");
         }
     }
 }

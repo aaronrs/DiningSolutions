@@ -61,7 +61,7 @@ public class OrderRepo {
         ed.putString("invoice_start_number", Integer.toString(invoiceNumber));
         ed.commit();
 
-        Order order = new Order(null, mCustomer.getId(), new DSDDate(), Integer.toString(invoiceNumber));
+        Order order = new Order(null, mCustomer.getId(), DSDDate.create(), Integer.toString(invoiceNumber));
         orderTable.addOrUpdate(mDatabase, mCustomer, order);
     }
 

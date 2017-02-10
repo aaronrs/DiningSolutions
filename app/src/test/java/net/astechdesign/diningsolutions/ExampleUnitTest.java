@@ -59,12 +59,12 @@ public class ExampleUnitTest {
                 Email.create("me@gmail.com"),
                 Phone.create("09876543"),
                 true,
-                new DSDDate(),
+                DSDDate.create(),
                 "",
                 new Address(null, "Potters Barn", "The Street", "", "The Town", "County", "AB1 1AB"),
                 null,
                 null);
-        Order order = new Order(null, null, new DSDDate(), "1234567890");
+        Order order = new Order(null, null, DSDDate.create(), "1234567890");
         Distributor distributor = new Distributor("5555", "Tom Jones", "0987654321", "tom@gmail.com");
 
         Document document = new Document(PageSize.A4);

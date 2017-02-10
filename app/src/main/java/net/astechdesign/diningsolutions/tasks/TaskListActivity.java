@@ -65,6 +65,9 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
             case R.id.menu_item_new_task:
                 FragmentManager fm = getSupportFragmentManager();
                 newTaskFragment = new NewTaskFragment();
+                Bundle args = new Bundle();
+                args.putString(NewTaskFragment.HEADER, "New Task");
+                newTaskFragment.setArguments(args);
                 newTaskFragment.show(fm, ADD_TASK);
                 return true;
             case R.id.menu_item_products:
@@ -97,14 +100,14 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
 
     public void getDate(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        DatePickerFragment dialog = DatePickerFragment.newInstance(GregorianCalendar.getInstance());
+        DatePickerFragment dialog = DatePickerFragment.newInstance(DSDDate.create());
         dialog.setTargetFragment(newTaskFragment, DatePickerFragment.REQUEST_DATE);
         dialog.show(fm, DATE_PICKER);
     }
 
     public void getTime(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        TimePickerFragment dialog = TimePickerFragment.newInstance(new DSDDate());
+        TimePickerFragment dialog = TimePickerFragment.newInstance(DSDDate.create());
         dialog.setTargetFragment(newTaskFragment, TimePickerFragment.REQUEST_TIME);
         dialog.show(fm, TIME_PICKER);
     }

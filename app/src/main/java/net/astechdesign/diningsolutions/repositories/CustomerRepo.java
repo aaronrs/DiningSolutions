@@ -64,7 +64,7 @@ public class CustomerRepo {
         throw new RuntimeException("unable to find customer:" + customerId);
     }
 
-    public void updateVisit(Customer customer, DSDDate date, String description) {
-        mCustomerTable.updateVisit(mDatabase, customer, date, description);
+    public void updateVisit(Customer customer, DSDDate date) {
+        mCustomerTable.updateVisit(mDatabase, customer, date);
     }
 }

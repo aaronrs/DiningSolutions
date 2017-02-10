@@ -97,10 +97,9 @@ public class CustomerEditFragment extends DialogFragment {
                                 getText(mEmailText1) + "@" + getText(mEmailText2),
                                 getText(mPhoneText),
                                 true,
-                                customer == null ? new DSDDate() : customer.created,
+                                customer == null ? DSDDate.create() : customer.created,
                                 "",
                                 address,
-                                null,
                                 null
                                 );
                         mListener.onDialogPositiveClick(dialog, newCustomer);

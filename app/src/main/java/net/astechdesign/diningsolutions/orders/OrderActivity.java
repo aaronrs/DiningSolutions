@@ -194,7 +194,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
     @Override
     public void onAddProductPositiveClick(DialogInterface dialog, Product product, double price, int quantity, String batch) {
-        DSDDate deliveryDate = new DSDDate();
+        DSDDate deliveryDate = DSDDate.create();
         OrderItem item = new OrderItem(null, product.name, price, quantity, batch, deliveryDate);
         OrderItemRepo.get(this).add(mOrder, item);
         mOrders = OrderRepo.get(this).getOrders(mCustomer);

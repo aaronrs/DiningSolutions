@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
 
+import net.astechdesign.diningsolutions.model.DSDDate;
+
 import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment {
@@ -23,7 +25,7 @@ public class DatePickerFragment extends DialogFragment {
 
     private DatePicker mDatePicker;
 
-    public static DatePickerFragment newInstance(Calendar date) {
+    public static DatePickerFragment newInstance(DSDDate date) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(TASK_DATE, date);
 
@@ -34,14 +36,14 @@ public class DatePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Calendar cal = (Calendar) getArguments().getSerializable(TASK_DATE);
+        DSDDate date = (DSDDate) getArguments().getSerializable(TASK_DATE);
 
 
         View view = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_date, null);
 
         mDatePicker = (DatePicker) view.findViewById(R.id.dialog_date_picker);
-        mDatePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), null);
+        mDatePicker.init(date.getYear(), date.getMonth(), date.getDay(), null);
 
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
@@ -62,7 +64,7 @@ public class DatePickerFragment extends DialogFragment {
             return;
         }
         Intent intent = new Intent();
-        intent.putExtra(RETURN_DATE, cal);
+        intent.putExtra(RETURN_DATE, DSDDate.create(cal));
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
 }

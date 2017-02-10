@@ -50,7 +50,7 @@ public class OrderAssets {
 
         DSDDate created = null;
         try {
-            created = new DSDDate(dateFormat.parse(order[2]));
+            created = DSDDate.create(dateFormat.parse(order[2]));
         } catch (ParseException e) {
             e.printStackTrace();
         }

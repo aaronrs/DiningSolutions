@@ -53,7 +53,7 @@ public class OrderItemRepo {
         orderItemTable.addOrUpdate(mDatabase, order, item);
     }
 
-    public void updateDelivery(OrderItem orderItem, Calendar cal) {
-        orderItemTable.updateDelivery(mDatabase, orderItem, DSDDate.create(cal));
+    public void updateDelivery(OrderItem orderItem, DSDDate date) {
+        orderItemTable.updateDelivery(mDatabase, orderItem, date);
     }
 }

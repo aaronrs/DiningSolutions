@@ -28,16 +28,13 @@ import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
-import net.astechdesign.diningsolutions.repositories.TaskRepo;
 import net.astechdesign.diningsolutions.tasks.NewTaskFragment;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,7 +42,7 @@ import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
 import static net.astechdesign.diningsolutions.TimePickerFragment.TIME_PICKER;
 import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
-public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener, NewTaskFragment.NewTaskListener  {
+public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener, NextVisitFragment.NextVisitListener {
 
     private static final String ADD_CUSTOMER = "add_customer";
     private static final String EDIT_CUSTOMER = "edit_customer";
@@ -59,7 +56,7 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     private List<Customer> mFilteredCustomerList;
     private TextView mCustomerSelect;
     private CustomerDetailFragment customerDetailFragment;
-    private NewTaskFragment newTaskFragment;
+    private NextVisitFragment nextVisitFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,33 +257,31 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     public void addNewVisit(View view) {
         Customer customer = (Customer) view.getTag();
         FragmentManager fm = getSupportFragmentManager();
-        newTaskFragment = new NewTaskFragment();
+        nextVisitFragment = new NextVisitFragment();
         Bundle args = new Bundle();
-        args.putString(NewTaskFragment.HEADER, "Next Visit");
-        args.putString(NewTaskFragment.TITLE, "Visit - " + customer.name);
-        args.putSerializable(NewTaskFragment.CUSTOMER_ID, customer);
-        newTaskFragment.setArguments(args);
-        newTaskFragment.show(fm, ADD_TASK);
+        args.putSerializable(NextVisitFragment.CUSTOMER, customer);
+        nextVisitFragment.setArguments(args);
+        nextVisitFragment.show(fm, ADD_TASK);
     }
 
     @Override
-    public void onNewTaskPositiveClick(DialogInterface dialog, DSDDate date, String title, String description) {
-        CustomerRepo.get(this).updateVisit(mCurrentCustomer, date, description);
+    public void onPositiveClick(DialogInterface dialog, DSDDate date) {
+        CustomerRepo.get(this).updateVisit(mCurrentCustomer, date);
         mCurrentCustomer = CustomerRepo.get(this).get(mCurrentCustomer.getId());
         showCustomerDetails(mCurrentCustomer);
     }
 
     public void getDate(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        DatePickerFragment dialog = DatePickerFragment.newInstance(GregorianCalendar.getInstance());
-        dialog.setTargetFragment(newTaskFragment, DatePickerFragment.REQUEST_DATE);
+        DatePickerFragment dialog = DatePickerFragment.newInstance(DSDDate.create());
+        dialog.setTargetFragment(nextVisitFragment, DatePickerFragment.REQUEST_DATE);
         dialog.show(fm, DATE_PICKER);
     }
 
     public void getTime(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        TimePickerFragment dialog = TimePickerFragment.newInstance(new DSDDate());
-        dialog.setTargetFragment(newTaskFragment, TimePickerFragment.REQUEST_TIME);
+        TimePickerFragment dialog = TimePickerFragment.newInstance(DSDDate.create());
+        dialog.setTargetFragment(nextVisitFragment, TimePickerFragment.REQUEST_TIME);
         dialog.show(fm, TIME_PICKER);
     }
 

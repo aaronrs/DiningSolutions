@@ -36,7 +36,6 @@ public class CustomerCursorWrapper extends CursorWrapper {
         DSDDate created = DSDDate.create(getLong(getColumnIndex(CustomerTable.CUSTOMER_CREATED)));
         String referral = getString(getColumnIndex(CustomerTable.CUSTOMER_REFERRAL));
         DSDDate visit = DSDDate.create(getLong(getColumnIndex(CustomerTable.VISIT_DATE)));
-        String description = getString(getColumnIndex(CustomerTable.VISIT_DESCRIPTION));
-        return Customer.create(id, name, email, phone, current, created, referral, address, visit, description);
+        return Customer.create(id, name, email, phone, current, created, referral, address, visit);
     }
 }

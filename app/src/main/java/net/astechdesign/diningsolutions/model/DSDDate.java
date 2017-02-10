@@ -9,18 +9,13 @@ import java.util.GregorianCalendar;
 
 public class DSDDate implements Serializable, Comparable {
 
-    private static SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS.SSS");
     private static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE dd MMMM yyyy");
     private static SimpleDateFormat displayTimeFormat = new SimpleDateFormat("KK:mm a");
 
-    private Date date;
+    public final Date date;
 
-    public DSDDate(Date date) {
+    private DSDDate(Date date) {
         this.date = date;
-    }
-
-    public DSDDate() {
-        this(new Date());
     }
 
     public String dbFormat() {
@@ -62,23 +57,16 @@ public class DSDDate implements Serializable, Comparable {
         return cal.get(field);
     }
 
+    public static DSDDate create(Date date) {
+        return new DSDDate(date);
+    }
+
+    public static DSDDate create() {
+        return new DSDDate(new Date());
+    }
+
     public static DSDDate create(Long date) {
-        return new DSDDate(new Date(date));
-    }
-
-    public static DSDDate create(String dateString) {
-        try {
-            return new DSDDate(dbDateFormat.parse(dateString));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static DSDDate create(int hour, int min) {
-        Calendar cal = GregorianCalendar.getInstance();
-        cal.set(Calendar.HOUR, hour);
-        cal.set(Calendar.MINUTE, min);
-        return new DSDDate(cal.getTime());
+        return create(new Date(date));
     }
 
     public static DSDDate create(Calendar cal) {
@@ -93,34 +81,20 @@ public class DSDDate implements Serializable, Comparable {
         return displayTimeFormat.format(getDate());
     }
 
-    public void setTime(Calendar newCal) {
+    public String getDisplayDateTime() {
+        return getDisplayDate() + " - " + getDisplayTime();
+    }
+
+    public static DSDDate withTime(DSDDate date, DSDDate time) {
         Calendar cal = GregorianCalendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.HOUR, newCal.get(Calendar.HOUR));
-        cal.set(Calendar.MINUTE, newCal.get(Calendar.MINUTE));
-        date = cal.getTime();
-    }
-
-    public static DSDDate create(Calendar dateCal, Calendar timeCal) {
-        dateCal.set(Calendar.HOUR, timeCal.get(Calendar.HOUR));
-        dateCal.set(Calendar.MINUTE, timeCal.get(Calendar.MINUTE));
-        return create(dateCal);
-    }
-
-    public static String getDisplayDate(Calendar cal) {
-        return displayDateFormat.format(cal.getTime());
-    }
-
-    public static String getDisplayTime(Calendar cal) {
-        return displayTimeFormat.format(cal.getTime());
+        cal.setTime(time.date);
+        cal.set(Calendar.HOUR, time.getHour());
+        cal.set(Calendar.MINUTE, time.getMinute());
+        return create(cal);
     }
 
     public boolean futureDate() {
         return this.date.compareTo(new Date()) >= 0;
-    }
-
-    public String getDisplayDateTime() {
-        return getDisplayDate() + " - " + getDisplayTime();
     }
 
     public boolean isCurrent() {

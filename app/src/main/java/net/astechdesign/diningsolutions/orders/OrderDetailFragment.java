@@ -84,8 +84,8 @@ public class OrderDetailFragment extends Fragment {
             return;
         }
         if (requestCode == DatePickerFragment.REQUEST_DATE) {
-            Calendar cal = (Calendar) data.getSerializableExtra(DatePickerFragment.RETURN_DATE);
-            orderItemRepo.updateDelivery(selectedOrderItem, cal);
+            DSDDate date = (DSDDate) data.getSerializableExtra(DatePickerFragment.RETURN_DATE);
+            orderItemRepo.updateDelivery(selectedOrderItem, date);
             setupRecyclerView(rootView);
             return;
         }
