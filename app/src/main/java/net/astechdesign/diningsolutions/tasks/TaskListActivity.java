@@ -3,8 +3,6 @@ package net.astechdesign.diningsolutions.tasks;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -19,14 +17,10 @@ import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
-import net.astechdesign.diningsolutions.repositories.OrderRepo;
 import net.astechdesign.diningsolutions.repositories.TaskRepo;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
@@ -100,15 +94,13 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
 
     public void getDate(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        DatePickerFragment dialog = DatePickerFragment.newInstance(DSDDate.create());
-        dialog.setTargetFragment(newTaskFragment, DatePickerFragment.REQUEST_DATE);
+        DatePickerFragment dialog = DatePickerFragment.newInstance(newTaskFragment, DSDDate.create());
         dialog.show(fm, DATE_PICKER);
     }
 
     public void getTime(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        TimePickerFragment dialog = TimePickerFragment.newInstance(DSDDate.create());
-        dialog.setTargetFragment(newTaskFragment, TimePickerFragment.REQUEST_TIME);
+        TimePickerFragment dialog = TimePickerFragment.newInstance(newTaskFragment, DSDDate.create());
         dialog.show(fm, TIME_PICKER);
     }
 

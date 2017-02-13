@@ -82,13 +82,16 @@ public class DSDDate implements Serializable, Comparable {
     }
 
     public String getDisplayDateTime() {
+        if (date.getTime() == 0) {
+            return "no date set";
+        }
         return getDisplayDate() + " - " + getDisplayTime();
     }
 
     public static DSDDate withTime(DSDDate date, DSDDate time) {
         Calendar cal = GregorianCalendar.getInstance();
-        cal.setTime(time.date);
-        cal.set(Calendar.HOUR, time.getHour());
+        cal.setTime(date.date);
+        cal.set(Calendar.HOUR_OF_DAY, time.getHour());
         cal.set(Calendar.MINUTE, time.getMinute());
         return create(cal);
     }

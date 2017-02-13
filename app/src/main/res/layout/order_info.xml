@@ -25,8 +25,7 @@
                 style="?android:attr/textAppearanceLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="12345" />
+                android:padding="8dp" />
 
         </LinearLayout>
 
@@ -53,8 +52,7 @@
                     style="?android:attr/textAppearanceLarge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="Aaron &amp; Anita Southwell" />
+                    android:padding="8dp" />
             </LinearLayout>
 
             <LinearLayout

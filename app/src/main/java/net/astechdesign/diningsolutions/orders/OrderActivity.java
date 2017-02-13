@@ -41,6 +41,7 @@ import net.astechdesign.diningsolutions.repositories.OrderRepo;
 import net.astechdesign.diningsolutions.repositories.assets.TemplateAssets;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
@@ -72,7 +73,12 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         }
 
         mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
+        ((TextView)findViewById(R.id.order_detail_name)).setText(mCustomer.name);
+
         mOrders = OrderRepo.get(this).getOrders(mCustomer);
+        if (mOrders.isEmpty()) {
+            mOrders = Order.emptyOrderList();
+        }
 
         // Setup spinner
         spinner = (Spinner) findViewById(R.id.spinner);
@@ -135,12 +141,16 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     }
 
     private void showOrder(int position) {
+        mOrder = mOrders.get(position);
+        if (mOrder.getId() == null) {
+            return;
+        }
+
         OrderDetailFragment fragment = new OrderDetailFragment();
 
         Bundle args = new Bundle();
         args.putSerializable(CUSTOMER, mCustomer);
 
-        mOrder = mOrders.get(position);
         args.putSerializable(ORDER, mOrder);
         initialiseView();
         fragment.setArguments(args);
@@ -233,7 +243,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
             TextView textView = (TextView) view.findViewById(android.R.id.text1);
             Order order = getItem(position);
-            textView.setText("Invoice No. " + order.invoiceNumber + " - " + order.created.getDisplayDate());
+            textView.setText("Invoice No. " + order.invoiceNumber + " - " + (order.created != null ? order.created.getDisplayDate() : ""));
 
             return view;
         }

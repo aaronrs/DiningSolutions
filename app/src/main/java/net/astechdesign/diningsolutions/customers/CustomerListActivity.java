@@ -32,7 +32,6 @@ import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
-import net.astechdesign.diningsolutions.tasks.NewTaskFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -272,17 +271,13 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
     }
 
     public void getDate(View v) {
-        FragmentManager fm = getSupportFragmentManager();
-        DatePickerFragment dialog = DatePickerFragment.newInstance(DSDDate.create());
-        dialog.setTargetFragment(nextVisitFragment, DatePickerFragment.REQUEST_DATE);
-        dialog.show(fm, DATE_PICKER);
+        DatePickerFragment dialog = DatePickerFragment.newInstance(nextVisitFragment, DSDDate.create());
+        dialog.show(getSupportFragmentManager(), DATE_PICKER);
     }
 
     public void getTime(View v) {
-        FragmentManager fm = getSupportFragmentManager();
-        TimePickerFragment dialog = TimePickerFragment.newInstance(DSDDate.create());
-        dialog.setTargetFragment(nextVisitFragment, TimePickerFragment.REQUEST_TIME);
-        dialog.show(fm, TIME_PICKER);
+        TimePickerFragment dialog = TimePickerFragment.newInstance(nextVisitFragment, DSDDate.create());
+        dialog.show(getSupportFragmentManager(), TIME_PICKER);
     }
 
 

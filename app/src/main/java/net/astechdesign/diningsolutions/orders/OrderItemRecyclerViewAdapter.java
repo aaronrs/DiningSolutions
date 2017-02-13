@@ -13,7 +13,6 @@ import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
@@ -81,7 +80,7 @@ public class OrderItemRecyclerViewAdapter
                 @Override
                 public void onClick(View v) {
                     fragment.setSelectedOrderItem(mItem);
-                    DatePickerFragment dialog = DatePickerFragment.newInstance(DSDDate.create());
+                    DatePickerFragment dialog = DatePickerFragment.newInstance(fragment, mItem.deliveryDate);
                     dialog.setTargetFragment(fragment, DatePickerFragment.REQUEST_DATE);
                     dialog.show(fm, DATE_PICKER);
                 }
