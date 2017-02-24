@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductRepo;
@@ -115,8 +116,11 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
                 mProductSelect.setText("");
                 FragmentManager fm = getSupportFragmentManager();
                 newProductFragment = new ProductEditFragment();
-                newProductFragment.setProduct(new Product(null, "", "", 0.00, "", 0));
                 newProductFragment.show(fm, ADD_PRODUCT);
+                return true;
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                this.startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

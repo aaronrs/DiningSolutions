@@ -21,6 +21,8 @@ import net.astechdesign.diningsolutions.model.Phone;
 
 public class CustomerEditFragment extends DialogFragment {
 
+    public static final String EDIT_CUSTOMER = "edit_customer";
+
     private CustomerEditListener mListener;
     private Customer mCurrentCustomer;
     private TextView mNameText;
@@ -32,7 +34,6 @@ public class CustomerEditFragment extends DialogFragment {
     private TextView mAddressCountyText;
     private TextView mAddressPostcodeText;
     private TextView mEmailText1;
-    private TextView mEmailText2;
 
     public void setCustomer(Customer mCurrentCustomer) {
         this.mCurrentCustomer = mCurrentCustomer;
@@ -48,8 +49,7 @@ public class CustomerEditFragment extends DialogFragment {
         final Customer customer = mCurrentCustomer;
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_customer, null);
         mNameText = (TextView) view.findViewById(R.id.customer_name);
-        mEmailText1 = (TextView) view.findViewById(R.id.customer_email1);
-        mEmailText2 = (TextView) view.findViewById(R.id.customer_email2);
+        mEmailText1 = (TextView) view.findViewById(R.id.customer_email);
         mPhoneText = (TextView) view.findViewById(R.id.customer_phone);
         mAddressNameText = (TextView) view.findViewById(R.id.address_name);
         mAddressLine1Text = (TextView) view.findViewById(R.id.address_line1);
@@ -61,8 +61,7 @@ public class CustomerEditFragment extends DialogFragment {
         if (mCurrentCustomer != null) {
             mNameText.setText(customer.name);
             if (customer.email.address.contains("@")) {
-                mEmailText1.setText(customer.email.address.split("@")[0]);
-                mEmailText2.setText(customer.email.address.split("@")[1]);
+                mEmailText1.setText(customer.email.address);
             }
             mPhoneText.setText(customer.phone.number);
             Address address = customer.address;
@@ -94,7 +93,7 @@ public class CustomerEditFragment extends DialogFragment {
                         Customer newCustomer = Customer.create(
                                 customer == null ? null : customer.getId(),
                                 getText(mNameText),
-                                getText(mEmailText1) + "@" + getText(mEmailText2),
+                                getText(mEmailText1),
                                 getText(mPhoneText),
                                 true,
                                 customer == null ? DSDDate.create() : customer.created,

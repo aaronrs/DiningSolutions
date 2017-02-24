@@ -1,5 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,47 +7,29 @@
     android:layout_marginRight="16dp"
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:showDividers="middle"
     tools:context="net.astechdesign.diningsolutions.customers.CustomerListActivity">
 
-    <!--
-    This layout is a two-pane layout for the Customers
-    master/detail flow.
-
-    -->
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="300dp"
-        android:layout_height="match_parent">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/customer_select"
-            android:hint="Name"
-            android:layout_height="wrap_content" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/customer_list"
-            android:name="net.astechdesign.diningsolutions.CustomerListFragment"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="net.astechdesign.diningsolutions.customers.CustomerListActivity"
-            tools:listitem="@layout/customer_list_content"
-            android:layout_width="match_parent" >
-
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/customer_detail_container"
+    <EditText
+        android:id="@+id/customer_select"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3" />
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/customer_list"
+        android:name="net.astechdesign.diningsolutions.CustomerListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:context="net.astechdesign.diningsolutions.customers.CustomerListActivity"
+        tools:listitem="@layout/customer_list_content">
+
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
+

@@ -32,6 +32,9 @@ public class ProductEditFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        if (product == null) {
+            product = new Product(null, "", "", 0.00, "", 0);
+        }
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_product, null);
         mNameText = (TextView) view.findViewById(R.id.product_name);
         mPriceText = (TextView) view.findViewById(R.id.product_price);

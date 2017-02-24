@@ -40,17 +40,17 @@ public class DBLoader {
             table.addOrUpdate(db, customer);
         }
 
-        Cursor cursor = table.get(db, "Southwell");
-        cursor.moveToFirst();
-        Customer customer = new CustomerCursorWrapper(cursor).getCustomer();
-        cursor.close();
-        List<Order> orderList = OrderAssets.getOrders(context);
-        for (Order order : orderList) {
-            DBHelper.getOrderTable().addOrUpdate(db, customer, order);
-            for (OrderItem item : order.orderItems) {
-                DBHelper.getOrderItemTable().addOrUpdate(db, order, item);
-            }
-        }
+//        Cursor cursor = table.get(db, "Southwell");
+//        cursor.moveToFirst();
+//        Customer customer = new CustomerCursorWrapper(cursor).getCustomer();
+//        cursor.close();
+//        List<Order> orderList = OrderAssets.getOrders(context);
+//        for (Order order : orderList) {
+//            DBHelper.getOrderTable().addOrUpdate(db, customer, order);
+//            for (OrderItem item : order.orderItems) {
+//                DBHelper.getOrderItemTable().addOrUpdate(db, order, item);
+//            }
+//        }
     }
 
     public static void showTable(SQLiteDatabase db, String tableName) {

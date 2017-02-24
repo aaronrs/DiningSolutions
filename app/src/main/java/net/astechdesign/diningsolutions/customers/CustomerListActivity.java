@@ -41,21 +41,17 @@ import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
 import static net.astechdesign.diningsolutions.TimePickerFragment.TIME_PICKER;
 import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
-public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener, NextVisitFragment.NextVisitListener {
+public class CustomerListActivity extends AppCompatActivity {
 
     private static final String ADD_CUSTOMER = "add_customer";
     private static final String EDIT_CUSTOMER = "edit_customer";
     public static final String CUSTOMER_ID = "net.astechdesign.diningsolutions.customer_id";
 
     private CustomerEditFragment newCustomerFragment;
-    private CustomerEditFragment customerEditFragment;
-    private Customer mCurrentCustomer;
     private RecyclerView mRecyclerView;
     private List<Customer> mCustomerList;
     private List<Customer> mFilteredCustomerList;
     private TextView mCustomerSelect;
-    private CustomerDetailFragment customerDetailFragment;
-    private NextVisitFragment nextVisitFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,17 +68,6 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fm = getSupportFragmentManager();
-                customerEditFragment = new CustomerEditFragment();
-                customerEditFragment.setCustomer(mCurrentCustomer);
-                customerEditFragment.show(fm, EDIT_CUSTOMER);
-            }
-        });
 
         setupCustomerList();
 
@@ -159,17 +144,6 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
         }
     }
 
-    @Override
-    public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
-        CustomerRepo.get(this).addOrUpdate(customer);
-        mCustomerList = CustomerRepo.get(this).get();
-        updateRecycler("");
-        showCustomerDetails(customer);
-
-        Snackbar.make(findViewById(R.id.coordinatorLayout), "Edited Customer " + customer.name, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-    }
-
     private void setupRecyclerView() {
         mRecyclerView.setAdapter(new CustomerListRecyclerViewAdapter(mFilteredCustomerList));
     }
@@ -237,48 +211,8 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
 
     private void showCustomerDetails(Customer customer) {
         mCustomerSelect.setText("");
-        Bundle arguments = new Bundle();
-        mCurrentCustomer = customer;
-        arguments.putSerializable(CustomerDetailFragment.ARG_CUSTOMER, mCurrentCustomer);
-        customerDetailFragment = new CustomerDetailFragment();
-        customerDetailFragment.setArguments(arguments);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.customer_detail_container, customerDetailFragment)
-                .commit();
-    }
-
-    public void showOrders(View view) {
-        Intent intent = new Intent(this, OrderActivity.class);
-        intent.putExtra(OrderDetailFragment.CUSTOMER, mCurrentCustomer);
+        Intent intent = new Intent(this, CustomerDetailActivity.class);
+        intent.putExtra(CustomerDetailActivity.CUSTOMER_ID, customer.getId());
         this.startActivity(intent);
     }
-
-    public void addNewVisit(View view) {
-        Customer customer = (Customer) view.getTag();
-        FragmentManager fm = getSupportFragmentManager();
-        nextVisitFragment = new NextVisitFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(NextVisitFragment.CUSTOMER, customer);
-        nextVisitFragment.setArguments(args);
-        nextVisitFragment.show(fm, ADD_TASK);
-    }
-
-    @Override
-    public void onPositiveClick(DialogInterface dialog, DSDDate date) {
-        CustomerRepo.get(this).updateVisit(mCurrentCustomer, date);
-        mCurrentCustomer = CustomerRepo.get(this).get(mCurrentCustomer.getId());
-        showCustomerDetails(mCurrentCustomer);
-    }
-
-    public void getDate(View v) {
-        DatePickerFragment dialog = DatePickerFragment.newInstance(nextVisitFragment, DSDDate.create());
-        dialog.show(getSupportFragmentManager(), DATE_PICKER);
-    }
-
-    public void getTime(View v) {
-        TimePickerFragment dialog = TimePickerFragment.newInstance(nextVisitFragment, DSDDate.create());
-        dialog.show(getSupportFragmentManager(), TIME_PICKER);
-    }
-
-
 }

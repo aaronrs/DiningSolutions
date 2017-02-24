@@ -55,13 +55,13 @@ public class OrderRepo {
 
     public void create(Context context, Customer mCustomer) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        int invoiceNumber = Integer.parseInt(sharedPref.getString("invoice_start_number", "0")) + 1;
+        long invoiceNumber = Long.parseLong(sharedPref.getString("invoice_start_number", "0")) + 1;
 
         SharedPreferences.Editor ed = sharedPref.edit();
-        ed.putString("invoice_start_number", Integer.toString(invoiceNumber));
+        ed.putString("invoice_start_number", Long.toString(invoiceNumber));
         ed.commit();
 
-        Order order = new Order(null, mCustomer.getId(), DSDDate.create(), Integer.toString(invoiceNumber));
+        Order order = new Order(null, mCustomer.getId(), DSDDate.create(), Long.toString(invoiceNumber));
         orderTable.addOrUpdate(mDatabase, mCustomer, order);
     }
 

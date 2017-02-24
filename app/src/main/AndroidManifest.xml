@@ -3,11 +3,11 @@
     package="net.astechdesign.diningsolutions">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <!--<uses-permission android:name="android.permission.GET_ACCOUNTS" />-->
-    <!--<uses-permission android:name="android.permission.READ_PROFILE" />-->
-    <!--<uses-permission android:name="android.permission.READ_CONTACTS" />-->
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <!-- <uses-permission android:name="android.permission.GET_ACCOUNTS" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_PROFILE" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_CONTACTS" /> -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/dsd_launcher"
@@ -16,8 +16,7 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity android:name=".tasks.TaskListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,6 +29,15 @@
             android:label="@string/title_customer_list"
             android:parentActivityName=".tasks.TaskListActivity" />
         <activity
+            android:name=".customers.CustomerDetailActivity"
+            android:label="@string/title_activity_customer_detail"
+            android:parentActivityName=".customers.CustomerListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.astechdesign.diningsolutions.customers.CustomerListActivity" />
+        </activity>
+        <activity
             android:name=".orders.OrderActivity"
             android:label="@string/title_activity_order"
             android:parentActivityName=".customers.CustomerListActivity"
@@ -38,12 +46,10 @@
             android:name=".products.ProductListActivity"
             android:label="@string/title_product_list"
             android:parentActivityName=".tasks.TaskListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".admin.SettingsActivity"
-            android:label="@string/title_activity_settings">
-        </activity>
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>

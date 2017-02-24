@@ -1,109 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <EditText
+        android:id="@+id/customer_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:ems="10"
-        android:id="@+id/customer_name"
-        android:hint="Name" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:ems="10"
-            android:id="@+id/customer_email1"
-            android:hint="email"
-            android:layout_weight="1"
-            android:layout_width="300dp" />
-
-        <TextView
-            android:text="@string/email_at"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView6"
-            android:layout_weight="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:layout_width="30dp"
-            android:textAlignment="center" />
-
-        <EditText
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:ems="10"
-            android:id="@+id/customer_email2"
-            android:hint="domain"
-            android:layout_weight="1"
-            android:layout_width="500dp" />
-    </LinearLayout>
+        android:hint="Name"
+        android:inputType="text" />
 
     <EditText
+        android:id="@+id/customer_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:ems="10"
+        android:hint="email"
+        android:inputType="text" />
+
+    <EditText
         android:id="@+id/customer_phone"
-        android:hint="Phone number" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Phone number"
+        android:inputType="text" />
 
     <TextView
-        android:text="Address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
+        android:text="Address" />
+
+    <EditText
         android:id="@+id/address_name"
-        android:hint="House Name/Number" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:ems="10"
+        android:hint="House Name/Number"
+        android:inputType="text" />
+
+    <EditText
         android:id="@+id/address_line1"
-        android:hint="Address line 1" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:ems="10"
+        android:hint="Address line 1"
+        android:inputType="text" />
+
+    <EditText
         android:id="@+id/address_line2"
-        android:hint="Address line 2" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:ems="10"
+        android:hint="Address line 2"
+        android:inputType="text" />
+
+    <EditText
         android:id="@+id/address_town"
-        android:hint="Town" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:ems="10"
+        android:hint="Town"
+        android:inputType="text" />
+
+    <EditText
         android:id="@+id/address_county"
-        android:hint="County" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:ems="10"
+        android:hint="County"
+        android:inputType="text" />
+
+    <EditText
         android:id="@+id/address_postcode"
-        android:hint="Postcode" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Postcode"
+        android:inputType="text" />
 
 </LinearLayout>
