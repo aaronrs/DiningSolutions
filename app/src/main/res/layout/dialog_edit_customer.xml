@@ -13,73 +13,85 @@
         android:hint="Name"
         android:inputType="text" />
 
-    <EditText
-        android:id="@+id/customer_email"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="email"
-        android:inputType="text" />
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/customer_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Phone number"
-        android:inputType="text" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Address" />
+            <EditText
+                android:id="@+id/customer_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="email"
+                android:inputType="text" />
 
-    <EditText
-        android:id="@+id/address_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="House Name/Number"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/customer_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Phone number"
+                android:inputType="text" />
 
-    <EditText
-        android:id="@+id/address_line1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Address line 1"
-        android:inputType="text" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address" />
 
-    <EditText
-        android:id="@+id/address_line2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Address line 2"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/address_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="House Name/Number"
+                android:inputType="text" />
 
-    <EditText
-        android:id="@+id/address_town"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Town"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/address_line1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Address line 1"
+                android:inputType="text" />
 
-    <EditText
-        android:id="@+id/address_county"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="County"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/address_line2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Address line 2"
+                android:inputType="text" />
 
-    <EditText
-        android:id="@+id/address_postcode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Postcode"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/address_town"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Town"
+                android:inputType="text" />
 
+            <EditText
+                android:id="@+id/address_county"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="County"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/address_postcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Postcode"
+                android:inputType="text" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -6,6 +6,8 @@ import java.util.UUID;
 
 public class Customer extends Model {
 
+    public static Customer newCustomer = create();
+
     public final String name;
     public final Email email;
     public final Phone phone;
@@ -51,5 +53,9 @@ public class Customer extends Model {
 
     public static Customer create(UUID id, String name, String email, String phone, boolean current, DSDDate created, String referral, Address address, DSDDate visit) {
         return create(id, name, new Email(email), new Phone(phone), current, created, referral, address, visit);
+    }
+
+    public static Customer create() {
+        return new Customer(null, null, null, null, false, DSDDate.create(), null, null, null);
     }
 }

@@ -42,14 +42,14 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
         super.onCreate(savedInstanceState);
 
         UUID id = (UUID) getIntent().getSerializableExtra(CUSTOMER_ID);
-        mCustomer = CustomerRepo.get(this).get(id);
+        mCustomer = id != null ? CustomerRepo.get(this).get(id) : Customer.newCustomer;
 
         setContentView(R.layout.activity_customer_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener editListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getSupportFragmentManager();
@@ -57,11 +57,16 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
                 customerEditFragment.setCustomer(mCustomer);
                 customerEditFragment.show(fm, EDIT_CUSTOMER);
             }
-        });
+        };
+        fab.setOnClickListener(editListener);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        showCustomerDetails();
+        if (mCustomer == Customer.newCustomer) {
+            editListener.onClick(null);
+        } else {
+            showCustomerDetails();
+        }
     }
 
     private void showCustomerDetails() {
@@ -91,7 +96,6 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
         }
     }
 
-
     public void showOrders(View view) {
         Intent intent = new Intent(this, OrderActivity.class);
         intent.putExtra(OrderDetailFragment.CUSTOMER, mCustomer);
@@ -111,9 +115,9 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
     @Override
     public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
         CustomerRepo.get(this).addOrUpdate(customer);
-        mCustomer = CustomerRepo.get(this).get(mCustomer.getId());
+        mCustomer = CustomerRepo.get(this).get(customer.getId());
         showCustomerDetails();
-        Snackbar.make(findViewById(R.id.coordinatorLayout), "Edited Customer " + customer.name, Snackbar.LENGTH_LONG)
+        Snackbar.make(findViewById(R.id.coordinatorLayoutDetail), "Edited Customer " + mCustomer.name, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 

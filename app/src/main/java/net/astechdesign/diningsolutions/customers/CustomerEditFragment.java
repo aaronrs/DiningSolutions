@@ -58,11 +58,9 @@ public class CustomerEditFragment extends DialogFragment {
         mAddressCountyText = (TextView) view.findViewById(R.id.address_county);
         mAddressPostcodeText = (TextView) view.findViewById(R.id.address_postcode);
 
-        if (mCurrentCustomer != null) {
+        if (mCurrentCustomer != Customer.newCustomer) {
             mNameText.setText(customer.name);
-            if (customer.email.address.contains("@")) {
-                mEmailText1.setText(customer.email.address);
-            }
+            mEmailText1.setText(customer.email.address);
             mPhoneText.setText(customer.phone.number);
             Address address = customer.address;
             if (address != null) {
@@ -91,12 +89,12 @@ public class CustomerEditFragment extends DialogFragment {
                                 getText(mAddressPostcodeText)
                                 );
                         Customer newCustomer = Customer.create(
-                                customer == null ? null : customer.getId(),
+                                customer.getId(),
                                 getText(mNameText),
                                 getText(mEmailText1),
                                 getText(mPhoneText),
                                 true,
-                                customer == null ? DSDDate.create() : customer.created,
+                                customer.created,
                                 "",
                                 address,
                                 null
