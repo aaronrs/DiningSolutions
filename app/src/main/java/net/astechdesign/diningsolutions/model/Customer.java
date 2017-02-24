@@ -30,10 +30,6 @@ public class Customer extends Model {
         this.visit = visit;
     }
 
-    public void addOrder(Order order) {
-        orderList.add(order);
-    }
-
     @Override
     public String toString() {
         return name;
