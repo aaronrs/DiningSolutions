@@ -14,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
@@ -24,18 +27,17 @@ import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
 
-    private static final String ADD_CUSTOMER = "add_customer";
-    public static final String CUSTOMER_ID = "net.astechdesign.diningsolutions.customer_id";
-
-    private CustomerEditFragment newCustomerFragment;
     private RecyclerView mRecyclerView;
     private List<Customer> mCustomerList;
     private List<Customer> mFilteredCustomerList;
-    private TextView mCustomerSelect;
+    private ArrayAdapter<String> mTownAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +53,43 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        setupCustomerList();
+        mCustomerList = CustomerRepo.get(this).get();
+        setupCustomerList(mCustomerList);
+        final Set<String> townSet = new HashSet<>();
+        for (Customer customer : mCustomerList) {
+            townSet.add(customer.address.town);
+        }
+        final List<String> towns = new ArrayList<>(townSet);
+        Collections.sort(towns);
+        towns.add(0, "Select Town");
 
-        mCustomerSelect = (EditText) findViewById(R.id.customer_select);
-        mCustomerSelect.addTextChangedListener(new TextWatcher() {
+        final Spinner spinner = (Spinner) findViewById(R.id.town_select);
+        final TextView customerSelect = (EditText) findViewById(R.id.customer_select);
+        final TextView addressSelect = (EditText) findViewById(R.id.address_select);
+
+        mTownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, towns);
+        spinner.setAdapter(mTownAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    if (customerSelect.getText().length() != 0) {
+                        customerSelect.setText("");
+                    }
+                    if (addressSelect.getText().length() != 0) {
+                        addressSelect.setText("");
+                    }
+                    updateRecyclerTown(towns.get(position));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        customerSelect.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -66,30 +101,86 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             @Override
             public void afterTextChanged(Editable s) {
                 String value = s.toString().trim();
-                updateRecycler(value);
+                if (value.length() > 0) {
+                    spinner.setAdapter(mTownAdapter);
+                    if (addressSelect.getText().length() != 0) {
+                        addressSelect.setText("");
+                    }
+                }
+                updateRecyclerName(value);
+            }
+        });
+        addressSelect.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String value = s.toString().trim();
+                if (value.length() > 0) {
+                    spinner.setAdapter(mTownAdapter);
+                    if (customerSelect.getText().length() != 0) {
+                        customerSelect.setText("");
+                    }
+                }
+                updateRecyclerAddress(value);
             }
         });
         mRecyclerView = (RecyclerView) findViewById(R.id.customer_list);
         setupRecyclerView();
     }
 
-    private void setupCustomerList() {
-        mCustomerList = CustomerRepo.get(this).get();
+    private void setupCustomerList(List<Customer> mCustomerList) {
+
         mFilteredCustomerList = new ArrayList<>();
-        mFilteredCustomerList.addAll(mCustomerList);
+        mFilteredCustomerList.addAll(this.mCustomerList);
     }
 
-    private void updateRecycler(String value) {
-        mFilteredCustomerList.clear();
-        if (value.trim().length() == 0) {
-            mFilteredCustomerList.addAll(mCustomerList);
-        }
-        for (Customer customer : mCustomerList) {
-            if (customer.compareValue(value)) {
-                mFilteredCustomerList.add(customer);
+    private void updateRecyclerName(String name) {
+        if (updateRecycler(name)) {
+            for (Customer customer : mCustomerList) {
+                if (customer.compareName(name)) {
+                    mFilteredCustomerList.add(customer);
+                }
             }
         }
         setupRecyclerView();
+    }
+
+    private void updateRecyclerAddress(String address) {
+        if (updateRecycler(address)) {
+            for (Customer customer : mCustomerList) {
+                if (customer.compareAddress(address)) {
+                    mFilteredCustomerList.add(customer);
+                }
+            }
+        }
+        setupRecyclerView();
+    }
+
+    private void updateRecyclerTown(String town) {
+        if (updateRecycler(town)) {
+            for (Customer customer : mCustomerList) {
+                if (customer.compareTown(town)) {
+                    mFilteredCustomerList.add(customer);
+                }
+            }
+        }
+        setupRecyclerView();
+    }
+
+    private boolean updateRecycler(String value) {
+        mFilteredCustomerList.clear();
+        if (value.length() == 0) {
+            mFilteredCustomerList.addAll(mCustomerList);
+            return false;
+        }
+        return true;
     }
 
     @Override

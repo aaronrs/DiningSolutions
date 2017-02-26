@@ -18,7 +18,7 @@ public class ProductRepo {
 
     private final SQLiteDatabase mDatabase;
     private final ProductTable productTable;
-    private Context mContext;
+    private final Context mContext;
 
     public static ProductRepo get(Context context) {
         if (repo == null) {

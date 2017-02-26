@@ -62,7 +62,6 @@ public class ExampleUnitTest {
                 DSDDate.create(),
                 "",
                 new Address(null, "Potters Barn", "The Street", "", "The Town", "County", "AB1 1AB"),
-                null,
                 null);
         Order order = new Order(null, null, DSDDate.create(), "1234567890");
         Distributor distributor = new Distributor("5555", "Tom Jones", "0987654321", "tom@gmail.com");

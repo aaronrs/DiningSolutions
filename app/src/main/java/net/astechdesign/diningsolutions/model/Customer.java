@@ -35,12 +35,23 @@ public class Customer extends Model {
         return name;
     }
 
-    public boolean compareValue(String value) {
+    public boolean compareName(String value) {
         for (String part : name.toLowerCase().split(" ")) {
             if (part.startsWith(value.toLowerCase()))
                 return true;
         }
         return false;
+    }
+
+    public boolean compareAddress(String value) {
+        return address.compareAddress(value);
+    }
+
+    public boolean compareTown(String value) {
+        if (address.town == null) {
+            return false;
+        }
+        return address.town.equals(value);
     }
 
     public static Customer create(UUID id, String name, Email email, Phone phone, boolean current, DSDDate created, String referral, Address address, DSDDate visit) {

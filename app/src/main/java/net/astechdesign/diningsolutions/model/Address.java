@@ -25,4 +25,16 @@ public class Address extends Model {
     public String toString() {
         return String.format("%s %s %s, %s", name, line1, town, postcode);
     }
+
+    public boolean compareAddress(String address) {
+        address = address.toLowerCase();
+        if (name.toLowerCase().startsWith(address) ||
+                line1.toLowerCase().startsWith(address) ||
+                line2.toLowerCase().startsWith(address) ||
+                county.toLowerCase().startsWith(address) ||
+                postcode.toLowerCase().startsWith(address)) {
+            return true;
+        }
+        return false;
+    }
 }
