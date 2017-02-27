@@ -202,10 +202,8 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         DSDDate deliveryDate = DSDDate.create();
         if (item != null) {
             OrderItemRepo.get(this).delete(mOrder, item);
-            item = new OrderItem(null, item.name, item.price, item.quantity, item.batch, item.deliveryDate);
-        } else {
-            item = new OrderItem(null, product.name, price, quantity, batch, deliveryDate);
         }
+        item = new OrderItem(null, product.name, price, quantity, batch, deliveryDate);
         OrderItemRepo.get(this).add(mOrder, item);
         mOrders = OrderRepo.get(this).getOrders(mCustomer);
 
