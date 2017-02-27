@@ -1,6 +1,5 @@
 package net.astechdesign.diningsolutions.customers;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -32,11 +31,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CustomerListActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
+public class CustomerListActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private List<Customer> mCustomerList;
-    private List<Customer> mFilteredCustomerList;
+    private List<Customer> mFilteredCustomerList = new ArrayList<>();
     private ArrayAdapter<String> mTownAdapter;
 
     @Override
@@ -53,8 +52,10 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mCustomerList = CustomerRepo.get(this).get();
-        setupCustomerList(mCustomerList);
+        mRecyclerView = (RecyclerView) findViewById(R.id.customer_list);
+
+        setupCustomerList();
+
         final Set<String> townSet = new HashSet<>();
         for (Customer customer : mCustomerList) {
             townSet.add(customer.address.town);
@@ -131,14 +132,20 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
                 updateRecyclerAddress(value);
             }
         });
-        mRecyclerView = (RecyclerView) findViewById(R.id.customer_list);
         setupRecyclerView();
     }
 
-    private void setupCustomerList(List<Customer> mCustomerList) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupCustomerList();
+    }
 
-        mFilteredCustomerList = new ArrayList<>();
+    private void setupCustomerList() {
+        mCustomerList = CustomerRepo.get(this).get();
+        mFilteredCustomerList.clear();
         mFilteredCustomerList.addAll(this.mCustomerList);
+        setupRecyclerView();
     }
 
     private void updateRecyclerName(String name) {
@@ -211,11 +218,6 @@ public class CustomerListActivity extends AppCompatActivity implements CustomerE
 
     private void setupRecyclerView() {
         mRecyclerView.setAdapter(new CustomerListRecyclerViewAdapter(mFilteredCustomerList));
-    }
-
-    @Override
-    public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
-
     }
 
     public class CustomerListRecyclerViewAdapter

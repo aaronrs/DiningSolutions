@@ -5,37 +5,51 @@
     android:orientation="vertical"
     app:layout_scrollFlags="scroll">
 
-    <Button
-        android:id="@+id/customer_order_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:onClick="showOrders"
-        android:padding="24dp"
-        android:text="Orders" />
-
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/customer_order_btn"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:layout_margin="8dp"
+            android:onClick="showOrders"
+            android:padding="24dp"
+            android:text="Orders"
+            android:layout_width="wrap_content" />
 
         <Button
             android:id="@+id/next_visit"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="6"
             android:layout_margin="8dp"
             android:onClick="addNewVisit"
             android:padding="24dp"
-            android:text="Next visit" />
+            android:text="Next visit"
+            android:layout_width="wrap_content" />
 
         <TextView
             android:id="@+id/visit_date_time"
             style="?android:attr/textAppearanceLarge"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
+            android:layout_weight="1"
             android:padding="@dimen/detail_padding"
-            android:text="Mon 04 May 2017 at 4:00PM" />
+            android:text="Mon 04 May 2017 at 4:00PM"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal" />
+
+        <Button
+            android:id="@+id/customer_delete_btn"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:layout_margin="8dp"
+            android:onClick="deleteCustomer"
+            android:padding="24dp"
+            android:text="Delete Customer"
+            android:gravity="right|center_vertical"
+            android:layout_width="wrap_content" />
     </LinearLayout>
 
     <ScrollView

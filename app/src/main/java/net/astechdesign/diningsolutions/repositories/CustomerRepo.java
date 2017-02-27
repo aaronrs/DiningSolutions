@@ -67,4 +67,8 @@ public class CustomerRepo {
     public void updateVisit(Customer customer, DSDDate date) {
         mCustomerTable.updateVisit(mDatabase, customer, date);
     }
+
+    public void deleteCustomer(Customer customer) {
+        mCustomerTable.delete(mDatabase, customer);
+    }
 }

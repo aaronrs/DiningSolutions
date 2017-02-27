@@ -1,15 +1,19 @@
 package net.astechdesign.diningsolutions.customers;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
@@ -126,6 +130,21 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
         CustomerRepo.get(this).updateVisit(mCustomer, date);
         mCustomer = CustomerRepo.get(this).get(mCustomer.getId());
         showCustomerDetails();
+    }
+
+    public void deleteCustomer(View v) {
+        final Activity home = this;
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Customer - " + mCustomer.name)
+                .setMessage("Do you want to delete this customer?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Toast.makeText(CustomerDetailActivity.this, "Customer Deleted", Toast.LENGTH_SHORT).show();
+                        CustomerRepo.get(home).deleteCustomer(mCustomer);
+                        home.finish();
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
     }
 
     public void getDate(View v) {

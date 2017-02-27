@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Model;
 
 public abstract class CMSTable<T extends Model> implements BaseColumns {
@@ -89,6 +90,10 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
     private void update(SQLiteDatabase db, Model parent, T model) {
         ContentValues insertValues = getModelValues(model);
         db.update(tableName, insertValues, UUID_ID + " = ?", new String[]{model.getDbId()});
+    }
+
+    public void delete(SQLiteDatabase db, T model) {
+        db.delete(tableName, UUID_ID + " = ?", new String[]{model.getDbId()});
     }
 
     private ContentValues getModelValues(T model) {
