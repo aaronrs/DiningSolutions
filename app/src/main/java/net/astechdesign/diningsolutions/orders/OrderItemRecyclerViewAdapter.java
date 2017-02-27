@@ -10,12 +10,12 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
 import java.util.List;
 
 import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
+import static net.astechdesign.diningsolutions.orders.OrderActivity.ADD_PRODUCT;
 
 public class OrderItemRecyclerViewAdapter
         extends RecyclerView.Adapter<OrderItemRecyclerViewAdapter.ViewHolder> {
@@ -23,11 +23,13 @@ public class OrderItemRecyclerViewAdapter
     private FragmentManager fm;
     private final List<OrderItem> mValues;
     private OrderDetailFragment fragment;
+    private FragmentManager mSupportFragmentManager;
 
-    public OrderItemRecyclerViewAdapter(OrderDetailFragment fragment, List<OrderItem> items) {
+    public OrderItemRecyclerViewAdapter(OrderDetailFragment fragment, List<OrderItem> items, FragmentManager supportFragmentManager) {
         this.fragment = fragment;
         this.fm = fragment.getActivity().getSupportFragmentManager();
-        mValues = items;
+        this.mValues = items;
+        this.mSupportFragmentManager = supportFragmentManager;
     }
 
     @Override
@@ -44,11 +46,11 @@ public class OrderItemRecyclerViewAdapter
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                        Context context = v.getContext();
-//                        Intent intent = new Intent(context, CustomerDetailActivity.class);
-//                        intent.putExtra(CustomerDetailFragment.ARG_CUSTOMER, holder.getId());
-//                        context.startActivity(intent);
-                }
+                FragmentManager fm = mSupportFragmentManager;
+                OrderAddProductFragment newProductFragment = new OrderAddProductFragment();
+                newProductFragment.setOrderItem(holder.mItem);
+                newProductFragment.show(fm, ADD_PRODUCT);
+            }
         });
     }
 

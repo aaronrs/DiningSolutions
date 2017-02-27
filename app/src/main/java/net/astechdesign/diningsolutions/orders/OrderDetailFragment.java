@@ -13,24 +13,16 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.TimePickerFragment;
-import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
-import net.astechdesign.diningsolutions.repositories.OrderRepo;
-
-import java.util.Calendar;
 
 public class OrderDetailFragment extends Fragment {
 
-    public static final String ADD_ORDER = "add_order";
     public static final String CUSTOMER = "customer";
     public static final String ORDER = "order";
-    private OrderRepo mOrderRepo;
 
-    private Customer mCustomer;
     private Order mOrder;
     private OrderItemRepo orderItemRepo;
     private OrderItem selectedOrderItem;
@@ -46,10 +38,8 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mOrderRepo = OrderRepo.get(getContext());
         orderItemRepo = OrderItemRepo.get(getContext());
 
-        mCustomer = (Customer)getArguments().getSerializable(CUSTOMER);
         if (getArguments().containsKey(ORDER)) {
             mOrder = (Order) getArguments().getSerializable(ORDER);
         }
@@ -75,7 +65,11 @@ public class OrderDetailFragment extends Fragment {
     private void setupRecyclerView(View rootView) {
         View recyclerView = rootView.findViewById(R.id.order_items_list);
         assert recyclerView != null;
-        ((RecyclerView)recyclerView).setAdapter(new OrderItemRecyclerViewAdapter(this, orderItemRepo.getOrderItems(mOrder)));
+        ((RecyclerView)recyclerView).setAdapter(
+                new OrderItemRecyclerViewAdapter(
+                        this,
+                        orderItemRepo.getOrderItems(mOrder),
+                        getActivity().getSupportFragmentManager()));
     }
 
     @Override

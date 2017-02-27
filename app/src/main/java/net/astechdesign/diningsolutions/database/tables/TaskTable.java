@@ -4,9 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Task;
-import net.astechdesign.diningsolutions.model.TaskType;
 
 public class TaskTable extends CMSTable<Task>{
 
@@ -16,14 +14,12 @@ public class TaskTable extends CMSTable<Task>{
     public static final String TASK_TIME = "time";
     public static final String TASK_TITLE = "title";
     public static final String TASK_DESCRIPTION = "description";
-    public static final String CUSTOMER_ID = "customer_id";
 
     private static final String CREATE_TABLE =
             TASK_DATE + " DATE," +
             TASK_TIME + " TIME," +
             TASK_TITLE + " TEXT," +
-            TASK_DESCRIPTION + " TEXT," +
-            CUSTOMER_ID + " TEXT";
+            TASK_DESCRIPTION + " TEXT";
 
     public TaskTable() {
         super(TABLE_NAME, CREATE_TABLE);
@@ -36,7 +32,7 @@ public class TaskTable extends CMSTable<Task>{
         values.put(TASK_TITLE, task.title);
         values.put(TASK_DESCRIPTION, task.description);
         if (task.customerId != null) {
-            values.put(CUSTOMER_ID, task.customerId.toString());
+            values.put(PARENT_ID, task.customerId.toString());
         }
         return values;
     }

@@ -11,18 +11,16 @@ public class OrderTable extends CMSTable<Order> {
 
     public static final String TABLE_NAME = "orders";
 
-    public static final String CUSTOMER_ID = "customer_id";
     public static final String ORDER_DATE = "order_date";
     public static final String INVOICE_NO = "invoice_no";
 
     private static String CREATE_TABLE =
-            CUSTOMER_ID + " TEXT, " +
             ORDER_DATE + " INTEGER, " +
             INVOICE_NO + " TEXT" +
             "";
 
     public OrderTable() {
-        super(TABLE_NAME, CREATE_TABLE, CUSTOMER_ID);
+        super(TABLE_NAME, CREATE_TABLE);
     }
 
     public ContentValues getInsertValues(Order order) {
@@ -34,7 +32,7 @@ public class OrderTable extends CMSTable<Order> {
 
     public Cursor getOrders(SQLiteDatabase db, Model parent) {
         String orderBy = ORDER_DATE + " DESC, " + INVOICE_NO + " DESC";
-        return db.query(TABLE_NAME, null, CUSTOMER_ID + " = ?", new String[]{parent.getDbId()}, null, null, orderBy);
+        return db.query(TABLE_NAME, null, PARENT_ID + " = ?", new String[]{parent.getDbId()}, null, null, orderBy);
     }
 
     public Cursor get(SQLiteDatabase db) {

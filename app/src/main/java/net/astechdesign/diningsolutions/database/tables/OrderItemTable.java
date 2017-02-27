@@ -12,7 +12,6 @@ public class OrderItemTable extends CMSTable<OrderItem> {
 
     public static final String TABLE_NAME = "orderItems";
 
-    public static final String PARENT_ID = "order_id";
     public static final String PRODUCT_NAME = "product_name";
     public static final String PRODUCT_BATCH = "batch";
     public static final String PRODUCT_QUANTITY = "quantity";
@@ -20,7 +19,6 @@ public class OrderItemTable extends CMSTable<OrderItem> {
     public static final String DELIVERY_DATE = "delivery_date";
 
     private static String CREATE_TABLE =
-            PARENT_ID + " TEXT, " +
             PRODUCT_NAME + " TEXT, " +
             PRODUCT_BATCH + " TEXT, " +
             PRODUCT_QUANTITY + " NUMBER, " +
@@ -29,7 +27,7 @@ public class OrderItemTable extends CMSTable<OrderItem> {
             "";
 
     public OrderItemTable() {
-        super(TABLE_NAME, CREATE_TABLE, PARENT_ID);
+        super(TABLE_NAME, CREATE_TABLE);
     }
 
     public ContentValues getInsertValues(OrderItem item) {

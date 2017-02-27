@@ -57,9 +57,7 @@ public class EmailTemplate {
             throw new RuntimeException("State: " + state);
         }
 
-        File pdfFolder = new File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                "invoices");
+        File pdfFolder = new File(context.getExternalFilesDir(null), "invoices");
         if (!pdfFolder.exists() && !pdfFolder.mkdirs()) {
             throw new RuntimeException("Couldn't make dir: " + pdfFolder.getAbsolutePath());
         }

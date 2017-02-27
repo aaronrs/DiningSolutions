@@ -5,26 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <LinearLayout
+    <AutoCompleteTextView
+        android:id="@+id/add_item_name_select"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Product Name" />
-
-        <AutoCompleteTextView
-            android:id="@+id/product_name_select"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Product Name"
-            tools:inputType="textCapWords" />
-    </LinearLayout>
+        android:hint="Product Name"
+        tools:inputType="textCapWords" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +18,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/product_price"
+            android:id="@+id/add_item_price"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -40,7 +26,7 @@
             android:inputType="numberDecimal" />
 
         <EditText
-            android:id="@+id/product_batch"
+            android:id="@+id/add_item_batch"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -53,8 +39,8 @@
             android:gravity="right"
             android:text="Quantity" />
 
-        <EditText
-            android:id="@+id/product_quantity"
+        <Spinner
+            android:id="@+id/add_item_quantity"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:ems="10"

@@ -25,7 +25,7 @@ public class ProductTable extends CMSTable<Product> {
             "";
 
     public ProductTable() {
-        super(TABLE_NAME, CREATE_TABLE, null);
+        super(TABLE_NAME, CREATE_TABLE);
     }
 
     @Override

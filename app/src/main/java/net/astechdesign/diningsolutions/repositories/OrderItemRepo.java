@@ -53,6 +53,10 @@ public class OrderItemRepo {
         orderItemTable.addOrUpdate(mDatabase, order, item);
     }
 
+    public void delete(Order order, OrderItem item) {
+        orderItemTable.delete(mDatabase, order.getDbId(), item);
+    }
+
     public void updateDelivery(OrderItem orderItem, DSDDate date) {
         orderItemTable.updateDelivery(mDatabase, orderItem, date);
     }

@@ -25,11 +25,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itextpdf.text.DocumentException;
-
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
-import net.astechdesign.diningsolutions.invoices.PDFInvoice;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
@@ -38,10 +35,7 @@ import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
-import net.astechdesign.diningsolutions.repositories.assets.TemplateAssets;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
@@ -49,12 +43,10 @@ import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
 public class OrderActivity extends AppCompatActivity implements OrderAddProductFragment.ProductAddListener {
 
-    private static final String ADD_PRODUCT = "add_product";
-    private static final String DATE_PICKER = "delivery_date";
+    public static final String ADD_PRODUCT = "add_product";
     private Customer mCustomer;
     private List<Order> mOrders;
     private Order mOrder;
-    private OrderAddProductFragment newProductFragment;
     private Toolbar toolbar;
     private Spinner spinner;
 
@@ -203,9 +195,17 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     }
 
     @Override
-    public void onAddProductPositiveClick(DialogInterface dialog, Product product, double price, int quantity, String batch) {
+    public void onAddProductPositiveClick(DialogInterface dialog, OrderItem item, Product product, double price, int quantity, String batch) {
+        if (product == null) {
+            return;
+        }
         DSDDate deliveryDate = DSDDate.create();
-        OrderItem item = new OrderItem(null, product.name, price, quantity, batch, deliveryDate);
+        if (item != null) {
+            OrderItemRepo.get(this).delete(mOrder, item);
+            item = new OrderItem(null, item.name, item.price, item.quantity, item.batch, item.deliveryDate);
+        } else {
+            item = new OrderItem(null, product.name, price, quantity, batch, deliveryDate);
+        }
         OrderItemRepo.get(this).add(mOrder, item);
         mOrders = OrderRepo.get(this).getOrders(mCustomer);
 
@@ -261,7 +261,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
     public void addProduct(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        newProductFragment = new OrderAddProductFragment();
+        OrderAddProductFragment newProductFragment = new OrderAddProductFragment();
         newProductFragment.show(fm, ADD_PRODUCT);
     }
 }

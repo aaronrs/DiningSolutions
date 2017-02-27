@@ -16,7 +16,6 @@ public class AddressTable extends CMSTable<Address> {
 
     private static String TABLE_NAME = "address";
 
-    public static final String CUSTOMER_ID = "customer_id";
     public static final String ADDRESS_NAME = "house_name";
     public static final String ADDRESS_LINE1 = "line1";
     public static final String ADDRESS_LINE2 = "line2";
@@ -25,7 +24,6 @@ public class AddressTable extends CMSTable<Address> {
     public static final String ADDRESS_POSTCODE = "postcode";
 
     private static String CREATE_TABLE =
-            CUSTOMER_ID + " TEXT, " +
             ADDRESS_NAME + " TEXT, " +
             ADDRESS_LINE1 + " TEXT, " +
             ADDRESS_LINE2 + " TEXT, " +
@@ -35,7 +33,7 @@ public class AddressTable extends CMSTable<Address> {
                     "";
 
     protected AddressTable(DBHelper db) {
-        super(TABLE_NAME, CREATE_TABLE, CUSTOMER_ID);
+        super(TABLE_NAME, CREATE_TABLE);
     }
 
     @Override
@@ -63,7 +61,7 @@ public class AddressTable extends CMSTable<Address> {
     }
 
     public Address get(SQLiteDatabase db, UUID customerId) {
-        Cursor cursor = db.query(TABLE_NAME, null, CUSTOMER_ID + " = ?", new String[]{customerId.toString()}, null, null, null);
+        Cursor cursor = db.query(TABLE_NAME, null, PARENT_ID + " = ?", new String[]{customerId.toString()}, null, null, null);
         cursor.moveToFirst();
         AddressCursorWrapper addressCursorWrapper = new AddressCursorWrapper(cursor);
         return addressCursorWrapper.getAddress();
