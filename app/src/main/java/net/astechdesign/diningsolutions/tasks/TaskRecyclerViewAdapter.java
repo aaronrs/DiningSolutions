@@ -42,6 +42,7 @@ public class TaskRecyclerViewAdapter
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (holder.mTask.customerId == null) return;
                 Intent intent = new Intent(activity, CustomerDetailActivity.class);
                 intent.putExtra(CustomerDetailActivity.CUSTOMER_ID, holder.mTask.customerId);
                 activity.startActivity(intent);
