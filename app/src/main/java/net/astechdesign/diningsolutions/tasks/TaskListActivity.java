@@ -29,8 +29,6 @@ import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
 public class TaskListActivity extends AppCompatActivity implements NewTaskFragment.NewTaskListener {
 
-    public static final String TASK = "task";
-
     private NewTaskFragment newTaskFragment;
     private RecyclerView recyclerView;
 
