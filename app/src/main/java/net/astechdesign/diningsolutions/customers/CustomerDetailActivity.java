@@ -77,8 +77,12 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
         findViewById(R.id.customer_order_btn).setTag(mCustomer.getDbId());
         findViewById(R.id.next_visit).setTag(mCustomer);
         setText(R.id.customer_name, mCustomer.name);
-        setText(R.id.customer_email, mCustomer.email.address.length() > 0 ? mCustomer.email.address : "Please add an email address or phone number");
-        setText(R.id.customer_phone, mCustomer.phone.number);
+        if (mCustomer.email.address.length() > 0) {
+            setText(R.id.customer_email, mCustomer.email.address);
+        }
+        if (mCustomer.phone.number.length() > 0) {
+            setText(R.id.customer_phone, mCustomer.phone.number);
+        }
         setText(R.id.visit_date_time, mCustomer.visit.getDisplayDateTime());
         Address address = mCustomer.address;
         if (address != null) {
