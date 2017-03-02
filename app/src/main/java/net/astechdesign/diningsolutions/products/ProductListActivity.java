@@ -197,7 +197,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
                 this.mItem = item;
                 mNameView.setText(item.name);
                 mPriceView.setText("£" + Double.toString(item.price));
-                mBarcodeView.setText(item.barcode);
+//                mBarcodeView.setText(item.barcode);
             }
 
             public Product getItem() {
