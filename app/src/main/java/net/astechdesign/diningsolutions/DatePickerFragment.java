@@ -10,7 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.widget.DatePicker;
 
-import net.astechdesign.diningsolutions.customers.NextVisitFragment;
 import net.astechdesign.diningsolutions.model.DSDDate;
 
 import java.util.Calendar;
@@ -25,11 +24,16 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     private Fragment targetFragment;
 
     public static DatePickerFragment newInstance(Fragment targetFragment, DSDDate date) {
+        DatePickerFragment fragment = newInstance(date);
+        fragment.setTarget(targetFragment);
+        return fragment;
+    }
+
+    public static DatePickerFragment newInstance(DSDDate date) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_DATE, date);
 
         DatePickerFragment fragment = new DatePickerFragment();
-        fragment.setTarget(targetFragment);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -53,6 +57,8 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         cal.set(Calendar.DAY_OF_MONTH, day);
         intent.putExtra(RETURN_DATE, DSDDate.create(cal));
 
-        targetFragment.onActivityResult(DatePickerFragment.REQUEST_DATE, Activity.RESULT_OK, intent);
+        if (targetFragment != null) {
+            targetFragment.onActivityResult(DatePickerFragment.REQUEST_DATE, Activity.RESULT_OK, intent);
+        }
     }
 }

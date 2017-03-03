@@ -85,4 +85,8 @@ public class OrderRepo {
         }
         return orders;
     }
+
+    public void updateInvoiceDate(Order order, DSDDate date) {
+        orderTable.addOrUpdate(mDatabase, new Order(order.getId(), order.customerId, date, order.invoiceNumber));
+    }
 }

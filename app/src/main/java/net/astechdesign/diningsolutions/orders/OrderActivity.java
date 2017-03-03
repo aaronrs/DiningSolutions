@@ -1,5 +1,6 @@
 package net.astechdesign.diningsolutions.orders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,7 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ThemedSpinnerAdapter;
@@ -25,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.model.Customer;
@@ -48,7 +52,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     private List<Order> mOrders;
     private Order mOrder;
     private Toolbar toolbar;
-    private Spinner spinner;
+    private Spinner invoiceDropdown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +77,9 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         }
 
         // Setup spinner
-        spinner = (Spinner) findViewById(R.id.spinner);
-        spinner.setAdapter(newAdapter());
-        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        invoiceDropdown = (Spinner) findViewById(R.id.spinner);
+        invoiceDropdown.setAdapter(newAdapter());
+        invoiceDropdown.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 showOrder(position);
@@ -86,6 +90,24 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
             }
         });
 
+        TextView invoiceDate = (TextView) findViewById(R.id.order_invoice_date);
+        invoiceDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                Fragment datePicker = getSupportFragmentManager().findFragmentByTag("date_picker");
+                if (datePicker != null) {
+                    ft.remove(datePicker);
+                }
+                ft.addToBackStack(null);
+
+                DatePickerFragment dialog = DatePickerFragment.newInstance((DSDDate) view.getTag());
+                dialog.show(ft, "date_picker");
+
+                Snackbar.make(view, "Clicked", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,10 +178,14 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         setFields(R.id.order_detail_phone, mCustomer.phone == null ? "" : mCustomer.phone.number);
         setFields(R.id.order_detail_email, mCustomer.email == null ? "" : mCustomer.email.address);
         setFields(R.id.order_invoice_number, mOrder.invoiceNumber);
+        TextView invoiceDateView = setFields(R.id.order_invoice_date, mOrder.created != null ? mOrder.created.getDisplayDate() : "");
+        invoiceDateView.setTag(mOrder.created);
     }
 
-    private void setFields(int id, String text) {
-        ((TextView) findViewById(id)).setText(text);
+    private TextView setFields(int id, String text) {
+        TextView view = (TextView) findViewById(id);
+        view.setText(text);
+        return view;
     }
 
     @Override
@@ -188,10 +214,23 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == DatePickerFragment.REQUEST_DATE) {
+            DSDDate date = (DSDDate) data.getSerializableExtra(DatePickerFragment.RETURN_DATE);
+            OrderRepo.get(this).updateInvoiceDate(mOrder, date);
+            updateInvoice();
+            return;
+        }
+    }
+
     private void createNewOrder() {
         OrderRepo.get(this).create(this, mCustomer);
         mOrders = OrderRepo.get(this).getOrders(mCustomer);
-        spinner.setAdapter(newAdapter());
+        invoiceDropdown.setAdapter(newAdapter());
     }
 
     @Override
@@ -205,18 +244,21 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         }
         item = new OrderItem(null, product.name, price, quantity, batch, deliveryDate);
         OrderItemRepo.get(this).add(mOrder, item);
-        mOrders = OrderRepo.get(this).getOrders(mCustomer);
+        updateInvoice();
 
-        spinner.setAdapter(newAdapter());
+        Snackbar.make(findViewById(R.id.main_content), "Added product " + product.name, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
+    private void updateInvoice() {
+        mOrders = OrderRepo.get(this).getOrders(mCustomer);
+        invoiceDropdown.setAdapter(newAdapter());
         for (int i=0; i < mOrders.size(); i++) {
             if (mOrders.get(i).invoiceNumber.equals(mOrder.invoiceNumber)) {
                 showOrder(i);
                 break;
             }
         }
-
-        Snackbar.make(findViewById(R.id.main_content), "Added product " + product.name, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
     }
 
     private static class MyOrderAdapter extends ArrayAdapter<Order> implements ThemedSpinnerAdapter {
