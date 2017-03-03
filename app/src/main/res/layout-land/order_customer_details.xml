@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         android:padding="8dp"
-        android:text="Invoice No:" />
+        android:text="Invoice No:"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/order_invoice_number"
@@ -17,7 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/text_invoice_number"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/text_invoice_date"
@@ -27,7 +29,8 @@
         android:layout_below="@id/text_invoice_number"
         android:gravity="right"
         android:padding="8dp"
-        android:text="Invoice Date:" />
+        android:text="Invoice Date:"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/order_invoice_date"
@@ -36,7 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/text_invoice_date"
         android:layout_below="@id/text_invoice_number"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/text_name"
@@ -46,7 +50,8 @@
         android:layout_below="@id/text_invoice_date"
         android:gravity="right"
         android:padding="8dp"
-        android:text="Name" />
+        android:text="Name"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/order_detail_name"
@@ -55,7 +60,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/text_invoice_date"
         android:layout_toRightOf="@id/text_name"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/text_phone"
@@ -65,7 +71,8 @@
         android:layout_below="@id/text_name"
         android:gravity="right"
         android:padding="8dp"
-        android:text="Phone" />
+        android:text="Phone"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/order_detail_phone"
@@ -74,7 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/text_name"
         android:layout_toRightOf="@id/text_phone"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/text_email"
@@ -84,7 +92,8 @@
         android:layout_below="@id/text_phone"
         android:gravity="right"
         android:padding="8dp"
-        android:text="Email" />
+        android:text="Email"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/order_detail_email"
@@ -93,6 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/text_phone"
         android:layout_toRightOf="@id/text_email"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:textSize="14sp"/>
 
 </RelativeLayout>

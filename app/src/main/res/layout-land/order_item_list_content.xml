@@ -1,50 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/product_name"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_width="400dp"
-        android:layout_marginEnd="8dp"
+        android:text="product name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/batch_number"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/product_name"
+        android:text="batch number"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/product_price"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:layout_toRightOf="@id/batch_number"
+        android:text="product price"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/product_quantity"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:layout_width="80dp" />
+        android:layout_width="80dp"
+        android:layout_toRightOf="@id/product_price"
+        android:text="quantity"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/product_cost"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:gravity="right"
-        android:layout_width="80dp" />
+        android:layout_width="80dp"
+        android:layout_toRightOf="@id/product_quantity"
+        android:text="cost"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <Button
-        android:text="Delivery Date"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
         android:id="@+id/delivery_date_btn"
-        android:inputType="textCapWords"
-        android:layout_marginLeft="16dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@id/product_cost"
+        android:text="Delivery Date" />
 
-</LinearLayout>
+</RelativeLayout>
