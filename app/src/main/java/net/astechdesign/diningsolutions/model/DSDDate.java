@@ -1,7 +1,6 @@
 package net.astechdesign.diningsolutions.model;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,6 +9,7 @@ import java.util.GregorianCalendar;
 public class DSDDate implements Serializable, Comparable {
 
     private static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE dd MMMM yyyy");
+    private static SimpleDateFormat shortDisplayDateFormat = new SimpleDateFormat("dd MMM yyyy");
     private static SimpleDateFormat displayTimeFormat = new SimpleDateFormat("KK:mm a");
 
     public final Date date;
@@ -75,6 +75,10 @@ public class DSDDate implements Serializable, Comparable {
 
     public String getDisplayDate() {
         return displayDateFormat.format(getDate());
+    }
+
+    public String getShortDisplayDate() {
+        return shortDisplayDateFormat.format(getDate());
     }
 
     public String getDisplayTime() {

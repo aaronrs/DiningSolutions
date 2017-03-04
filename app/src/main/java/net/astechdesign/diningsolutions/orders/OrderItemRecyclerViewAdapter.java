@@ -96,7 +96,7 @@ public class OrderItemRecyclerViewAdapter
             mPriceView.setText(Double.toString(mItem.price));
             mQuantityView.setText(Integer.toString(mItem.quantity));
             mCostView.setText(String.format("%.2f", mItem.cost()));
-            mDeliveryDateBtn.setText(mItem.deliveryDate.getDisplayDate());
+            mDeliveryDateBtn.setText(mItem.deliveryDate.getShortDisplayDate());
         }
     }
 }

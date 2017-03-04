@@ -5,7 +5,7 @@
     <TextView
         android:id="@+id/text_invoice_number"
         style="?android:attr/textAppearanceMedium"
-        android:layout_width="@dimen/detail_labels"
+        android:layout_width="@dimen/detail_labels_land"
         android:layout_height="wrap_content"
         android:gravity="right"
         android:padding="8dp"
@@ -24,7 +24,7 @@
     <TextView
         android:id="@+id/text_invoice_date"
         style="?android:attr/textAppearanceMedium"
-        android:layout_width="@dimen/detail_labels"
+        android:layout_width="@dimen/detail_labels_land"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_invoice_number"
         android:gravity="right"
@@ -45,7 +45,7 @@
     <TextView
         android:id="@+id/text_name"
         style="?android:attr/textAppearanceMedium"
-        android:layout_width="@dimen/detail_labels"
+        android:layout_width="@dimen/detail_labels_land"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_invoice_date"
         android:gravity="right"
@@ -66,7 +66,7 @@
     <TextView
         android:id="@+id/text_phone"
         style="?android:attr/textAppearanceMedium"
-        android:layout_width="@dimen/detail_labels"
+        android:layout_width="@dimen/detail_labels_land"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_name"
         android:gravity="right"
@@ -87,7 +87,7 @@
     <TextView
         android:id="@+id/text_email"
         style="?android:attr/textAppearanceMedium"
-        android:layout_width="@dimen/detail_labels"
+        android:layout_width="@dimen/detail_labels_land"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_phone"
         android:gravity="right"

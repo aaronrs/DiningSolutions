@@ -24,7 +24,6 @@
         android:id="@+id/order_container"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@id/add_product_btn"
         android:layout_toRightOf="@id/customer_details" />
 
 </RelativeLayout>
