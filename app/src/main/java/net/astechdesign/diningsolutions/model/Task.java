@@ -33,7 +33,8 @@ public class Task extends Model {
     }
 
     public static Task visitTask(Customer customer) {
-        return create(customer.visit, "Visit", "The next visit to: "  + customer.name, customer.getId());
+        String taskMsg = String.format("The next visit to: %s, %s", customer.name, customer.phone.number);
+        return create(customer.visit, "Visit", taskMsg, customer.getId());
     }
 
     public static Task create(DSDDate date, String title, String description) {
