@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
-import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductRepo;
 
@@ -128,10 +127,12 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
     }
 
     @Override
-    public void onEditProductPositiveClick(DialogInterface dialog, Product product) {
-        ProductRepo.get(this).addOrUpdate(product);
-        if (product.isDeleted()) {
+    public void onEditProductPositiveClick(DialogInterface dialog, Product product, boolean deleted) {
+        if (deleted) {
+            ProductRepo.get(this).delete(product);
             Toast.makeText(this, "Product deleted: " + product.name, Toast.LENGTH_SHORT).show();
+        } else {
+            ProductRepo.get(this).addOrUpdate(product);
         }
         updateRecycler("");
     }

@@ -26,14 +26,14 @@ public class ProductEditFragment extends DialogFragment {
     private EditProductListener mListener;
 
     public interface EditProductListener {
-        void onEditProductPositiveClick(DialogInterface dialog, Product product);
+        void onEditProductPositiveClick(DialogInterface dialog, Product product, boolean deleted);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (product == null) {
-            product = new Product(null, "", "", 0.00, "", 0);
+            product = new Product(null, "", "", 0.00, "");
         }
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_product, null);
         mNameText = (TextView) view.findViewById(R.id.product_name);
@@ -55,9 +55,8 @@ public class ProductEditFragment extends DialogFragment {
                                 mNameText.getText().toString(),
                                 product.description,
                                 Double.parseDouble(mPriceText.getText().toString()),
-                                mBarcodeText.getText().toString(),
-                                deleted ? 1 : 0);
-                        mListener.onEditProductPositiveClick(dialog, newProduct);
+                                mBarcodeText.getText().toString());
+                        mListener.onEditProductPositiveClick(dialog, newProduct, deleted);
                     }
                 })
                 .create();

@@ -48,4 +48,8 @@ public class ProductRepo {
     public void addOrUpdate(Product product) {
         productTable.addOrUpdate(mDatabase, product);
     }
+
+    public void delete(Product product) {
+        productTable.delete(mDatabase, product);
+    }
 }

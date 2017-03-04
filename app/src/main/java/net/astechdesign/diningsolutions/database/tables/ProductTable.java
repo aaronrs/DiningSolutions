@@ -33,7 +33,6 @@ public class ProductTable extends CMSTable<Product> {
         values.put(PRODUCT_DESCRIPTION, product.description);
         values.put(PRODUCT_PRICE, product.price);
         values.put(PRODUCT_BARCODE, product.barcode);
-        values.put(DELETED, product.isDeleted() ? 1 : 0);
         return values;
     }
 
