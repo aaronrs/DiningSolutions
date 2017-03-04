@@ -38,7 +38,7 @@
     <TextView
         android:id="@+id/product_cost"
         android:layout_height="wrap_content"
-        android:layout_width="80dp"
+        android:layout_width="60dp"
         android:layout_toRightOf="@id/product_quantity"
         android:text="cost"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
