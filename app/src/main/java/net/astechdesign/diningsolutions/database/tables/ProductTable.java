@@ -14,14 +14,12 @@ public class ProductTable extends CMSTable<Product> {
     public static final String PRODUCT_PRICE = "price";
     public static final String PRODUCT_DESCRIPTION = "description";
     public static final String PRODUCT_BARCODE = "barcode";
-    public static final String PRODUCT_DELETED = "deleted";
 
     private static String CREATE_TABLE =
             PRODUCT_NAME + " TEXT, " +
             PRODUCT_DESCRIPTION + " TEXT, " +
             PRODUCT_PRICE + " NUMBER, " +
-            PRODUCT_BARCODE + " TEXT, " +
-            PRODUCT_DELETED + " INTEGER " +
+            PRODUCT_BARCODE + " TEXT " +
             "";
 
     public ProductTable() {
@@ -35,15 +33,11 @@ public class ProductTable extends CMSTable<Product> {
         values.put(PRODUCT_DESCRIPTION, product.description);
         values.put(PRODUCT_PRICE, product.price);
         values.put(PRODUCT_BARCODE, product.barcode);
-        values.put(PRODUCT_DELETED, product.isDeleted() ? 1 : 0);
+        values.put(DELETED, product.isDeleted() ? 1 : 0);
         return values;
     }
 
-    public Cursor get(SQLiteDatabase db) {
-        return db.query(TABLE_NAME, null, PRODUCT_DELETED + " = 0", null, null, null, PRODUCT_NAME);
-    }
-
-    public Cursor get(SQLiteDatabase mDatabase, String filter) {
-        return mDatabase.query(TABLE_NAME, null, PRODUCT_NAME + " LIKE ?", new String[]{filter}, null, null, PRODUCT_NAME);
+    public Cursor get(SQLiteDatabase mDatabase, String orderby, String filter) {
+        return mDatabase.query(TABLE_NAME, null, PRODUCT_NAME + " LIKE ?", new String[]{filter}, null, null, orderby);
     }
 }

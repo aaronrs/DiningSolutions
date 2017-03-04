@@ -74,15 +74,11 @@ public class CustomerTable extends CMSTable<Customer> {
         return values;
     }
 
-    public Cursor get(SQLiteDatabase db) {
-        return db.query(TABLE_NAME, null, null, null, null, null, CUSTOMER_NAME);
-    }
-
     public Cursor get(SQLiteDatabase db, UUID customerId) {
         return db.query(TABLE_NAME, null, UUID_ID + " = ?", new String[]{customerId.toString()}, null, null, null);
     }
 
-    public Cursor get(SQLiteDatabase db, String name) {
+    public Cursor get(SQLiteDatabase db, String name, String orderby) {
         return db.query(TABLE_NAME, null, CUSTOMER_NAME + " = ?", new String[]{name}, null, null, CUSTOMER_NAME);
     }
 

@@ -36,7 +36,7 @@ public class CustomerRepo {
     }
 
     public List<Customer> get() {
-        Cursor cursor = mCustomerTable.get(mDatabase);
+        Cursor cursor = mCustomerTable.get(mDatabase, CustomerTable.CUSTOMER_NAME);
         List<Customer> customerList = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

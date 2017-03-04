@@ -5,20 +5,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
-import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Model;
-import net.astechdesign.diningsolutions.model.Order;
-import net.astechdesign.diningsolutions.model.OrderItem;
 
 public abstract class CMSTable<T extends Model> implements BaseColumns {
 
     public static String UUID_ID = "id";
+    public static final String DELETED = "deleted";
     public static final String PARENT_ID = "parent_id";
 
     private static String CREATE = "CREATE TABLE %s (" +
             _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             UUID_ID + " TEXT," +
             PARENT_ID + " TEXT," +
+            DELETED + " INTEGER DEFAULT 0," +
             " %s)";
 
     private final String tableName;
@@ -45,6 +44,10 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
         } else {
             update(db, model);
         }
+    }
+
+    public Cursor get(SQLiteDatabase db, String orderBy) {
+        return db.query(tableName, null, DELETED + " != 1", null, null, null, orderBy);
     }
 
     public void addOrUpdate(SQLiteDatabase db, Model parent, T model) {
@@ -76,11 +79,15 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
     }
 
     public void delete(SQLiteDatabase db, T model) {
-        db.delete(tableName, UUID_ID + " = ?", new String[]{model.getDbId()});
+        ContentValues values = new ContentValues();
+        values.put(DELETED, 1);
+        db.update(tableName, values, UUID_ID + " = ?", new String[]{model.getDbId()});
     }
 
     public void delete(SQLiteDatabase db, String parentId, T model) {
-        db.delete(tableName, PARENT_ID + " = ? AND " + UUID_ID + " = ?", new String[]{parentId, model.getDbId()});
+        ContentValues values = new ContentValues();
+        values.put(DELETED, 1);
+        db.update(tableName, values, PARENT_ID + " = ? AND " + UUID_ID + " = ?", new String[]{parentId, model.getDbId()});
     }
 
     private ContentValues getModelValues(T model) {
