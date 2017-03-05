@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 
+import net.astechdesign.diningsolutions.admin.Prefs;
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.database.wrappers.OrderCursorWrapper;
@@ -55,13 +56,14 @@ public class OrderRepo {
 
     public void create(Context context, Customer mCustomer) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        long invoiceNumber = Long.parseLong(sharedPref.getString("invoice_start_number", "0")) + 1;
+        long invoiceNumber = Long.parseLong(sharedPref.getString(Prefs.INVOICE.toString(), "1"));
+        String distributor = sharedPref.getString(Prefs.NUMBER.toString(), "0555");
 
         SharedPreferences.Editor ed = sharedPref.edit();
-        ed.putString("invoice_start_number", Long.toString(invoiceNumber));
+        ed.putString("invoice_start_number", Long.toString(invoiceNumber + 1));
         ed.commit();
 
-        Order order = new Order(null, mCustomer.getId(), DSDDate.create(), Long.toString(invoiceNumber));
+        Order order = new Order(null, mCustomer.getId(), DSDDate.create(), String.format("%s-%06d", distributor, invoiceNumber));
         orderTable.addOrUpdate(mDatabase, mCustomer, order);
     }
 
