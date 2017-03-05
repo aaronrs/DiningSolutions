@@ -51,6 +51,9 @@ public class ProductEditFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                         boolean deleted = ((CheckBox) view.findViewById(R.id.delete_checkBox)).isChecked();
+                        if (product.getId() == null && mNameText.length() == 0) {
+                            return;
+                        }
                         Product newProduct = new Product(product.getId(),
                                 mNameText.getText().toString(),
                                 product.description,
