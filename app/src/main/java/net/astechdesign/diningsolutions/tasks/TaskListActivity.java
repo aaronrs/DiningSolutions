@@ -19,6 +19,7 @@ import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
+import net.astechdesign.diningsolutions.reports.ReportsActivity;
 import net.astechdesign.diningsolutions.repositories.TaskRepo;
 
 import java.util.List;
@@ -68,6 +69,10 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
                 return true;
             case R.id.menu_item_customers:
                 intent = new Intent(this, CustomerListActivity.class);
+                this.startActivity(intent);
+                return true;
+            case R.id.action_reports:
+                intent = new Intent(this, ReportsActivity.class);
                 this.startActivity(intent);
                 return true;
             case R.id.action_settings:
