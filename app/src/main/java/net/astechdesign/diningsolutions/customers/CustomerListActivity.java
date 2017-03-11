@@ -259,6 +259,7 @@ public class CustomerListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mNameView;
             public final TextView mPhoneView;
+            public final TextView mAddressView;
             public Customer mItem;
 
             public ViewHolder(View view) {
@@ -266,17 +267,19 @@ public class CustomerListActivity extends AppCompatActivity {
                 mView = view;
                 mNameView = (TextView) view.findViewById(R.id.name);
                 mPhoneView = (TextView) view.findViewById(R.id.telephone);
+                mAddressView = (TextView) view.findViewById(R.id.address);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mPhoneView.getText() + "'";
+                return super.toString() + " '" + mNameView.getText() + "'";
             }
 
             public void setItem(Customer item) {
                 this.mItem = item;
                 mNameView.setText(item.name);
                 mPhoneView.setText(item.phone.number);
+                mAddressView.setText(item.address.toString());
             }
         }
     }

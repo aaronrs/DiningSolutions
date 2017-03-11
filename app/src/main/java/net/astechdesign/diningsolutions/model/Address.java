@@ -23,7 +23,7 @@ public class Address extends Model {
 
     @Override
     public String toString() {
-        return String.format("%s %s %s, %s", name, line1, town, postcode);
+        return String.format("%s %s, %s, %s", name, line1, town, postcode);
     }
 
     public boolean compareAddress(String address) {
