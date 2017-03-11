@@ -10,19 +10,19 @@ import android.view.ViewGroup;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.reports.dummy.DummyContent;
 
-public class RecordFragment extends Fragment {
+public class CustomerReportFragment extends Fragment {
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public RecordFragment() {
+    public CustomerReportFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static RecordFragment newInstance() {
-        RecordFragment fragment = new RecordFragment();
+    public static CustomerReportFragment newInstance() {
+        CustomerReportFragment fragment = new CustomerReportFragment();
         return fragment;
     }
 
