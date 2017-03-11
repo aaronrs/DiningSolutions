@@ -19,7 +19,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0: return StockReportFragment.newInstance();
             case 1: return EarningsReportFragment.newInstance();
-            case 2: return RecordFragment.newInstance();
+            case 2: return CustomerReportFragment.newInstance();
         }
         return StockReportFragment.newInstance();
     }
