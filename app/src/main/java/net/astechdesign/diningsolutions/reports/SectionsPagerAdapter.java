@@ -19,13 +19,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0: return StockReportFragment.newInstance();
             case 1: return EarningsReportFragment.newInstance();
+            case 2: return RecordFragment.newInstance();
         }
         return StockReportFragment.newInstance();
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -35,6 +36,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return "Stock Report";
             case 1:
                 return "Earnings Report";
+            case 2:
+                return "Records";
         }
         return null;
     }
