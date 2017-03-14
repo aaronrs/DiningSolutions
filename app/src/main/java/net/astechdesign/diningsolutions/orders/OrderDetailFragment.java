@@ -1,7 +1,6 @@
 package net.astechdesign.diningsolutions.orders;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
@@ -76,20 +75,6 @@ public class OrderDetailFragment extends Fragment implements DatePickerFragment.
     public void onDatePicked(DSDDate date) {
         orderItemRepo.updateDelivery(selectedOrderItem, date);
         setupRecyclerView(rootView);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-        if (requestCode == DatePickerFragment.REQUEST_DATE) {
-            DSDDate date = (DSDDate) data.getSerializableExtra(DatePickerFragment.RETURN_DATE);
-            orderItemRepo.updateDelivery(selectedOrderItem, date);
-            setupRecyclerView(rootView);
-            return;
-        }
-
     }
 
     public void setSelectedOrderItem(OrderItem selectedOrderItem) {

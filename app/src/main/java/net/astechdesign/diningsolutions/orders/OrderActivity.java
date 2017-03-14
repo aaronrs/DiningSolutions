@@ -207,6 +207,11 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
     @Override
     public void onDatePicked(DSDDate date) {
+        for (OrderItem item : mOrder.orderItems) {
+            if (date.after(item.deliveryDate)) {
+                OrderItemRepo.get(this).updateDelivery(item, date);
+            }
+        }
         OrderRepo.get(this).updateInvoiceDate(mOrder, date);
         updateInvoice();
     }

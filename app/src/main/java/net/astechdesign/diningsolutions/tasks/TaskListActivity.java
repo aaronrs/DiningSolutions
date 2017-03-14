@@ -84,6 +84,12 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupRecyclerView();
+    }
+
     private void setupRecyclerView() {
         List<Task> taskList = TaskRepo.get(this).get();
         recyclerView.setAdapter(new TaskRecyclerViewAdapter(this, taskList));

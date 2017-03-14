@@ -112,4 +112,8 @@ public class DSDDate implements Serializable, Comparable {
         cal.set(Calendar.MILLISECOND, 0);
         return date.after(cal.getTime());
     }
+
+    public boolean after(DSDDate newDate) {
+        return date.after(newDate.date);
+    }
 }
