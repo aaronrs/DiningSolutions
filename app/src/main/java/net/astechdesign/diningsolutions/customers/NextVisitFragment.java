@@ -19,7 +19,7 @@ import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 
-public class NextVisitFragment extends DialogFragment {
+public class NextVisitFragment extends DialogFragment implements DatePickerFragment.DatePickerListener {
 
     public static final String CUSTOMER = "customer";
     public static final String HEADER = "task_header";
@@ -60,6 +60,12 @@ public class NextVisitFragment extends DialogFragment {
                     }
                 })
                 .create();
+    }
+
+    @Override
+    public void onDatePicked(DSDDate date) {
+        mDateText.setText(date.getDisplayDate());
+        mDateText.setTag(date);
     }
 
     @Override

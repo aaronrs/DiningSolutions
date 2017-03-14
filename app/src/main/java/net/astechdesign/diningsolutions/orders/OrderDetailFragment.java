@@ -18,7 +18,7 @@ import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 
-public class OrderDetailFragment extends Fragment {
+public class OrderDetailFragment extends Fragment implements DatePickerFragment.DatePickerListener {
 
     public static final String CUSTOMER = "customer";
     public static final String ORDER = "order";
@@ -70,6 +70,12 @@ public class OrderDetailFragment extends Fragment {
                         this,
                         orderItemRepo.getOrderItems(mOrder),
                         getActivity().getSupportFragmentManager()));
+    }
+
+    @Override
+    public void onDatePicked(DSDDate date) {
+        orderItemRepo.updateDelivery(selectedOrderItem, date);
+        setupRecyclerView(rootView);
     }
 
     @Override

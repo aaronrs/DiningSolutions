@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.reports.dummy.DummyContent;
 
 public class CustomerReportFragment extends Fragment {
 
@@ -38,7 +37,7 @@ public class CustomerReportFragment extends Fragment {
 
         if (view instanceof RecyclerView) {
             RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setAdapter(new MyRecordRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setAdapter(new MyRecordRecyclerViewAdapter(null));
         }
         return view;
     }

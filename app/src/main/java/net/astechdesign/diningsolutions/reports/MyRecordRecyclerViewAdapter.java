@@ -7,15 +7,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.reports.dummy.DummyContent.DummyItem;
+import net.astechdesign.diningsolutions.model.Record;
 
 import java.util.List;
+import java.util.Map;
 
 public class MyRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyRecordRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Record> mValues;
 
-    public MyRecordRecyclerViewAdapter(List<DummyItem> items) {
+    public MyRecordRecyclerViewAdapter(List<Record> items) {
         mValues = items;
     }
 
@@ -29,8 +30,10 @@ public class MyRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyRecordRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        Map<String, Object> data = holder.mItem.data;
+        holder.mDateView.setText((String) data.get("date"));
+        holder.mNameView.setText((String) data.get("product"));
+        holder.mQuantityView.setText(Integer.toString((Integer) data.get("quantity")));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,20 +54,22 @@ public class MyRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyRecordRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mDateView;
+        public final TextView mNameView;
+        public final TextView mQuantityView;
+        public Record mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mDateView = (TextView) view.findViewById(R.id.report_date);
+            mNameView = (TextView) view.findViewById(R.id.report_product);
+            mQuantityView = (TextView) view.findViewById(R.id.report_quantity);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mNameView.getText() + "'";
         }
     }
 }

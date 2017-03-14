@@ -8,11 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.reports.dummy.DummyContent;
+import net.astechdesign.diningsolutions.repositories.ReportRepo;
 
 public class StockReportFragment extends Fragment {
 
+    private final ReportRepo reportRepo;
+
     public StockReportFragment() {
+        reportRepo = ReportRepo.get(getContext());
     }
 
     public static StockReportFragment newInstance() {
@@ -27,7 +30,7 @@ public class StockReportFragment extends Fragment {
 
         if (view instanceof RecyclerView) {
             RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setAdapter(new MyRecordRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setAdapter(new MyRecordRecyclerViewAdapter(reportRepo.getSales()));
         }
         return view;
     }

@@ -9,9 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ThemedSpinnerAdapter;
@@ -45,7 +43,7 @@ import java.util.List;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
-public class OrderActivity extends AppCompatActivity implements OrderAddProductFragment.ProductAddListener {
+public class OrderActivity extends AppCompatActivity implements OrderAddProductFragment.ProductAddListener, DatePickerFragment.DatePickerListener {
 
     public static final String ADD_PRODUCT = "add_product";
     private Customer mCustomer;
@@ -94,15 +92,8 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         invoiceDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                Fragment datePicker = getSupportFragmentManager().findFragmentByTag("date_picker");
-                if (datePicker != null) {
-                    ft.remove(datePicker);
-                }
-                ft.addToBackStack(null);
-
-                DatePickerFragment dialog = DatePickerFragment.newInstance((DSDDate) view.getTag());
-                dialog.show(ft, "date_picker");
+                DatePickerFragment dialog = DatePickerFragment.newInstance(OrderActivity.this, (DSDDate) view.getTag());
+                dialog.show(getSupportFragmentManager(), "date_picker");
 
                 Snackbar.make(view, "Clicked", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -212,6 +203,12 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onDatePicked(DSDDate date) {
+        OrderRepo.get(this).updateInvoiceDate(mOrder, date);
+        updateInvoice();
     }
 
     @Override

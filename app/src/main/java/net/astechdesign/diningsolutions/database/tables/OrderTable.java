@@ -39,4 +39,18 @@ public class OrderTable extends CMSTable<Order> {
         String orderBy = ORDER_DATE + " DESC, " + INVOICE_NO + " DESC";
         return db.query(TABLE_NAME, null, null, null, null, null, orderBy);
     }
+
+    public Cursor getOrderSummary(SQLiteDatabase db) {
+        String query = "" +
+                "SELECT strftime('%Y-%m-%d', " + ORDER_DATE + " / 1000, 'unixepoch')" + " as " + ORDER_DATE + ", " +
+                OrderItemTable.PRODUCT_NAME + ", " +
+                "SUM(" + OrderItemTable.PRODUCT_QUANTITY  + ") as quantity " +
+                "FROM " + TABLE_NAME  + " JOIN " +
+                OrderItemTable.TABLE_NAME + " " +
+                "WHERE " + TABLE_NAME + "." + UUID_ID  + " = " +
+                OrderItemTable.TABLE_NAME + "." + PARENT_ID + " " +
+                "GROUP BY strftime('%Y-%m-%d', " + ORDER_DATE + " / 1000, 'unixepoch')" + ", " +
+                OrderItemTable.PRODUCT_NAME;
+        return db.rawQuery(query, null);
+    }
 }
