@@ -3,7 +3,6 @@ package net.astechdesign.diningsolutions.orders;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -22,6 +21,8 @@ import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductRepo;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class OrderAddProductFragment extends DialogFragment {
 
@@ -32,6 +33,7 @@ public class OrderAddProductFragment extends DialogFragment {
     private Product mProduct;
     private OrderItem mItem;
     private int mQuantity;
+    private Map<String, Product> productMap;
 
     public interface ProductAddListener {
         void onAddProductPositiveClick(DialogInterface dialog, OrderItem item, Product product, double price, int quantity, String batch);
@@ -57,12 +59,17 @@ public class OrderAddProductFragment extends DialogFragment {
         });
 
         List<Product> productList = ProductRepo.get(getContext()).get();
+        productMap = new TreeMap<>();
+        for (Product product : productList) {
+            productMap.put(product.name, product);
+        }
+
         ArrayAdapter<Product> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_dropdown_item_1line,
                 productList);
 
         final AutoCompleteTextView productDropdown = (AutoCompleteTextView) view.findViewById(R.id.add_item_name_select);
-        productDropdown.setThreshold(3);
+        productDropdown.setThreshold(1);
         productDropdown.setAdapter(adapter);
         productDropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -71,20 +78,31 @@ public class OrderAddProductFragment extends DialogFragment {
                 mPriceView.setText(Double.toString(mProduct.price));
             }
         });
+        AutoCompleteTextView.Validator validator = new AutoCompleteTextView.Validator() {
+            @Override
+            public boolean isValid(CharSequence text) {
+                if (productMap.containsKey(text.toString().toUpperCase())) {
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public CharSequence fixText(CharSequence invalidText) {
+                return invalidText.toString().toUpperCase();
+            }
+        };
+        productDropdown.setValidator(validator);
+
         if (mItem != null) {
             mPriceView.setText(Double.toString(mItem.price));
             mBatchView.setText(mItem.batch);
             mQuantityView.setSelection(mItem.quantity - 1);
 
-            for (int i = 0; i < productList.size() ; i++) {
-                if (productList.get(i).name.equals(mItem.name)) {
-                    productDropdown.setListSelection(i);
-                    mProduct = productList.get(i);
-                    productDropdown.setText(mProduct.name);
-                    mPriceView.requestFocus();
-                    break;
-                }
-            }
+            Product mProduct = productMap.get(mItem.name);
+            productDropdown.setListSelection(productList.indexOf(mProduct));
+            productDropdown.setText(mProduct.name);
+            mPriceView.requestFocus();
             productDropdown.setEnabled(false);
         }
         return new AlertDialog.Builder(getActivity())
@@ -118,12 +136,4 @@ public class OrderAddProductFragment extends DialogFragment {
             throw new ClassCastException(activity.toString() + " must implement ProductAddListener");
         }
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-    }
-
 }

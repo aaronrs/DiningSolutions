@@ -306,4 +306,9 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         OrderAddProductFragment newProductFragment = new OrderAddProductFragment();
         newProductFragment.show(fm, ADD_PRODUCT);
     }
+
+    public void addNewProduct(View view) {
+
+    }
+
 }
