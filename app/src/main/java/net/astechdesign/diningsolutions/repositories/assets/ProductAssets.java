@@ -33,7 +33,7 @@ public class ProductAssets {
                 String name = productInfo[0];
                 if (!productNames.contains(name)) {
                     productNames.add(name);
-                    productList.add(new Product(null, name, "", new Double(productInfo[1]), null));
+                    productList.add(Product.create(name, "", new Double(productInfo[1]), null));
                 }
             }
         } catch (Exception e) {

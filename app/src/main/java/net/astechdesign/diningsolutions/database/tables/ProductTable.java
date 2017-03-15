@@ -39,4 +39,8 @@ public class ProductTable extends CMSTable<Product> {
     public Cursor get(SQLiteDatabase mDatabase, String orderby, String filter) {
         return mDatabase.query(TABLE_NAME, null, PRODUCT_NAME + " LIKE ?", new String[]{filter}, null, null, orderby);
     }
+
+    public Cursor getProduct(SQLiteDatabase mDatabase, String name) {
+        return mDatabase.query(TABLE_NAME, null, PRODUCT_NAME + " = ?", new String[]{name}, null, null, null);
+    }
 }

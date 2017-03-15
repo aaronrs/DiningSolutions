@@ -53,4 +53,5 @@ public class OrderTable extends CMSTable<Order> {
                 OrderItemTable.PRODUCT_NAME;
         return db.rawQuery(query, null);
     }
+
 }

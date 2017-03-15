@@ -9,6 +9,7 @@
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="false"
+        android:layout_marginTop="8dp"
         android:hint="Product Name"
         tools:inputType="textCapWords" />
 
@@ -18,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="false"
         android:layout_toRightOf="@+id/add_item_name_select"
+        android:enabled="false"
         android:onClick="addNewProduct"
         android:text="Add Product" />
 

@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
@@ -307,8 +308,18 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         newProductFragment.show(fm, ADD_PRODUCT);
     }
 
-    public void addNewProduct(View view) {
-
+    public void deleteItem(View view) {
+        final OrderItem item = (OrderItem) view.getTag();
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Order Item")
+                .setMessage("Delete " + item.name + " from order?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        OrderItemRepo.get(OrderActivity.this).delete(mOrder, item);
+                        updateInvoice();
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
     }
 
 }

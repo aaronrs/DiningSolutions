@@ -52,4 +52,10 @@ public class ProductRepo {
     public void delete(Product product) {
         productTable.delete(mDatabase, product);
     }
+
+    public Product get(String name) {
+        Cursor cursor = productTable.getProduct(mDatabase, name);
+        cursor.moveToFirst();
+        return new ProductCursorWrapper(cursor).getProduct();
+    }
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -78,12 +79,29 @@ public class OrderAddProductFragment extends DialogFragment {
                 mPriceView.setText(Double.toString(mProduct.price));
             }
         });
+
+        final Button newProductBtn = (Button) view.findViewById(R.id.add_new_product);
+        newProductBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = productDropdown.getText().toString();
+                double price = Double.parseDouble(mPriceView.getText().toString());
+                ProductRepo productRepo = ProductRepo.get(getContext());
+                productRepo.addOrUpdate(Product.create(name, price));
+                Product newProduct = productRepo.get(name);
+                mProduct = newProduct;
+                view.setEnabled(false);
+            }
+        });
+
         AutoCompleteTextView.Validator validator = new AutoCompleteTextView.Validator() {
             @Override
             public boolean isValid(CharSequence text) {
                 if (productMap.containsKey(text.toString().toUpperCase())) {
+                    newProductBtn.setEnabled(false);
                     return true;
                 }
+                newProductBtn.setEnabled(true);
                 return false;
             }
 

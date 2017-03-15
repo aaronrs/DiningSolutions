@@ -63,7 +63,7 @@ public class CustomerAssets {
                 if (peeps.add(name + postcode)) {
                     Address address = new Address(UUID.randomUUID(), house, line1, line2, town, county, postcode);
                     Date createDate = fileDateFormat.parse(created);
-                    customerList.add(Customer.create(null, name, email, "", true, DSDDate.create(createDate), "", address, null));
+                    customerList.add(Customer.create(name, email, "", true, DSDDate.create(createDate), "", address, null));
                 }
             }
         } catch (Exception e) {

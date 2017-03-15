@@ -58,11 +58,15 @@ public class Customer extends Model {
         return new Customer(id, name, email, phone, current, created, referral, address, visit);
     }
 
+    public static Customer create(String name, String email, String phone, boolean current, DSDDate created, String referral, Address address, DSDDate visit) {
+        return create(null, name, new Email(email), new Phone(phone), current, created, referral, address, visit);
+    }
+
     public static Customer create(UUID id, String name, String email, String phone, boolean current, DSDDate created, String referral, Address address, DSDDate visit) {
         return create(id, name, new Email(email), new Phone(phone), current, created, referral, address, visit);
     }
 
     public static Customer create() {
-        return new Customer(null, null, null, null, false, DSDDate.create(), null, null, null);
+        return create(null, null, (Email)null, null, false, DSDDate.create(), null, null, null);
     }
 }

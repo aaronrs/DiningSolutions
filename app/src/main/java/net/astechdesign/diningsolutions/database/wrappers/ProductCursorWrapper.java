@@ -21,6 +21,6 @@ public class ProductCursorWrapper extends CursorWrapper {
         String description = getString(getColumnIndex(ProductTable.PRODUCT_DESCRIPTION));
         Double price = getDouble(getColumnIndex(ProductTable.PRODUCT_PRICE));
         String barcode = getString(getColumnIndex(ProductTable.PRODUCT_BARCODE));
-        return new Product(id, name, description, price, barcode);
+        return Product.create(id, name, description, price, barcode);
     }
 }
