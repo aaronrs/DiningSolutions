@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
@@ -67,6 +68,7 @@ public class OrderItemRecyclerViewAdapter
         public final TextView mQuantityView;
         public final TextView mCostView;
         public final Button mDeliveryDateBtn;
+        public final ImageButton mDeleteBtn;
         public OrderItem mItem;
 
         public ViewHolder(View view) {
@@ -78,6 +80,7 @@ public class OrderItemRecyclerViewAdapter
             mQuantityView = (TextView) view.findViewById(R.id.product_quantity);
             mCostView = (TextView) view.findViewById(R.id.product_cost);
             mDeliveryDateBtn = (Button) view.findViewById(R.id.delivery_date_btn);
+            mDeleteBtn = (ImageButton) view.findViewById(R.id.delete_item);
             mDeliveryDateBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -97,6 +100,7 @@ public class OrderItemRecyclerViewAdapter
             mQuantityView.setText(Integer.toString(mItem.quantity));
             mCostView.setText(String.format("%.2f", mItem.cost()));
             mDeliveryDateBtn.setText(mItem.deliveryDate.getShortDisplayDate());
+            mDeleteBtn.setTag(mItem);
         }
     }
 }

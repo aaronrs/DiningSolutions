@@ -50,4 +50,9 @@ public class OrderItemTable extends CMSTable<OrderItem> {
         values.put(DELIVERY_DATE, date.dbFormat());
         db.update(TABLE_NAME, values, UUID_ID + " = ?", new String[]{orderItem.getDbId()});
     }
+
+    public void deleteItem(SQLiteDatabase mDatabase, Order order, OrderItem item) {
+        String query = "%s = ? and %s = ?";
+        mDatabase.delete(TABLE_NAME, String.format(query, PARENT_ID, UUID_ID), new String[]{order.getDbId(), item.getDbId()});
+    }
 }

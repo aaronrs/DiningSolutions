@@ -54,7 +54,7 @@ public class OrderItemRepo {
     }
 
     public void delete(Order order, OrderItem item) {
-        orderItemTable.delete(mDatabase, order.getDbId(), item);
+        orderItemTable.deleteItem(mDatabase, order, item);
     }
 
     public void updateDelivery(OrderItem orderItem, DSDDate date) {

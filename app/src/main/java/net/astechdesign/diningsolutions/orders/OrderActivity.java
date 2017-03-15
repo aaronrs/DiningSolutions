@@ -314,12 +314,12 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
                 .setTitle("Delete Order Item")
                 .setMessage("Delete " + item.name + " from order?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
+                .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         OrderItemRepo.get(OrderActivity.this).delete(mOrder, item);
                         updateInvoice();
-                    }})
-                .setNegativeButton(android.R.string.no, null).show();
+                    }}).show();
     }
 
 }
