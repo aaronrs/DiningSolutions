@@ -1,5 +1,6 @@
 package net.astechdesign.diningsolutions.reports;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,10 @@ import java.util.Map;
 public class MyRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyRecordRecyclerViewAdapter.ViewHolder> {
 
     private final List<Record> mValues;
+    private String previousDate;
+    private int color1 = Color.parseColor("#EEEE99");
+    private int color2 = Color.parseColor("#99EEEE");
+    private int color;
 
     public MyRecordRecyclerViewAdapter(List<Record> items) {
         mValues = items;
@@ -29,9 +34,14 @@ public class MyRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyRecordRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        Map<String, Object> data = holder.mItem.data;
-        holder.mDateView.setText((String) data.get("date"));
+        Map<String, Object> data = mValues.get(position).data;
+        String date = (String) data.get("date");
+        if (!date.equals(previousDate)) {
+            color = color == color1 ? color2 : color1;
+            previousDate = date;
+        }
+        holder.setBackground(color);
+        holder.mDateView.setText(date);
         holder.mNameView.setText((String) data.get("product"));
         holder.mQuantityView.setText(Integer.toString((Integer) data.get("quantity")));
 
@@ -57,7 +67,6 @@ public class MyRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyRecordRe
         public final TextView mDateView;
         public final TextView mNameView;
         public final TextView mQuantityView;
-        public Record mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -70,6 +79,10 @@ public class MyRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyRecordRe
         @Override
         public String toString() {
             return super.toString() + " '" + mNameView.getText() + "'";
+        }
+
+        public void setBackground(int colour) {
+            mView.setBackgroundColor(colour);
         }
     }
 }

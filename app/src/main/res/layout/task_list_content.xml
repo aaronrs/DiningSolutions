@@ -1,52 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:padding="8dp">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/task_date"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="7"
+        android:paddingLeft="8dp"
+        android:textAlignment="viewStart"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/task_time"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_date"
+        android:paddingLeft="8dp"
+        android:textAlignment="viewStart"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/task_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp">
-
-        <TextView
-            android:id="@+id/task_date"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:textAlignment="viewStart"
-            android:textAppearance="?attr/textAppearanceListItem"
-             />
-
-        <TextView
-            android:id="@+id/task_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/task_date"
-            android:paddingLeft="8dp"
-            android:textAlignment="viewStart"
-            android:textAppearance="?attr/textAppearanceListItem"
-             />
-
-        <TextView
-            android:id="@+id/task_title"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/task_date"
-            android:paddingLeft="8dp"
-            android:textAppearance="?attr/textAppearanceListItem"
-             />
-
-        <TextView
-            android:id="@+id/task_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/task_date"
-            android:layout_toRightOf="@id/task_title"
-            android:paddingLeft="8dp"
-            android:textAppearance="?attr/textAppearanceListItem"
-             />
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/task_date"
+        android:paddingLeft="8dp"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/task_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_title"
+        android:layout_toRightOf="@+id/task_time"
+        android:paddingLeft="8dp"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+</RelativeLayout>

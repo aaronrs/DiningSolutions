@@ -55,14 +55,6 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_new_task:
-                FragmentManager fm = getSupportFragmentManager();
-                newTaskFragment = new NewTaskFragment();
-                Bundle args = new Bundle();
-                args.putString(NewTaskFragment.HEADER, "New Task");
-                newTaskFragment.setArguments(args);
-                newTaskFragment.show(fm, ADD_TASK);
-                return true;
             case R.id.menu_item_products:
                 Intent intent = new Intent(this, ProductListActivity.class);
                 this.startActivity(intent);
@@ -113,4 +105,12 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
         dialog.show(fm, TIME_PICKER);
     }
 
+    public void addTask(View view) {
+        FragmentManager fm = getSupportFragmentManager();
+        newTaskFragment = new NewTaskFragment();
+        Bundle args = new Bundle();
+        args.putString(NewTaskFragment.HEADER, "New Task");
+        newTaskFragment.setArguments(args);
+        newTaskFragment.show(fm, ADD_TASK);
+    }
 }
