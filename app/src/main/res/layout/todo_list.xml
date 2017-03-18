@@ -9,6 +9,8 @@
         android:id="@+id/add_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="false"
+        android:layout_marginLeft="24dp"
         android:onClick="addTask"
         android:text="Add Task" />
 
