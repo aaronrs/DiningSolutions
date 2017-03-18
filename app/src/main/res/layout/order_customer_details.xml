@@ -1,108 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/text_invoice_number"
-        style="?android:attr/textAppearanceMedium"
-        android:layout_width="@dimen/detail_labels"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:padding="8dp"
-        android:text="Invoice No:"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/order_invoice_number"
-        style="?android:attr/textAppearanceLarge"
+        android:id="@+id/text_customer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/text_invoice_number"
-        android:padding="8dp"
-        android:textSize="14sp"/>
+        android:paddingBottom="8dp"
+        android:text="Customer" />
 
-    <TextView
-        android:id="@+id/text_invoice_date"
-        style="?android:attr/textAppearanceMedium"
-        android:layout_width="@dimen/detail_labels"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_invoice_number"
-        android:gravity="right"
-        android:padding="8dp"
-        android:text="Invoice Date:"
-        android:textSize="14sp"/>
-
-    <TextView
-        android:id="@+id/order_invoice_date"
-        style="?android:attr/textAppearanceLarge"
+    <RelativeLayout
+        android:id="@+id/layout_customer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/text_invoice_date"
-        android:layout_below="@id/text_invoice_number"
-        android:padding="8dp"
-        android:textSize="14sp"/>
+        android:layout_below="@+id/text_customer"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text_name"
-        style="?android:attr/textAppearanceMedium"
-        android:layout_width="@dimen/detail_labels"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_invoice_date"
-        android:gravity="right"
-        android:padding="8dp"
-        android:text="Name"
-        android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/text_name"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="@dimen/detail_labels_land"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingBottom="8dp"
+            android:paddingRight="8dp"
+            android:text="Name"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/order_detail_name"
-        style="?android:attr/textAppearanceLarge"
+        <TextView
+            android:id="@+id/order_detail_name"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/text_name"
+            android:layout_toRightOf="@id/text_name"
+            android:paddingBottom="8dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/text_phone"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="@dimen/detail_labels_land"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_name"
+            android:gravity="right"
+            android:paddingBottom="8dp"
+            android:paddingRight="8dp"
+            android:text="Phone"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/order_detail_phone"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/text_phone"
+            android:layout_toRightOf="@id/text_phone"
+            android:paddingBottom="8dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/text_email"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="@dimen/detail_labels_land"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_phone"
+            android:gravity="right"
+            android:paddingBottom="8dp"
+            android:paddingRight="8dp"
+            android:text="Email"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/order_detail_email"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/text_email"
+            android:layout_toRightOf="@id/text_email"
+            android:paddingBottom="8dp"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_invoice_date"
-        android:layout_toRightOf="@id/text_name"
-        android:padding="8dp"
-        android:textSize="14sp" />
+        android:layout_alignTop="@+id/layout_customer"
+        android:layout_toRightOf="@+id/layout_customer">
 
-    <TextView
-        android:id="@+id/text_phone"
-        style="?android:attr/textAppearanceMedium"
-        android:layout_width="@dimen/detail_labels"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_name"
-        android:gravity="right"
-        android:padding="8dp"
-        android:text="Phone"
-        android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/text_address"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="@dimen/detail_labels_land"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingBottom="8dp"
+            android:paddingRight="8dp"
+            android:text="Address"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/order_detail_phone"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_name"
-        android:layout_toRightOf="@id/text_phone"
-        android:padding="8dp"
-        android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/order_detail_address"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/text_address"
+            android:layout_toRightOf="@+id/text_address"
+            android:paddingBottom="8dp"
+            android:textSize="14sp" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/text_email"
-        style="?android:attr/textAppearanceMedium"
-        android:layout_width="@dimen/detail_labels"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_phone"
-        android:gravity="right"
-        android:padding="8dp"
-        android:text="Email"
-        android:textSize="14sp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout_customer">
 
-    <TextView
-        android:id="@+id/order_detail_email"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_phone"
-        android:layout_toRightOf="@id/text_email"
-        android:padding="8dp"
-        android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/text_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="Order" />
+
+        <TextView
+            android:id="@+id/text_invoice_number"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="@dimen/detail_labels_land"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_order"
+            android:gravity="right"
+            android:paddingBottom="8dp"
+            android:paddingRight="8dp"
+            android:text="Invoice No:"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/order_invoice_number"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/text_invoice_number"
+            android:layout_toRightOf="@id/text_invoice_number"
+            android:paddingBottom="8dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/text_invoice_date"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="@dimen/detail_labels_land"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_invoice_number"
+            android:gravity="right"
+            android:paddingBottom="8dp"
+            android:paddingRight="8dp"
+            android:text="Invoice Date:"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/order_invoice_date"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/text_invoice_date"
+            android:layout_toRightOf="@id/text_invoice_date"
+            android:paddingBottom="8dp"
+            android:textSize="14sp" />
+    </RelativeLayout>
 
 </RelativeLayout>
