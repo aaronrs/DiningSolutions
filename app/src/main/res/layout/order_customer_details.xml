@@ -10,6 +10,21 @@
         android:paddingBottom="8dp"
         android:text="Customer" />
 
+    <Button
+        android:id="@+id/next_visit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="true"
+        android:text="Next Visit" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/next_visit"
+        android:text="Order History" />
+
     <RelativeLayout
         android:id="@+id/layout_customer"
         android:layout_width="wrap_content"

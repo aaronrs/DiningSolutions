@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Model;
 import net.astechdesign.diningsolutions.model.Order;
 
@@ -54,4 +55,18 @@ public class OrderTable extends CMSTable<Order> {
         return db.rawQuery(query, null);
     }
 
+    public Cursor getCurrentOrder(SQLiteDatabase db, Customer customer) {
+        String query = "SELECT * " +
+                "FROM " + TABLE_NAME + " " +
+                "WHERE " + UUID_ID + " = ? " +
+                "ORDER BY " + ORDER_DATE + " " +
+                "LIMIT 1";
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(query, new String[]{customer.getDbId()});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cursor;
+    }
 }

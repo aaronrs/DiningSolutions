@@ -15,6 +15,7 @@ import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
+import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Task;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
 import static net.astechdesign.diningsolutions.TimePickerFragment.TIME_PICKER;
+import static net.astechdesign.diningsolutions.customers.CustomerEditFragment.EDIT_CUSTOMER;
 import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
 public class TaskListActivity extends AppCompatActivity implements NewTaskFragment.NewTaskListener {
@@ -112,5 +114,11 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
         args.putString(NewTaskFragment.HEADER, "New Task");
         newTaskFragment.setArguments(args);
         newTaskFragment.show(fm, ADD_TASK);
+    }
+
+    public void addCustomer(View v) {
+        FragmentManager fm = getSupportFragmentManager();
+        CustomerEditFragment customerEditFragment = new CustomerEditFragment();
+        customerEditFragment.show(fm, EDIT_CUSTOMER);
     }
 }

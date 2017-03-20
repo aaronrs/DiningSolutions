@@ -31,18 +31,20 @@ import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
-import java.util.List;
 import java.util.UUID;
 
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
-public class OrderActivity extends AppCompatActivity implements OrderAddProductFragment.ProductAddListener, DatePickerFragment.DatePickerListener {
+public class OrderActivity extends AppCompatActivity
+        implements OrderAddProductFragment.ProductAddListener,
+        DatePickerFragment.DatePickerListener,
+        EditEntryFragment.EditEntryAddListener {
 
     public static final String CUSTOMER_ID = "customer_id";
     public static final String ADD_PRODUCT = "add_product";
+    public static final String EDIT_ENTRY = "edit_entry";
     private Customer mCustomer;
-    private List<Order> mOrders;
     private Order mOrder;
     private Toolbar toolbar;
 
@@ -64,9 +66,12 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         mCustomer = CustomerRepo.get(this).get(customerId);
         ((TextView)findViewById(R.id.order_detail_name)).setText(mCustomer.name);
 
-        mOrders = OrderRepo.get(this).getOrders(mCustomer);
-        if (mOrders.isEmpty()) {
-            mOrders = Order.emptyOrderList();
+        initialiseCustomerView();
+
+        mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
+        if (mOrder == null) {
+            createNewOrder();
+            mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
         }
 
         TextView invoiceDate = (TextView) findViewById(R.id.order_invoice_date);
@@ -89,15 +94,8 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
                         .setAction("Action", null).show();
             }
         });
-
-        if (!mOrders.isEmpty()) {
-            mOrder = mOrders.get(0);
-            initialiseView();
-        }
-        if (mOrders.size() > 0) {
-            showOrder(0);
-        }
     }
+
     private void sendEmail() {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -121,8 +119,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         }
     }
 
-    private void showOrder(int position) {
-        mOrder = mOrders.get(position);
+    private void showOrder() {
         if (mOrder.getId() == null) {
             return;
         }
@@ -133,21 +130,38 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         args.putSerializable(CUSTOMER, mCustomer);
 
         args.putSerializable(ORDER, mOrder);
-        initialiseView();
+        initialiseOrderView();
         fragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.order_container, fragment)
                 .commit();
     }
 
-    private void initialiseView() {
-        setFields(R.id.order_detail_name, mCustomer.name);
+    private void initialiseCustomerView() {
+        setFields(R.id.order_detail_name, mCustomer.name, "Customer Name");
         setFields(R.id.order_detail_phone, mCustomer.phone == null ? "" : mCustomer.phone.number);
         setFields(R.id.order_detail_email, mCustomer.email == null ? "" : mCustomer.email.address);
         setFields(R.id.order_detail_address, mCustomer.address.toString());
+    }
+
+    private void initialiseOrderView() {
         setFields(R.id.order_invoice_number, mOrder.invoiceNumber);
         TextView invoiceDateView = setFields(R.id.order_invoice_date, mOrder.created != null ? mOrder.created.getDisplayDate() : "");
         invoiceDateView.setTag(mOrder.created);
+    }
+
+    private TextView setFields(int id, final String text, final String name) {
+        TextView textView = setFields(id, text);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                EditEntryFragment fragment = new EditEntryFragment();
+                fragment.value(name, text == null ? "" : text);
+                fragment.show(fm, EDIT_ENTRY);
+            }
+        });
+        return textView;
     }
 
     private TextView setFields(int id, String text) {
@@ -167,7 +181,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
         switch (item.getItemId()) {
             case R.id.menu_item_new_order:
                 createNewOrder();
-                showOrder(0);
+                showOrder();
                 return true;
             case R.id.menu_item_products:
                 Intent intent = new Intent(this, ProductListActivity.class);
@@ -208,7 +222,7 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
 
     private void createNewOrder() {
         OrderRepo.get(this).create(this, mCustomer);
-        mOrders = OrderRepo.get(this).getOrders(mCustomer);
+        mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
     }
 
     @Override
@@ -229,13 +243,8 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
     }
 
     private void updateInvoice() {
-        mOrders = OrderRepo.get(this).getOrders(mCustomer);
-        for (int i=0; i < mOrders.size(); i++) {
-            if (mOrders.get(i).invoiceNumber.equals(mOrder.invoiceNumber)) {
-                showOrder(i);
-                break;
-            }
-        }
+        mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
+                showOrder();
     }
 
     public void addProduct(View view) {
@@ -258,4 +267,8 @@ public class OrderActivity extends AppCompatActivity implements OrderAddProductF
                     }}).show();
     }
 
+    @Override
+    public void onEditPositiveClick(DialogInterface dialog) {
+
+    }
 }

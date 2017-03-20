@@ -8,11 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -217,71 +215,7 @@ public class CustomerListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        mRecyclerView.setAdapter(new CustomerListRecyclerViewAdapter(mFilteredCustomerList));
-    }
-
-    public class CustomerListRecyclerViewAdapter
-            extends RecyclerView.Adapter<CustomerListRecyclerViewAdapter.ViewHolder> {
-
-        private final List<Customer> mValues;
-
-        public CustomerListRecyclerViewAdapter(List<Customer> items) {
-            mValues = items;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.customer_list_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.setItem(mValues.get(position));
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(CustomerListActivity.this, CustomerDetailActivity.class);
-                    intent.putExtra(CustomerDetailActivity.CUSTOMER_ID, holder.mItem.getId());
-                    CustomerListActivity.this.startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues == null ? 0 : mValues.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mNameView;
-            public final TextView mPhoneView;
-            public final TextView mAddressView;
-            public Customer mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mNameView = (TextView) view.findViewById(R.id.name);
-                mPhoneView = (TextView) view.findViewById(R.id.telephone);
-                mAddressView = (TextView) view.findViewById(R.id.address);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mNameView.getText() + "'";
-            }
-
-            public void setItem(Customer item) {
-                this.mItem = item;
-                mNameView.setText(item.name);
-                mPhoneView.setText(item.phone.number);
-                mAddressView.setText(item.address.toString());
-            }
-        }
+        mRecyclerView.setAdapter(new CustomerListRecyclerViewAdapter(this, mFilteredCustomerList));
     }
 
 }

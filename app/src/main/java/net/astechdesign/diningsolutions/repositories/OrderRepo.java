@@ -40,6 +40,12 @@ public class OrderRepo {
         orderTable = DBHelper.getOrderTable();
     }
 
+    public Order getCurrentOrder(Customer customer) {
+        Cursor cursor = orderTable.getCurrentOrder(mDatabase, customer);
+        Order order = cursor.moveToFirst() ? new OrderCursorWrapper(cursor).getOrder() : null;
+        return order;
+    }
+
     public List<Order> getOrders(Customer customer) {
         Cursor cursor = orderTable.getOrders(mDatabase, customer);
         List<Order> orders = new ArrayList<>();
