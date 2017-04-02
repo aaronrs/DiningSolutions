@@ -30,15 +30,13 @@ public class OrderItemTable extends CMSTable<OrderItem> {
         super(TABLE_NAME, CREATE_TABLE);
     }
 
-    public ContentValues getInsertValues(OrderItem item) {
-        ContentValues values = new ContentValues();
+    public void insertDbValues(ContentValues values, OrderItem item) {
         values.put(PARENT_ID, item.getDbId());
         values.put(PRODUCT_NAME, item.name);
         values.put(PRODUCT_BATCH, item.batch);
         values.put(PRODUCT_PRICE, item.price);
         values.put(PRODUCT_QUANTITY, item.quantity);
         values.put(DELIVERY_DATE, item.deliveryDate.dbFormat());
-        return values;
     }
 
     public Cursor getOrderItems(SQLiteDatabase db, Order parent) {

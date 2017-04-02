@@ -17,6 +17,7 @@ import net.astechdesign.diningsolutions.model.OrderItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class OrderRepo {
 
@@ -42,14 +43,13 @@ public class OrderRepo {
 
     public Order getCurrentOrder(Customer customer) {
         Cursor cursor = orderTable.getCurrentOrder(mDatabase, customer);
-        Order order = cursor.moveToFirst() ? new OrderCursorWrapper(cursor).getOrder() : null;
+        Order order = cursor.isAfterLast() ? null : new OrderCursorWrapper(cursor).getOrder();
         return order;
     }
 
     public List<Order> getOrders(Customer customer) {
         Cursor cursor = orderTable.getOrders(mDatabase, customer);
         List<Order> orders = new ArrayList<>();
-        cursor.moveToFirst();
         while (!cursor.isAfterLast() && cursor.getCount() > 0) {
             Order order = new OrderCursorWrapper(cursor).getOrder();
             List<OrderItem> orderItems = itemRepo.getOrderItems(order);
@@ -60,7 +60,7 @@ public class OrderRepo {
         return orders;
     }
 
-    public void create(Context context, Customer mCustomer) {
+    public String getInvoiceNumber(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         long invoiceNumber = Long.parseLong(sharedPref.getString(Prefs.INVOICE.toString(), "1"));
         String distributor = sharedPref.getString(Prefs.NUMBER.toString(), "0555");
@@ -69,21 +69,20 @@ public class OrderRepo {
         ed.putString("invoice_start_number", Long.toString(invoiceNumber + 1));
         ed.commit();
 
-        Order order = new Order(null, mCustomer.getId(), DSDDate.create(), String.format("%s-%06d", distributor, invoiceNumber));
-        orderTable.addOrUpdate(mDatabase, mCustomer, order);
+        return String.format("%s-%06d", distributor, invoiceNumber);
     }
 
-    public void add(Customer customer, Order order) {
-        orderTable.addOrUpdate(mDatabase, customer, order);
+    public UUID add(Customer customer, Order order) {
+        UUID id = orderTable.addOrUpdate(mDatabase, customer, order);
         for (OrderItem item : order.orderItems) {
             itemRepo.add(order, item);
         }
+        return id;
     }
 
     public List<Order> get() {
         Cursor cursor = orderTable.get(mDatabase);
         List<Order> orders = new ArrayList<>();
-        cursor.moveToFirst();
         while (!cursor.isAfterLast() && cursor.getCount() > 0) {
             Order order = new OrderCursorWrapper(cursor).getOrder();
             List<OrderItem> orderItems = itemRepo.getOrderItems(order);
@@ -96,5 +95,15 @@ public class OrderRepo {
 
     public void updateInvoiceDate(Order order, DSDDate date) {
         orderTable.addOrUpdate(mDatabase, new Order(order.getId(), order.customerId, date, order.invoiceNumber));
+    }
+
+    public Order getOrder(UUID id) {
+        Cursor cursor = orderTable.get(mDatabase, id);
+        return new OrderCursorWrapper(cursor).getOrder();
+    }
+
+    public Order create(Customer customer) {
+        UUID id = orderTable.addOrUpdate(mDatabase, customer, Order.create(getInvoiceNumber(mContext)));
+        return new OrderCursorWrapper(orderTable.get(mDatabase, id)).getOrder();
     }
 }

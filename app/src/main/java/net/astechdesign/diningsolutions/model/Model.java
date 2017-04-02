@@ -16,9 +16,6 @@ public abstract class Model implements Serializable {
     }
 
     public String getDbId() {
-        if (id == null) {
-            id = UUID.randomUUID();
-        }
-        return id.toString();
+        return id == null ? null : id.toString();
     }
 }

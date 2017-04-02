@@ -41,7 +41,12 @@
             android:name=".orders.OrderActivity"
             android:label="@string/title_activity_order"
             android:parentActivityName=".customers.CustomerListActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
         <activity
             android:name=".products.ProductListActivity"
             android:label="@string/title_product_list"

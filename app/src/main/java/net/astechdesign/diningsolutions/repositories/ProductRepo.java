@@ -36,7 +36,6 @@ public class ProductRepo {
     public List<Product> get() {
         List<Product> productList = new ArrayList<>();
         Cursor cursor = productTable.get(mDatabase, ProductTable.PRODUCT_NAME);
-        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             ProductCursorWrapper productCursorWrapper = new ProductCursorWrapper(cursor);
             productList.add(productCursorWrapper.getProduct());
@@ -55,7 +54,6 @@ public class ProductRepo {
 
     public Product get(String name) {
         Cursor cursor = productTable.getProduct(mDatabase, name);
-        cursor.moveToFirst();
         return new ProductCursorWrapper(cursor).getProduct();
     }
 }

@@ -15,10 +15,10 @@ import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
-import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Task;
+import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.reports.ReportsActivity;
 import net.astechdesign.diningsolutions.repositories.TaskRepo;
@@ -27,7 +27,6 @@ import java.util.List;
 
 import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
 import static net.astechdesign.diningsolutions.TimePickerFragment.TIME_PICKER;
-import static net.astechdesign.diningsolutions.customers.CustomerEditFragment.EDIT_CUSTOMER;
 import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
 public class TaskListActivity extends AppCompatActivity implements NewTaskFragment.NewTaskListener {
@@ -117,8 +116,10 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
     }
 
     public void addCustomer(View v) {
-        FragmentManager fm = getSupportFragmentManager();
-        CustomerEditFragment customerEditFragment = new CustomerEditFragment();
-        customerEditFragment.show(fm, EDIT_CUSTOMER);
+        Intent intent = new Intent(this, OrderActivity.class);
+        this.startActivity(intent);
+//        FragmentManager fm = getSupportFragmentManager();
+//        CustomerEditFragment customerEditFragment = new CustomerEditFragment();
+//        customerEditFragment.show(fm, EDIT_CUSTOMER);
     }
 }

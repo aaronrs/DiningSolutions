@@ -121,7 +121,7 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
     }
 
     @Override
-    public void onDialogPositiveClick(DialogInterface dialog, Customer customer) {
+    public void onCustomerEditClick(DialogInterface dialog, Customer customer) {
         CustomerRepo.get(this).addOrUpdate(customer);
         mCustomer = CustomerRepo.get(this).get(customer.getId());
         showCustomerDetails();

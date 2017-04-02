@@ -42,7 +42,6 @@ public class TaskRepo {
     public List<Task> get() {
         List<Task> tasks = new ArrayList<>();
         Cursor cursor = mTaskTable.getTasks(mDatabase);
-        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             tasks.add(new TaskCursorWrapper(cursor).getTask());
             cursor.moveToNext();

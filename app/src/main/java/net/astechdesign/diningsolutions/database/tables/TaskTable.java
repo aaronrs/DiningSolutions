@@ -26,15 +26,13 @@ public class TaskTable extends CMSTable<Task>{
     }
 
     @Override
-    protected ContentValues getInsertValues(Task task) {
-        ContentValues values = new ContentValues();
+    protected void insertDbValues(ContentValues values, Task task) {
         values.put(TASK_DATE, task.date == null ? null : task.date.dbFormat());
         values.put(TASK_TITLE, task.title);
         values.put(TASK_DESCRIPTION, task.description);
         if (task.customerId != null) {
             values.put(PARENT_ID, task.customerId.toString());
         }
-        return values;
     }
 
     public Cursor getTasks(SQLiteDatabase db) {

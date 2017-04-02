@@ -12,7 +12,6 @@ import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class OrderItemRepo {
@@ -39,7 +38,6 @@ public class OrderItemRepo {
     public List<OrderItem> getOrderItems(Order order) {
         Cursor cursor = orderItemTable.getOrderItems(mDatabase, order);
         List<OrderItem> orderItems = new ArrayList<>();
-        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             OrderItemCursorWrapper cursorWrapper = new OrderItemCursorWrapper(cursor);
             orderItems.add(cursorWrapper.getOrderItem());

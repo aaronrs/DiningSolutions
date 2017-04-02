@@ -16,8 +16,6 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.Phone;
 
 public class CustomerEditFragment extends DialogFragment {
 
@@ -40,7 +38,7 @@ public class CustomerEditFragment extends DialogFragment {
     }
 
     public interface CustomerEditListener {
-        void onDialogPositiveClick(DialogInterface dialog, Customer customer);
+        void onCustomerEditClick(DialogInterface dialog, Customer customer);
     }
 
     @NonNull
@@ -99,7 +97,7 @@ public class CustomerEditFragment extends DialogFragment {
                                 address,
                                 null
                                 );
-                        mListener.onDialogPositiveClick(dialog, newCustomer);
+                        mListener.onCustomerEditClick(dialog, newCustomer);
                     }
                 })
                 .create();

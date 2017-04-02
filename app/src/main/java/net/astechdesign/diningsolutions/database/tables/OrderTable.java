@@ -24,11 +24,9 @@ public class OrderTable extends CMSTable<Order> {
         super(TABLE_NAME, CREATE_TABLE);
     }
 
-    public ContentValues getInsertValues(Order order) {
-        ContentValues values = new ContentValues();
+    public void insertDbValues(ContentValues values, Order order) {
         values.put(INVOICE_NO, order.invoiceNumber);
         values.put(ORDER_DATE, order.created.dbFormat());
-        return values;
     }
 
     public Cursor getOrders(SQLiteDatabase db, Model parent) {
@@ -38,7 +36,9 @@ public class OrderTable extends CMSTable<Order> {
 
     public Cursor get(SQLiteDatabase db) {
         String orderBy = ORDER_DATE + " DESC, " + INVOICE_NO + " DESC";
-        return db.query(TABLE_NAME, null, null, null, null, null, orderBy);
+        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, orderBy);
+        cursor.moveToFirst();
+        return cursor;
     }
 
     public Cursor getOrderSummary(SQLiteDatabase db) {

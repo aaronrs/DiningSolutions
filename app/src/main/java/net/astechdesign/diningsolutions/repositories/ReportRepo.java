@@ -36,7 +36,6 @@ public class ReportRepo {
     public List<Record> getSales() {
         List<Record> records = new ArrayList<>();
         Cursor cursor = orderTable.getOrderSummary(mDatabase);
-        cursor.moveToFirst();
         while (!cursor.isAfterLast() && cursor.getCount() > 0) {
             records.add(new RecordCursorWrapper(cursor).getRecord());
             cursor.moveToNext();

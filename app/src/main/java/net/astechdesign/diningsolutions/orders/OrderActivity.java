@@ -1,6 +1,5 @@
 package net.astechdesign.diningsolutions.orders;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,6 +20,8 @@ import android.widget.Toast;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
+import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
+import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
@@ -39,19 +40,49 @@ import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 public class OrderActivity extends AppCompatActivity
         implements OrderAddProductFragment.ProductAddListener,
         DatePickerFragment.DatePickerListener,
+        CustomerEditFragment.CustomerEditListener,
         EditEntryFragment.EditEntryAddListener {
 
     public static final String CUSTOMER_ID = "customer_id";
     public static final String ADD_PRODUCT = "add_product";
     public static final String EDIT_ENTRY = "edit_entry";
+
     private Customer mCustomer;
     private Order mOrder;
     private Toolbar toolbar;
+    private TextView mTextName;
+    private TextView mTextPhone;
+    private TextView mTextEmail;
+    private TextView mTextAddressName;
+    private TextView mTextAddressLine1;
+    private TextView mTextAddressLine2;
+    private TextView mTextAddressTown;
+    private TextView mTextAddressCounty;
+    private TextView mTextAddressPostcode;
+    private TextView mTextVisit;
+    private int columnKey = 10;
+    private int titleKey = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
+
+        initialiseFields();
+
+        UUID customerId = (UUID) getIntent().getSerializableExtra(CUSTOMER_ID);
+        if (customerId != null) {
+            mCustomer = CustomerRepo.get(this).get(customerId);
+            mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
+        } else {
+            mTextVisit.setTag(DSDDate.create());
+            FragmentManager fm = getSupportFragmentManager();
+            CustomerEditFragment fragment = new CustomerEditFragment();
+            fragment.setCustomer(Customer.newCustomer);
+            fragment.show(fm, EDIT_ENTRY);
+        }
+
+        displayCustomer();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,17 +93,15 @@ public class OrderActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        UUID customerId = (UUID) getIntent().getSerializableExtra(CUSTOMER_ID);
-        mCustomer = CustomerRepo.get(this).get(customerId);
-        ((TextView)findViewById(R.id.order_detail_name)).setText(mCustomer.name);
-
-        initialiseCustomerView();
-
-        mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
-        if (mOrder == null) {
-            createNewOrder();
-            mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
-        }
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendEmail();
+                Snackbar.make(view, "Emailing order to " + mCustomer.email.address, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
         TextView invoiceDate = (TextView) findViewById(R.id.order_invoice_date);
         invoiceDate.setOnClickListener(new View.OnClickListener() {
@@ -85,15 +114,76 @@ public class OrderActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendEmail();
-                Snackbar.make(view, "Emailing order to " + mCustomer.email.address, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
+    }
+
+    private void initialiseFields() {
+        mTextName = setupField(R.id.customer_name, "Customer Name", CustomerTable.CUSTOMER_NAME);
+        mTextPhone = setupField(R.id.customer_phone, "Customer Phone", CustomerTable.CUSTOMER_PHONE);
+        mTextEmail = setupField(R.id.customer_email, "Customer Email", CustomerTable.CUSTOMER_EMAIL);
+        mTextAddressName = setupField(R.id.address_name, "Address House No./Name", CustomerTable.ADDRESS_NAME);
+        mTextAddressLine1 = setupField(R.id.address_line1, "Address Line 1", CustomerTable.ADDRESS_LINE1);
+        mTextAddressLine2 = setupField(R.id.address_line2, "Address Line 2", CustomerTable.ADDRESS_LINE2);
+        mTextAddressTown = setupField(R.id.address_town, "Town", CustomerTable.ADDRESS_TOWN);
+        mTextAddressCounty = setupField(R.id.address_county, "County", CustomerTable.ADDRESS_COUNTY);
+        mTextAddressPostcode = setupField(R.id.address_postcode, "Postcode", CustomerTable.ADDRESS_POSTCODE);
+        mTextVisit = setupField(R.id.order_detail_visit, "Visit Date", CustomerTable.VISIT_DATE);
+    }
+
+    private TextView setupField(int viewId, String... tags) {
+        TextView view = (TextView) findViewById(viewId);
+        view.setTag(tags);
+        return view;
+    }
+
+    private void displayCustomer() {
+        if (mCustomer != null) {
+            mTextName.setText(mCustomer.name);
+            mTextPhone.setText(mCustomer.phone == null ? null : mCustomer.phone.number);
+            mTextEmail.setText(mCustomer.email == null ? null : mCustomer.email.address);
+            mTextAddressName.setText(mCustomer.address == null ? null : mCustomer.address.name);
+            mTextAddressLine1.setText(mCustomer.address == null ? null : mCustomer.address.line1);
+            mTextAddressLine2.setText(mCustomer.address == null ? null : mCustomer.address.line2);
+            mTextAddressTown.setText(mCustomer.address == null ? null : mCustomer.address.town);
+            mTextAddressCounty.setText(mCustomer.address == null ? null : mCustomer.address.county);
+            mTextAddressPostcode.setText(mCustomer.address == null ? null : mCustomer.address.postcode);
+        }
+    }
+
+    private void displayOrder() {
+        if (mOrder.getId() == null) {
+            return;
+        }
+
+        OrderDetailFragment fragment = new OrderDetailFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable(CUSTOMER, mCustomer);
+
+        args.putSerializable(ORDER, mOrder);
+        initialiseOrderView();
+        fragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.order_container, fragment)
+                .commit();
+    }
+
+    private void initialiseOrderView() {
+        setFields(R.id.order_invoice_number, mOrder.invoiceNumber);
+        TextView invoiceDateView = setFields(R.id.order_invoice_date, mOrder.created != null ? mOrder.created.getDisplayDate() : "");
+        invoiceDateView.setTag(mOrder.created);
+    }
+
+    private TextView setFields(int id, String text) {
+        TextView view = (TextView) findViewById(id);
+        if (text != null) {
+            view.setText(text);
+        }
+        return view;
+    }
+
+    private Order createNewOrder() {
+        return OrderRepo.get(this).create(mCustomer);
     }
 
     private void sendEmail() {
@@ -119,57 +209,6 @@ public class OrderActivity extends AppCompatActivity
         }
     }
 
-    private void showOrder() {
-        if (mOrder.getId() == null) {
-            return;
-        }
-
-        OrderDetailFragment fragment = new OrderDetailFragment();
-
-        Bundle args = new Bundle();
-        args.putSerializable(CUSTOMER, mCustomer);
-
-        args.putSerializable(ORDER, mOrder);
-        initialiseOrderView();
-        fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.order_container, fragment)
-                .commit();
-    }
-
-    private void initialiseCustomerView() {
-        setFields(R.id.order_detail_name, mCustomer.name, "Customer Name");
-        setFields(R.id.order_detail_phone, mCustomer.phone == null ? "" : mCustomer.phone.number);
-        setFields(R.id.order_detail_email, mCustomer.email == null ? "" : mCustomer.email.address);
-        setFields(R.id.order_detail_address, mCustomer.address.toString());
-    }
-
-    private void initialiseOrderView() {
-        setFields(R.id.order_invoice_number, mOrder.invoiceNumber);
-        TextView invoiceDateView = setFields(R.id.order_invoice_date, mOrder.created != null ? mOrder.created.getDisplayDate() : "");
-        invoiceDateView.setTag(mOrder.created);
-    }
-
-    private TextView setFields(int id, final String text, final String name) {
-        TextView textView = setFields(id, text);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                EditEntryFragment fragment = new EditEntryFragment();
-                fragment.value(name, text == null ? "" : text);
-                fragment.show(fm, EDIT_ENTRY);
-            }
-        });
-        return textView;
-    }
-
-    private TextView setFields(int id, String text) {
-        TextView view = (TextView) findViewById(id);
-        view.setText(text);
-        return view;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_order_list, menu);
@@ -179,10 +218,6 @@ public class OrderActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_new_order:
-                createNewOrder();
-                showOrder();
-                return true;
             case R.id.menu_item_products:
                 Intent intent = new Intent(this, ProductListActivity.class);
                 this.startActivity(intent);
@@ -207,22 +242,10 @@ public class OrderActivity extends AppCompatActivity
         updateInvoice();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-        if (requestCode == DatePickerFragment.REQUEST_DATE) {
-            DSDDate date = (DSDDate) data.getSerializableExtra(DatePickerFragment.RETURN_DATE);
-            OrderRepo.get(this).updateInvoiceDate(mOrder, date);
-            updateInvoice();
-            return;
-        }
-    }
-
-    private void createNewOrder() {
-        OrderRepo.get(this).create(this, mCustomer);
-        mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
+    public void addProduct(View view) {
+        FragmentManager fm = getSupportFragmentManager();
+        OrderAddProductFragment newProductFragment = new OrderAddProductFragment();
+        newProductFragment.show(fm, ADD_PRODUCT);
     }
 
     @Override
@@ -244,13 +267,7 @@ public class OrderActivity extends AppCompatActivity
 
     private void updateInvoice() {
         mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
-                showOrder();
-    }
-
-    public void addProduct(View view) {
-        FragmentManager fm = getSupportFragmentManager();
-        OrderAddProductFragment newProductFragment = new OrderAddProductFragment();
-        newProductFragment.show(fm, ADD_PRODUCT);
+        displayOrder();
     }
 
     public void deleteItem(View view) {
@@ -268,7 +285,40 @@ public class OrderActivity extends AppCompatActivity
     }
 
     @Override
-    public void onEditPositiveClick(DialogInterface dialog) {
+    public void onEditFieldPositiveClick(DialogInterface dialog, String field, String value) {
+        CustomerRepo.get(this).update(mCustomer, field, value);
+        mCustomer = CustomerRepo.get(this).get(mCustomer.getId());
+        displayCustomer();
+    }
 
+    public void editVisitDate(View view) {
+        DatePickerFragment dialog = DatePickerFragment.newInstance(this, (DSDDate) view.getTag());
+        dialog.show(getSupportFragmentManager(), "date_picker");
+    }
+
+    public void showHistory(View view) {
+    }
+
+    public void editText(View view) {
+        FragmentManager fm = getSupportFragmentManager();
+        EditEntryFragment fragment = new EditEntryFragment();
+        String[] tags = (String[]) view.getTag();
+        fragment.value(tags[0], tags[1], ((TextView)view).getText().toString());
+        fragment.show(fm, EDIT_ENTRY);
+    }
+
+    public void newOrder(View view) {
+        createNewOrder();
+        displayOrder();
+    }
+
+    @Override
+    public void onCustomerEditClick(DialogInterface dialog, Customer customer) {
+        if (customer.name.length() == 0) finish();
+        CustomerRepo customerRepo = CustomerRepo.get(this);
+        UUID uuid = customerRepo.addOrUpdate(customer);
+        mCustomer = customerRepo.get(uuid);
+        mOrder = OrderRepo.get(this).create(mCustomer);
+        displayCustomer();
     }
 }

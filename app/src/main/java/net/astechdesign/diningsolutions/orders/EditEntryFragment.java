@@ -17,22 +17,25 @@ import net.astechdesign.diningsolutions.R;
 public class EditEntryFragment extends DialogFragment {
 
     private EditEntryAddListener mListener;
-    private String name;
+    private String textTitle;
     private String value;
+    private String field;
 
     public interface EditEntryAddListener {
-        void onEditPositiveClick(DialogInterface dialog);
+        void onEditFieldPositiveClick(DialogInterface dialog, String field, String value);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_entry, null);
-        String title = name;
+        String title = this.textTitle;
         if (value != null) {
             ((TextView) view.findViewById(R.id.value)).setText(value);
-            title = "Edit " + name;
+            title = "Edit " + this.textTitle;
         }
+        final TextView valueView = (TextView) view.findViewById(R.id.value);
+        final String editTitle = title;
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(title)
@@ -40,7 +43,8 @@ public class EditEntryFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onEditPositiveClick(dialog);
+                        String value = valueView.getText().toString();
+                        mListener.onEditFieldPositiveClick(dialog, field, value);
                     }
                 })
                 .create();
@@ -56,8 +60,9 @@ public class EditEntryFragment extends DialogFragment {
         }
     }
 
-    public void value(String name, String value) {
-        this.name = name;
+    public void value(String title, String field, String value) {
+        this.textTitle = title;
+        this.field = field;
         this.value = value;
     }
 

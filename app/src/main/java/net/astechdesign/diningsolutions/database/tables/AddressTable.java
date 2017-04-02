@@ -1,16 +1,9 @@
 package net.astechdesign.diningsolutions.database.tables;
 
 import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import net.astechdesign.diningsolutions.database.DBHelper;
-import net.astechdesign.diningsolutions.database.wrappers.AddressCursorWrapper;
 import net.astechdesign.diningsolutions.model.Address;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class AddressTable extends CMSTable<Address> {
 
@@ -37,33 +30,12 @@ public class AddressTable extends CMSTable<Address> {
     }
 
     @Override
-    protected ContentValues getInsertValues(Address address) {
-        ContentValues values = new ContentValues();
+    protected void insertDbValues(ContentValues values, Address address) {
         values.put(ADDRESS_NAME, address.name);
         values.put(ADDRESS_LINE1, address.line1);
         values.put(ADDRESS_LINE2, address.line2);
         values.put(ADDRESS_TOWN, address.town);
         values.put(ADDRESS_COUNTY, address.county);
         values.put(ADDRESS_POSTCODE, address.postcode);
-        return values;
-    }
-
-    public List<Address> get(SQLiteDatabase db) {
-        List<Address> addressList = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            AddressCursorWrapper addressCursorWrapper = new AddressCursorWrapper(cursor);
-            addressList.add(addressCursorWrapper.getAddress());
-            cursor.moveToNext();
-        }
-        return addressList;
-    }
-
-    public Address get(SQLiteDatabase db, UUID customerId) {
-        Cursor cursor = db.query(TABLE_NAME, null, PARENT_ID + " = ?", new String[]{customerId.toString()}, null, null, null);
-        cursor.moveToFirst();
-        AddressCursorWrapper addressCursorWrapper = new AddressCursorWrapper(cursor);
-        return addressCursorWrapper.getAddress();
     }
 }

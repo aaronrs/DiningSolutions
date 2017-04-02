@@ -2,7 +2,6 @@ package net.astechdesign.diningsolutions.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,5 +72,9 @@ public class Order extends Model {
     public static List<Order> emptyOrderList() {
         Order order = new Order(null, null, null, "No Orders");
         return Arrays.asList(new Order[]{order});
+    }
+
+    public static Order create(String invoiceNumber) {
+        return new Order(null, null, DSDDate.create(), invoiceNumber);
     }
 }

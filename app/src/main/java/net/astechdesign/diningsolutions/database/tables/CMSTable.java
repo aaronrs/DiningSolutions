@@ -7,6 +7,8 @@ import android.provider.BaseColumns;
 
 import net.astechdesign.diningsolutions.model.Model;
 
+import java.util.UUID;
+
 public abstract class CMSTable<T extends Model> implements BaseColumns {
 
     public static String UUID_ID = "id";
@@ -36,46 +38,52 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
         }
     }
 
-    protected abstract ContentValues getInsertValues(T model);
+    protected abstract void insertDbValues(ContentValues values, T model);
 
-    public void addOrUpdate(SQLiteDatabase db, T model) {
+    public UUID addOrUpdate(SQLiteDatabase db, T model) {
         if (model.getId() == null) {
-            add(db, model);
-        } else {
-            update(db, model);
+            return add(db, model);
         }
+        update(db, model);
+        return model.getId();
     }
 
     public Cursor get(SQLiteDatabase db, String orderBy) {
-        return db.query(tableName, null, DELETED + " != 1", null, null, null, orderBy);
+        Cursor cursor = db.query(tableName, null, DELETED + " != 1", null, null, null, orderBy);
+        cursor.moveToFirst();
+        return cursor;
     }
 
-    public void addOrUpdate(SQLiteDatabase db, Model parent, T model) {
+    public UUID addOrUpdate(SQLiteDatabase db, Model parent, T model) {
         if (model.getId() == null) {
-            add(db, parent, model);
-        } else {
-            update(db, parent, model);
+            return add(db, parent, model);
         }
+        update(db, parent, model);
+        return model.getId();
     }
 
-    private void add(SQLiteDatabase db, T model) {
+    private UUID add(SQLiteDatabase db, T model) {
         ContentValues insertValues = getModelValues(model);
         db.insert(tableName, null, insertValues);
+        return UUID.fromString((String)insertValues.get(UUID_ID));
     }
 
-    private void add(SQLiteDatabase db, Model parent, T model) {
+    private UUID add(SQLiteDatabase db, Model parent, T model) {
         ContentValues insertValues = getModelValues(parent, model);
         db.insert(tableName, null, insertValues);
+        return UUID.fromString((String)insertValues.get(UUID_ID));
     }
 
-    private void update(SQLiteDatabase db, T model) {
+    private UUID update(SQLiteDatabase db, T model) {
         ContentValues insertValues = getModelValues(model);
         db.update(tableName, insertValues, UUID_ID + " = ?", new String[]{model.getDbId()});
+        return model.getId();
     }
 
-    private void update(SQLiteDatabase db, Model parent, T model) {
+    private UUID update(SQLiteDatabase db, Model parent, T model) {
         ContentValues insertValues = getModelValues(model);
         db.update(tableName, insertValues, UUID_ID + " = ?", new String[]{model.getDbId()});
+        return model.getId();
     }
 
     public void delete(SQLiteDatabase db, T model) {
@@ -91,16 +99,22 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
     }
 
     private ContentValues getModelValues(T model) {
-        ContentValues insertValues = getInsertValues(model);
-        insertValues.put(UUID_ID, model.getDbId());
+        ContentValues insertValues = new ContentValues();
+        insertDbValues(insertValues, model);
+        insertValues.put(UUID_ID, model.getId() == null ? UUID.randomUUID().toString() : model.getDbId());
         return insertValues;
     }
 
     private ContentValues getModelValues(Model parent, T model) {
-        ContentValues insertValues = getInsertValues(model);
-        insertValues.put(UUID_ID, model.getDbId());
+        ContentValues insertValues = getModelValues(model);
         insertValues.put(PARENT_ID, parent.getDbId());
         return insertValues;
+    }
+
+    public Cursor get(SQLiteDatabase db, UUID id) {
+        Cursor query = db.query(tableName, null, UUID_ID + " = ?", new String[]{id.toString()}, null, null, null);
+        query.moveToFirst();
+        return query;
     }
 
     public enum TableType {

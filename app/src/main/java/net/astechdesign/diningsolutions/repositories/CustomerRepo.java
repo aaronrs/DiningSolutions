@@ -38,7 +38,6 @@ public class CustomerRepo {
     public List<Customer> get() {
         Cursor cursor = mCustomerTable.get(mDatabase, CustomerTable.CUSTOMER_NAME);
         List<Customer> customerList = new ArrayList<>();
-        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             CustomerCursorWrapper customerCursorWrapper = new CustomerCursorWrapper(cursor);
             Customer customer = customerCursorWrapper.getCustomer();
@@ -49,13 +48,12 @@ public class CustomerRepo {
         return customerList;
     }
 
-    public void addOrUpdate(Customer customer) {
-        mCustomerTable.addOrUpdate(mDatabase, customer);
+    public UUID addOrUpdate(Customer customer) {
+        return mCustomerTable.addOrUpdate(mDatabase, customer);
     }
 
     public Customer get(UUID customerId) {
         Cursor cursor = mCustomerTable.get(mDatabase, customerId);
-        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             CustomerCursorWrapper customerCursorWrapper = new CustomerCursorWrapper(cursor);
             return customerCursorWrapper.getCustomer();
@@ -69,5 +67,14 @@ public class CustomerRepo {
 
     public void deleteCustomer(Customer customer) {
         mCustomerTable.delete(mDatabase, customer);
+    }
+
+    public void update(Customer customer, String field, String value) {
+        mCustomerTable.update(mDatabase, customer, field, value);
+    }
+
+    public Customer create() {
+        UUID id = mCustomerTable.addOrUpdate(mDatabase, Customer.create());
+        return new CustomerCursorWrapper(mCustomerTable.get(mDatabase, id)).getCustomer();
     }
 }

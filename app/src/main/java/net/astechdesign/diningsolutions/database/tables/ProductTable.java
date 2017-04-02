@@ -27,13 +27,11 @@ public class ProductTable extends CMSTable<Product> {
     }
 
     @Override
-    protected ContentValues getInsertValues(Product product) {
-        ContentValues values = new ContentValues();
+    protected void insertDbValues(ContentValues values, Product product) {
         values.put(PRODUCT_NAME, product.name);
         values.put(PRODUCT_DESCRIPTION, product.description);
         values.put(PRODUCT_PRICE, product.price);
         values.put(PRODUCT_BARCODE, product.barcode);
-        return values;
     }
 
     public Cursor get(SQLiteDatabase mDatabase, String orderby, String filter) {

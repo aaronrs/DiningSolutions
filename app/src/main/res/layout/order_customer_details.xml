@@ -3,141 +3,191 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
+    <Button
+        android:id="@+id/text_visit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="editVisitDate"
+        android:text="Visit Date" />
+
     <TextView
-        android:id="@+id/text_customer"
+        android:id="@+id/order_detail_visit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:text="Customer" />
-
-    <Button
-        android:id="@+id/next_visit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentRight="true"
-        android:text="Next Visit" />
+        android:layout_toRightOf="@+id/text_visit"
+        android:hint="no date set"
+        android:paddingTop="16dp"
+        android:textSize="14sp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/next_visit"
+        android:layout_alignParentEnd="true"
+        android:onClick="showHistory"
         android:text="Order History" />
 
     <RelativeLayout
-        android:id="@+id/layout_customer"
+        android:id="@+id/left_column"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_customer"
+        android:layout_below="@id/text_visit"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text_name"
-            style="?android:attr/textAppearanceMedium"
-            android:layout_width="@dimen/detail_labels_land"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingBottom="8dp"
-            android:paddingRight="8dp"
-            android:text="Name"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/order_detail_name"
-            style="?android:attr/textAppearanceLarge"
+            android:id="@+id/text_customer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/text_name"
-            android:layout_toRightOf="@id/text_name"
             android:paddingBottom="8dp"
-            android:textSize="14sp" />
+            android:text="Customer" />
 
-        <TextView
-            android:id="@+id/text_phone"
-            style="?android:attr/textAppearanceMedium"
-            android:layout_width="@dimen/detail_labels_land"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_name"
-            android:gravity="right"
-            android:paddingBottom="8dp"
-            android:paddingRight="8dp"
-            android:text="Phone"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/order_detail_phone"
-            style="?android:attr/textAppearanceLarge"
+        <RelativeLayout
+            android:id="@+id/customer_column"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/text_phone"
-            android:layout_toRightOf="@id/text_phone"
-            android:paddingBottom="8dp"
-            android:textSize="14sp" />
+            android:layout_below="@+id/text_customer"
+            android:layout_marginLeft="24dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text_email"
-            style="?android:attr/textAppearanceMedium"
-            android:layout_width="@dimen/detail_labels_land"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_phone"
-            android:gravity="right"
-            android:paddingBottom="8dp"
-            android:paddingRight="8dp"
-            android:text="Email"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/customer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Customer Name"
+                android:onClick="editText"
+                android:paddingBottom="8dp"
+                android:tag="Customer Name"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/order_detail_email"
-            style="?android:attr/textAppearanceLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/text_email"
-            android:layout_toRightOf="@id/text_email"
-            android:paddingBottom="8dp"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/customer_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/customer_name"
+                android:hint="Phone number"
+                android:onClick="editText"
+                android:paddingBottom="8dp"
+                android:tag="Phone Number"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/customer_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/customer_phone"
+                android:hint="Email address"
+                android:onClick="editText"
+                android:paddingBottom="8dp"
+                android:tag="Phone Number"
+                android:textSize="14sp" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/layout_address"
+        android:id="@+id/right_column"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/layout_customer"
-        android:layout_toRightOf="@+id/layout_customer">
+        android:layout_below="@+id/text_visit"
+        android:layout_marginLeft="24dp"
+        android:layout_toRightOf="@+id/left_column">
 
         <TextView
             android:id="@+id/text_address"
-            style="?android:attr/textAppearanceMedium"
-            android:layout_width="@dimen/detail_labels_land"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
             android:paddingBottom="8dp"
             android:paddingRight="8dp"
             android:text="Address"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/order_detail_address"
-            style="?android:attr/textAppearanceLarge"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/text_address"
-            android:layout_toRightOf="@+id/text_address"
-            android:paddingBottom="8dp"
-            android:textSize="14sp" />
+            android:layout_below="@+id/text_address"
+            android:layout_marginLeft="24dp">
+
+            <TextView
+                android:id="@+id/address_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="House name/number"
+                android:onClick="editText"
+                android:paddingBottom="8dp"
+                android:tag="Address"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/address_line1"
+                style="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/address_name"
+                android:hint="line 1"
+                android:onClick="editText"
+                android:paddingBottom="8dp"
+                android:tag="Address"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/address_line2"
+                style="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/address_line1"
+                android:hint="line 2"
+                android:onClick="editText"
+                android:paddingBottom="8dp"
+                android:tag="Address"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/address_town"
+                style="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/address_line2"
+                android:hint="town"
+                android:onClick="editText"
+                android:paddingBottom="8dp"
+                android:tag="Town"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/address_county"
+                style="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/address_town"
+                android:hint="county"
+                android:onClick="editText"
+                android:paddingBottom="8dp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/address_postcode"
+                style="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/address_county"
+                android:hint="postcode"
+                android:onClick="editText"
+                android:paddingBottom="8dp"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout_customer">
+        android:layout_below="@+id/right_column">
 
-        <TextView
+        <Button
             android:id="@+id/text_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
-            android:text="Order" />
+            android:onClick="newOrder"
+            android:text="New Order" />
 
         <TextView
             android:id="@+id/text_invoice_number"

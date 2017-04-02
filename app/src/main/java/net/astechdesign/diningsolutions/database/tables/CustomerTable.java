@@ -8,8 +8,6 @@ import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 
-import java.util.UUID;
-
 public class CustomerTable extends CMSTable<Customer> {
 
     public static final String TABLE_NAME = "customers";
@@ -52,8 +50,7 @@ public class CustomerTable extends CMSTable<Customer> {
         instance = this;
     }
 
-    protected ContentValues getInsertValues(Customer customer) {
-        ContentValues values = new ContentValues();
+    protected void insertDbValues(ContentValues values, Customer customer) {
         values.put(CUSTOMER_NAME, customer.name);
         values.put(CUSTOMER_EMAIL, customer.email.address);
         values.put(CUSTOMER_PHONE, customer.phone.number);
@@ -71,11 +68,6 @@ public class CustomerTable extends CMSTable<Customer> {
         values.put(ADDRESS_TOWN, address.town);
         values.put(ADDRESS_COUNTY, address.county);
         values.put(ADDRESS_POSTCODE, address.postcode);
-        return values;
-    }
-
-    public Cursor get(SQLiteDatabase db, UUID customerId) {
-        return db.query(TABLE_NAME, null, UUID_ID + " = ?", new String[]{customerId.toString()}, null, null, null);
     }
 
     public Cursor get(SQLiteDatabase db, String name, String orderby) {
@@ -90,5 +82,11 @@ public class CustomerTable extends CMSTable<Customer> {
         ContentValues values = new ContentValues();
         values.put(VISIT_DATE, date.dbFormat());
         db.update(TABLE_NAME, values, UUID_ID + " = ?", new String[]{mCurrentCustomer.getDbId()});
+    }
+
+    public void update(SQLiteDatabase db, Customer customer, String field, String value) {
+        ContentValues values = new ContentValues();
+        values.put(field, value);
+        db.update(TABLE_NAME, values, UUID_ID + " = ?", new String[]{customer.getId().toString()});
     }
 }

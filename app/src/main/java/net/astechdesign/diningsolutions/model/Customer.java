@@ -59,14 +59,14 @@ public class Customer extends Model {
     }
 
     public static Customer create(String name, String email, String phone, boolean current, DSDDate created, String referral, Address address, DSDDate visit) {
-        return create(null, name, new Email(email), new Phone(phone), current, created, referral, address, visit);
+        return create(null, name, Email.create(email), Phone.create(phone), current, created, referral, address, visit);
     }
 
     public static Customer create(UUID id, String name, String email, String phone, boolean current, DSDDate created, String referral, Address address, DSDDate visit) {
-        return create(id, name, new Email(email), new Phone(phone), current, created, referral, address, visit);
+        return create(id, name, Email.create(email), Phone.create(phone), current, created, referral, address, visit);
     }
 
     public static Customer create() {
-        return create(null, null, (Email)null, null, false, DSDDate.create(), null, null, null);
+        return create(null, "", "", "", true, DSDDate.create(), "", Address.create(), null);
     }
 }

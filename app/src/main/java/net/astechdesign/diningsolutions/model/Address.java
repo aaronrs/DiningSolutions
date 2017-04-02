@@ -37,4 +37,8 @@ public class Address extends Model {
         }
         return false;
     }
+
+    public static Address create() {
+        return new Address(null, "", "", "", "", "", "");
+    }
 }
