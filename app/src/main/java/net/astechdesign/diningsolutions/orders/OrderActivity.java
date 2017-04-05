@@ -248,6 +248,7 @@ public class OrderActivity extends AppCompatActivity
 
         @Override
         public void onDatePicked(DSDDate date) {
+            date = DSDDate.withTime(date, mCustomer.visit);
             CustomerRepo customerRepo = CustomerRepo.get(activity);
             customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, date.dbFormat());
             mCustomer = customerRepo.get(mCustomer.getId());

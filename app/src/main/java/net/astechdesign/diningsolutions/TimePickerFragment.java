@@ -48,7 +48,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     @Override
     public void onTimeSet(TimePicker view, int hour, int minute) {
         Calendar cal = GregorianCalendar.getInstance();
-        cal.set(Calendar.HOUR, hour);
+        cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minute);
 
         mListener.onTimePicked(DSDDate.create(cal));
