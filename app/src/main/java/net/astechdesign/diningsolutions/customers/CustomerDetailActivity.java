@@ -14,23 +14,18 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.UUID;
 
-import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
-import static net.astechdesign.diningsolutions.TimePickerFragment.TIME_PICKER;
 import static net.astechdesign.diningsolutions.customers.CustomerEditFragment.EDIT_CUSTOMER;
 import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
-public class CustomerDetailActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener, NextVisitFragment.NextVisitListener {
+public class CustomerDetailActivity extends AppCompatActivity implements CustomerEditFragment.CustomerEditListener {
 
     public static final String CUSTOMER_ID = "net.astechdesign.diningsolutions.customer_id";
     public static final String CUSTOMER  = "net.astechdesign.diningsolutions.customer";
@@ -125,13 +120,6 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
                 .setAction("Action", null).show();
     }
 
-    @Override
-    public void onPositiveClick(DialogInterface dialog, DSDDate date) {
-        CustomerRepo.get(this).updateVisit(mCustomer, date);
-        mCustomer = CustomerRepo.get(this).get(mCustomer.getId());
-        showCustomerDetails();
-    }
-
     public void deleteCustomer(View v) {
         final Activity home = this;
         new AlertDialog.Builder(this)
@@ -145,15 +133,5 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
                         home.finish();
                     }})
                 .setNegativeButton(android.R.string.no, null).show();
-    }
-
-    public void getDate(View v) {
-        DatePickerFragment dialog = DatePickerFragment.newInstance(nextVisitFragment, DSDDate.create());
-        dialog.show(getSupportFragmentManager(), DATE_PICKER);
-    }
-
-    public void getTime(View v) {
-        TimePickerFragment dialog = TimePickerFragment.newInstance(nextVisitFragment, DSDDate.create());
-        dialog.show(getSupportFragmentManager(), TIME_PICKER);
     }
 }

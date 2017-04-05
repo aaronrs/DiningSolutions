@@ -20,7 +20,7 @@ import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 
-public class NewTaskFragment extends DialogFragment implements DatePickerFragment.DatePickerListener {
+public class NewTaskFragment extends DialogFragment implements DatePickerFragment.DatePickerListener, TimePickerFragment.TimePickerListener {
 
     public static final String ADD_TASK = "add_task";
     public static final String CUSTOMER = "customer";
@@ -87,6 +87,11 @@ public class NewTaskFragment extends DialogFragment implements DatePickerFragmen
         mDateText.setTag(date);
     }
 
+    @Override
+    public void onTimePicked(DSDDate time) {
+        mDateText.setText(time.getDisplayTime());
+        mDateText.setTag(time);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

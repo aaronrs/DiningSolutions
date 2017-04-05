@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    public static final String DATE_PICKER = "delivery_date_picker";
+    public static final String DATE_PICKER = "date_picker";
     private static final String ARG_DATE = "date";
     public static final String RETURN_DATE = "net.astechdesign.diningsolutions.date";
     public static final int REQUEST_DATE = 0;

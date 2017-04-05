@@ -36,6 +36,8 @@ public class TaskTable extends CMSTable<Task>{
     }
 
     public Cursor getTasks(SQLiteDatabase db) {
-        return db.query(TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
+        cursor.moveToFirst();
+        return cursor;
     }
 }

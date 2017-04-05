@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
+import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.List;
 
@@ -42,7 +44,8 @@ public class TaskRecyclerViewAdapter
             public void onClick(View v) {
                 if (holder.mTask.customerId == null) return;
                 Intent intent = new Intent(activity, OrderActivity.class);
-                intent.putExtra(OrderActivity.CUSTOMER_ID, holder.mTask.customerId);
+                Customer customer = CustomerRepo.get(activity).get(holder.mTask.customerId);
+                intent.putExtra(OrderActivity.CUSTOMER, customer);
                 activity.startActivity(intent);
             }
         });

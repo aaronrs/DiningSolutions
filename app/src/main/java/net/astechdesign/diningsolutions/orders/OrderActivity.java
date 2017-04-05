@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
@@ -38,7 +39,6 @@ import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
 public class OrderActivity extends AppCompatActivity
         implements OrderAddProductFragment.ProductAddListener,
-        DatePickerFragment.DatePickerListener,
         CustomerEditFragment.CustomerEditListener,
         EditEntryFragment.EditEntryAddListener {
 
@@ -58,23 +58,35 @@ public class OrderActivity extends AppCompatActivity
     private TextView mTextAddressCounty;
     private TextView mTextAddressPostcode;
     private TextView mTextVisit;
+    private TextView mTextVisitTime;
     private int columnKey = 10;
     private int titleKey = 20;
+    private VisitDatePicked visitDatePicked;
+    private VisitTimePicked visitTimePicked;
+    private DeliveryDatePicked deliveryDatePicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
+        visitDatePicked = new VisitDatePicked(this);
+        visitTimePicked = new VisitTimePicked(this);
+        deliveryDatePicked = new DeliveryDatePicked(this);
+
         initialiseFields();
 
+        mTextVisit = (TextView) findViewById(R.id.order_detail_visit);
+        mTextVisitTime = (TextView) findViewById(R.id.order_detail_visit_time);
         mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
         if (mCustomer.equals(Customer.newCustomer)) {
             mTextVisit.setTag(DSDDate.create());
+            mTextVisitTime.setTag(DSDDate.create());
             editText(mTextName);
         } else {
             mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
             mTextVisit.setTag(mCustomer.visit);
+            mTextVisitTime.setTag(mCustomer.visit);
         }
 
         displayCustomer();
@@ -102,7 +114,7 @@ public class OrderActivity extends AppCompatActivity
         invoiceDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerFragment dialog = DatePickerFragment.newInstance(OrderActivity.this, (DSDDate) view.getTag());
+                DatePickerFragment dialog = DatePickerFragment.newInstance(deliveryDatePicked, (DSDDate) view.getTag());
                 dialog.show(getSupportFragmentManager(), "date_picker");
 
                 Snackbar.make(view, "Clicked", Snackbar.LENGTH_LONG)
@@ -120,7 +132,6 @@ public class OrderActivity extends AppCompatActivity
         mTextAddressTown = setupField(R.id.address_town, "Town", CustomerTable.ADDRESS_TOWN);
         mTextAddressCounty = setupField(R.id.address_county, "County", CustomerTable.ADDRESS_COUNTY);
         mTextAddressPostcode = setupField(R.id.address_postcode, "Postcode", CustomerTable.ADDRESS_POSTCODE);
-        mTextVisit = setupField(R.id.order_detail_visit, "Visit Date", CustomerTable.VISIT_DATE);
     }
 
     private TextView setupField(int viewId, String... tags) {
@@ -130,7 +141,7 @@ public class OrderActivity extends AppCompatActivity
     }
 
     private void displayCustomer() {
-        if (mCustomer != null) {
+        if (!mCustomer.equals(Customer.newCustomer)) {
             mTextName.setText(mCustomer.name);
             mTextPhone.setText(mCustomer.phone == null ? null : mCustomer.phone.number);
             mTextEmail.setText(mCustomer.email == null ? null : mCustomer.email.address);
@@ -138,6 +149,12 @@ public class OrderActivity extends AppCompatActivity
             mTextAddressTown.setText(mCustomer.address == null ? null : mCustomer.address.town);
             mTextAddressCounty.setText(mCustomer.address == null ? null : mCustomer.address.county);
             mTextAddressPostcode.setText(mCustomer.address == null ? null : mCustomer.address.postcode);
+            if (mCustomer.visit != null) {
+                mTextVisit.setText(mCustomer.visit.getDisplayDate());
+                mTextVisit.setTag(mCustomer.visit);
+                mTextVisitTime.setText(mCustomer.visit.getDisplayTime());
+                mTextVisitTime.setTag(mCustomer.visit);
+            };
         }
     }
 
@@ -222,15 +239,56 @@ public class OrderActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onDatePicked(DSDDate date) {
-        for (OrderItem item : mOrder.orderItems) {
-            if (date.after(item.deliveryDate)) {
-                OrderItemRepo.get(this).updateDelivery(item, date);
-            }
+    class VisitDatePicked implements DatePickerFragment.DatePickerListener{
+        private final OrderActivity activity;
+
+        public VisitDatePicked(OrderActivity activity) {
+            this.activity = activity;
         }
-        OrderRepo.get(this).updateInvoiceDate(mOrder, date);
-        updateInvoice();
+
+        @Override
+        public void onDatePicked(DSDDate date) {
+            CustomerRepo customerRepo = CustomerRepo.get(activity);
+            customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, date.dbFormat());
+            mCustomer = customerRepo.get(mCustomer.getId());
+            activity.displayCustomer();
+        }
+    }
+
+    class VisitTimePicked implements TimePickerFragment.TimePickerListener{
+        private final OrderActivity activity;
+
+        public VisitTimePicked(OrderActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public void onTimePicked(DSDDate time) {
+            DSDDate date = DSDDate.withTime(mCustomer.visit, time);
+            CustomerRepo customerRepo = CustomerRepo.get(activity);
+            customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, date.dbFormat());
+            mCustomer = customerRepo.get(mCustomer.getId());
+            activity.displayCustomer();
+        }
+    }
+
+    class DeliveryDatePicked implements DatePickerFragment.DatePickerListener{
+        private final OrderActivity activity;
+
+        public DeliveryDatePicked(OrderActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public void onDatePicked(DSDDate date) {
+            for (OrderItem item : mOrder.orderItems) {
+                if (date.after(item.deliveryDate)) {
+                    OrderItemRepo.get(activity).updateDelivery(item, date);
+                }
+            }
+            OrderRepo.get(activity).updateInvoiceDate(mOrder, date);
+            activity.updateInvoice();
+        }
     }
 
     public void addProduct(View view) {
@@ -290,8 +348,13 @@ public class OrderActivity extends AppCompatActivity
     }
 
     public void editVisitDate(View view) {
-        DatePickerFragment dialog = DatePickerFragment.newInstance(this, (DSDDate) view.getTag());
+        DatePickerFragment dialog = DatePickerFragment.newInstance(visitDatePicked, (DSDDate) view.getTag());
         dialog.show(getSupportFragmentManager(), "date_picker");
+    }
+
+    public void editVisitTime(View view) {
+        TimePickerFragment dialog = TimePickerFragment.newInstance(visitTimePicked, (DSDDate) view.getTag());
+        dialog.show(getSupportFragmentManager(), "time_picker");
     }
 
     public void showHistory(View view) {
