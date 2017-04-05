@@ -69,4 +69,29 @@ public class Customer extends Model {
     public static Customer create() {
         return create(null, "", "", "", true, DSDDate.create(), "", Address.create(), null);
     }
+
+    public static Customer create(String name) {
+        return create(null, name, "", "", true, DSDDate.create(), "", Address.create(), null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Customer customer = (Customer) o;
+
+        if (name != null ? !name.equals(customer.name) : customer.name != null) return false;
+        if (email.address != null ? !email.address.equals(customer.email.address) : customer.email.address != null) return false;
+        return phone.number != null ? phone.number.equals(customer.phone.number) : customer.phone.number == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        return result;
+    }
 }

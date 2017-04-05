@@ -25,9 +25,7 @@ public class CustomerEditFragment extends DialogFragment {
     private Customer mCurrentCustomer;
     private TextView mNameText;
     private TextView mPhoneText;
-    private TextView mAddressNameText;
-    private TextView mAddressLine1Text;
-    private TextView mAddressLine2Text;
+    private TextView mAddressLineText;
     private TextView mAddressTownText;
     private TextView mAddressCountyText;
     private TextView mAddressPostcodeText;
@@ -49,9 +47,7 @@ public class CustomerEditFragment extends DialogFragment {
         mNameText = (TextView) view.findViewById(R.id.customer_name);
         mEmailText1 = (TextView) view.findViewById(R.id.customer_email);
         mPhoneText = (TextView) view.findViewById(R.id.customer_phone);
-        mAddressNameText = (TextView) view.findViewById(R.id.address_name);
-        mAddressLine1Text = (TextView) view.findViewById(R.id.address_line1);
-        mAddressLine2Text = (TextView) view.findViewById(R.id.address_line2);
+        mAddressLineText = (TextView) view.findViewById(R.id.address_line);
         mAddressTownText = (TextView) view.findViewById(R.id.address_town);
         mAddressCountyText = (TextView) view.findViewById(R.id.address_county);
         mAddressPostcodeText = (TextView) view.findViewById(R.id.address_postcode);
@@ -62,9 +58,7 @@ public class CustomerEditFragment extends DialogFragment {
             mPhoneText.setText(customer.phone.number);
             Address address = customer.address;
             if (address != null) {
-                mAddressNameText.setText(address.name);
-                mAddressLine1Text.setText(address.line1);
-                mAddressLine2Text.setText(address.line2);
+                mAddressLineText.setText(address.line);
                 mAddressTownText.setText(address.town);
                 mAddressCountyText.setText(address.county);
                 mAddressPostcodeText.setText(address.postcode);
@@ -77,11 +71,9 @@ public class CustomerEditFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Address address = new Address(
+                        Address address = Address.create(
                                 null,
-                                getText(mAddressNameText),
-                                getText(mAddressLine1Text),
-                                getText(mAddressLine2Text),
+                                getText(mAddressLineText),
                                 getText(mAddressTownText),
                                 getText(mAddressCountyText),
                                 getText(mAddressPostcodeText)

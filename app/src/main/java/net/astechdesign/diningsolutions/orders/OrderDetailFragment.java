@@ -19,7 +19,6 @@ import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 
 public class OrderDetailFragment extends Fragment implements DatePickerFragment.DatePickerListener {
 
-    public static final String CUSTOMER = "customer";
     public static final String ORDER = "order";
 
     private Order mOrder;

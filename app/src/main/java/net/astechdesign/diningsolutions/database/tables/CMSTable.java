@@ -38,6 +38,9 @@ public abstract class CMSTable<T extends Model> implements BaseColumns {
         }
     }
 
+    public void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
+
     protected abstract void insertDbValues(ContentValues values, T model);
 
     public UUID addOrUpdate(SQLiteDatabase db, T model) {

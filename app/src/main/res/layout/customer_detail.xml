@@ -90,21 +90,7 @@
         android:paddingLeft="24dp">
 
         <TextView
-            android:id="@+id/address_name"
-            style="?android:attr/textAppearanceLarge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/detail_padding" />
-
-        <TextView
-            android:id="@+id/address_line1"
-            style="?android:attr/textAppearanceLarge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/detail_padding" />
-
-        <TextView
-            android:id="@+id/address_line2"
+            android:id="@+id/address_line"
             style="?android:attr/textAppearanceLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -106,34 +106,10 @@
             android:layout_marginLeft="24dp">
 
             <TextView
-                android:id="@+id/address_name"
+                android:id="@+id/address_line"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="House name/number"
-                android:onClick="editText"
-                android:paddingBottom="8dp"
-                android:tag="Address"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/address_line1"
-                style="?android:attr/textAppearanceLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/address_name"
-                android:hint="line 1"
-                android:onClick="editText"
-                android:paddingBottom="8dp"
-                android:tag="Address"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/address_line2"
-                style="?android:attr/textAppearanceLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/address_line1"
-                android:hint="line 2"
+                android:hint="House &amp; street"
                 android:onClick="editText"
                 android:paddingBottom="8dp"
                 android:tag="Address"
@@ -144,7 +120,7 @@
                 style="?android:attr/textAppearanceLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/address_line2"
+                android:layout_below="@+id/address_line"
                 android:hint="town"
                 android:onClick="editText"
                 android:paddingBottom="8dp"

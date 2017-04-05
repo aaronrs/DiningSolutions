@@ -19,7 +19,7 @@ import static net.astechdesign.diningsolutions.database.tables.CMSTable.TableTyp
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "orders";
 
     private static Map<CMSTable.TableType, CMSTable> tables;
@@ -51,6 +51,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion != newVersion) {
+            for (CMSTable table : tables.values()) {
+                table.upgrade(db, oldVersion, newVersion);
+            }
+        }
     }
 
     public static DBHelper get(Context context) {

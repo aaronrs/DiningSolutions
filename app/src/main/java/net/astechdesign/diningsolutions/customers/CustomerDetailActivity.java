@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +21,6 @@ import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
-import net.astechdesign.diningsolutions.orders.OrderDetailFragment;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.UUID;
@@ -86,9 +84,7 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
         setText(R.id.visit_date_time, mCustomer.visit.getDisplayDateTime());
         Address address = mCustomer.address;
         if (address != null) {
-            setText(R.id.address_name, address.name);
-            setText(R.id.address_line1, address.line1);
-            setText(R.id.address_line2, address.line2);
+            setText(R.id.address_line, address.line);
             setText(R.id.address_town, address.town);
             setText(R.id.address_county, address.county);
             setText(R.id.address_postcode, address.postcode);
@@ -106,7 +102,7 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
 
     public void showOrders(View view) {
         Intent intent = new Intent(this, OrderActivity.class);
-        intent.putExtra(OrderDetailFragment.CUSTOMER, mCustomer);
+        intent.putExtra(OrderActivity.CUSTOMER, mCustomer);
         this.startActivity(intent);
     }
 
@@ -122,8 +118,8 @@ public class CustomerDetailActivity extends AppCompatActivity implements Custome
 
     @Override
     public void onCustomerEditClick(DialogInterface dialog, Customer customer) {
-        CustomerRepo.get(this).addOrUpdate(customer);
-        mCustomer = CustomerRepo.get(this).get(customer.getId());
+        UUID customerId = CustomerRepo.get(this).addOrUpdate(customer);
+        mCustomer = CustomerRepo.get(this).get(customerId);
         showCustomerDetails();
         Snackbar.make(findViewById(R.id.coordinatorLayoutDetail), "Edited Customer " + mCustomer.name, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();

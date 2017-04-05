@@ -45,27 +45,11 @@
                 android:text="Address" />
 
             <EditText
-                android:id="@+id/address_name"
+                android:id="@+id/address_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="House Name/Number"
-                android:inputType="text" />
-
-            <EditText
-                android:id="@+id/address_line1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Address line 1"
-                android:inputType="text" />
-
-            <EditText
-                android:id="@+id/address_line2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Address line 2"
+                android:hint="House address"
                 android:inputType="text" />
 
             <EditText

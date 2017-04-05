@@ -49,19 +49,14 @@ public class CustomerAssets {
                     email = house;
                     house = "";
                 }
-                String line1 = customerInfo[3].trim();
-                if (pattern.matcher(line1).matches()) {
-                    house = line1.trim().split(" ")[0];
-                    line1 = line1.substring(house.length() + 1);
-                }
-                String line2 = customerInfo[4].trim();
+                String addressLine = (house != "" ? house + ", " : "") + customerInfo[3].trim();
                 String town = customerInfo[5].trim();
                 String county = customerInfo[6].trim();
                 String postcode = customerInfo[7].trim();
                 String created = customerInfo[8].trim();
 
                 if (peeps.add(name + postcode)) {
-                    Address address = new Address(UUID.randomUUID(), house, line1, line2, town, county, postcode);
+                    Address address = Address.create(UUID.randomUUID(), addressLine, town, county, postcode);
                     Date createDate = fileDateFormat.parse(created);
                     customerList.add(Customer.create(name, email, "", true, DSDDate.create(createDate), "", address, null));
                 }

@@ -40,7 +40,7 @@ public class CustomerListRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, OrderActivity.class);
-                intent.putExtra(OrderActivity.CUSTOMER_ID, holder.mItem.getId());
+                intent.putExtra(OrderActivity.CUSTOMER, holder.mItem);
                 context.startActivity(intent);
             }
         });

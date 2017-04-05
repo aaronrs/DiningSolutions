@@ -37,6 +37,7 @@ public class CustomerRepo {
 
     public List<Customer> get() {
         Cursor cursor = mCustomerTable.get(mDatabase, CustomerTable.CUSTOMER_NAME);
+
         List<Customer> customerList = new ArrayList<>();
         while (!cursor.isAfterLast()) {
             CustomerCursorWrapper customerCursorWrapper = new CustomerCursorWrapper(cursor);

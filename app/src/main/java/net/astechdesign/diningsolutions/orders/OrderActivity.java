@@ -34,7 +34,6 @@ import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
 import java.util.UUID;
 
-import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.CUSTOMER;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
 public class OrderActivity extends AppCompatActivity
@@ -43,6 +42,7 @@ public class OrderActivity extends AppCompatActivity
         CustomerEditFragment.CustomerEditListener,
         EditEntryFragment.EditEntryAddListener {
 
+    public static final String CUSTOMER = "customer";
     public static final String CUSTOMER_ID = "customer_id";
     public static final String ADD_PRODUCT = "add_product";
     public static final String EDIT_ENTRY = "edit_entry";
@@ -53,9 +53,7 @@ public class OrderActivity extends AppCompatActivity
     private TextView mTextName;
     private TextView mTextPhone;
     private TextView mTextEmail;
-    private TextView mTextAddressName;
-    private TextView mTextAddressLine1;
-    private TextView mTextAddressLine2;
+    private TextView mTextAddressLine;
     private TextView mTextAddressTown;
     private TextView mTextAddressCounty;
     private TextView mTextAddressPostcode;
@@ -70,16 +68,13 @@ public class OrderActivity extends AppCompatActivity
 
         initialiseFields();
 
-        UUID customerId = (UUID) getIntent().getSerializableExtra(CUSTOMER_ID);
-        if (customerId != null) {
-            mCustomer = CustomerRepo.get(this).get(customerId);
-            mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
-        } else {
+        mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
+        if (mCustomer.equals(Customer.newCustomer)) {
             mTextVisit.setTag(DSDDate.create());
-            FragmentManager fm = getSupportFragmentManager();
-            CustomerEditFragment fragment = new CustomerEditFragment();
-            fragment.setCustomer(Customer.newCustomer);
-            fragment.show(fm, EDIT_ENTRY);
+            editText(mTextName);
+        } else {
+            mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
+            mTextVisit.setTag(mCustomer.visit);
         }
 
         displayCustomer();
@@ -121,9 +116,7 @@ public class OrderActivity extends AppCompatActivity
         mTextName = setupField(R.id.customer_name, "Customer Name", CustomerTable.CUSTOMER_NAME);
         mTextPhone = setupField(R.id.customer_phone, "Customer Phone", CustomerTable.CUSTOMER_PHONE);
         mTextEmail = setupField(R.id.customer_email, "Customer Email", CustomerTable.CUSTOMER_EMAIL);
-        mTextAddressName = setupField(R.id.address_name, "Address House No./Name", CustomerTable.ADDRESS_NAME);
-        mTextAddressLine1 = setupField(R.id.address_line1, "Address Line 1", CustomerTable.ADDRESS_LINE1);
-        mTextAddressLine2 = setupField(R.id.address_line2, "Address Line 2", CustomerTable.ADDRESS_LINE2);
+        mTextAddressLine = setupField(R.id.address_line, "Address", CustomerTable.ADDRESS_LINE);
         mTextAddressTown = setupField(R.id.address_town, "Town", CustomerTable.ADDRESS_TOWN);
         mTextAddressCounty = setupField(R.id.address_county, "County", CustomerTable.ADDRESS_COUNTY);
         mTextAddressPostcode = setupField(R.id.address_postcode, "Postcode", CustomerTable.ADDRESS_POSTCODE);
@@ -141,9 +134,7 @@ public class OrderActivity extends AppCompatActivity
             mTextName.setText(mCustomer.name);
             mTextPhone.setText(mCustomer.phone == null ? null : mCustomer.phone.number);
             mTextEmail.setText(mCustomer.email == null ? null : mCustomer.email.address);
-            mTextAddressName.setText(mCustomer.address == null ? null : mCustomer.address.name);
-            mTextAddressLine1.setText(mCustomer.address == null ? null : mCustomer.address.line1);
-            mTextAddressLine2.setText(mCustomer.address == null ? null : mCustomer.address.line2);
+            mTextAddressLine.setText(mCustomer.address == null ? null : mCustomer.address.line);
             mTextAddressTown.setText(mCustomer.address == null ? null : mCustomer.address.town);
             mTextAddressCounty.setText(mCustomer.address == null ? null : mCustomer.address.county);
             mTextAddressPostcode.setText(mCustomer.address == null ? null : mCustomer.address.postcode);
@@ -286,8 +277,15 @@ public class OrderActivity extends AppCompatActivity
 
     @Override
     public void onEditFieldPositiveClick(DialogInterface dialog, String field, String value) {
-        CustomerRepo.get(this).update(mCustomer, field, value);
-        mCustomer = CustomerRepo.get(this).get(mCustomer.getId());
+        UUID customerId;
+        if (mCustomer.getId() == null) {
+            mCustomer = Customer.create(value);
+            customerId = CustomerRepo.get(this).addOrUpdate(mCustomer);
+        } else {
+            CustomerRepo.get(this).update(mCustomer, field, value);
+            customerId = mCustomer.getId();
+        }
+        mCustomer = CustomerRepo.get(this).get(customerId);
         displayCustomer();
     }
 

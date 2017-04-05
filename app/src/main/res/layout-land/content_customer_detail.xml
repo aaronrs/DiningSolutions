@@ -121,7 +121,7 @@
                 android:text="ADDRESS" />
 
             <TextView
-                android:id="@+id/address_name"
+                android:id="@+id/address_line"
                 style="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -130,29 +130,11 @@
                 android:padding="@dimen/detail_padding" />
 
             <TextView
-                android:id="@+id/address_line1"
-                style="?android:attr/textAppearanceLarge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/address_name"
-                android:layout_marginLeft="24dp"
-                android:padding="@dimen/detail_padding" />
-
-            <TextView
-                android:id="@+id/address_line2"
-                style="?android:attr/textAppearanceLarge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/address_line1"
-                android:layout_marginLeft="24dp"
-                android:padding="@dimen/detail_padding" />
-
-            <TextView
                 android:id="@+id/address_town"
                 style="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/address_line2"
+                android:layout_below="@id/address_line"
                 android:layout_marginLeft="24dp"
                 android:padding="@dimen/detail_padding" />
 

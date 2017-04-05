@@ -20,9 +20,7 @@ public class CustomerTable extends CMSTable<Customer> {
     public static final String CUSTOMER_REFERRAL = "referral";
     public static final String VISIT_DATE = "visit_date";
     public static final String ADDRESS_ID = "address_id";
-    public static final String ADDRESS_NAME = "house_name";
-    public static final String ADDRESS_LINE1 = "line1";
-    public static final String ADDRESS_LINE2 = "line2";
+    public static final String ADDRESS_LINE = "address";
     public static final String ADDRESS_TOWN = "town";
     public static final String ADDRESS_COUNTY = "county";
     public static final String ADDRESS_POSTCODE = "postcode";
@@ -36,9 +34,7 @@ public class CustomerTable extends CMSTable<Customer> {
             CUSTOMER_REFERRAL + " TEXT, " +
             VISIT_DATE + " INTEGER, " +
             ADDRESS_ID + " TEXT, " +
-            ADDRESS_NAME + " TEXT, " +
-            ADDRESS_LINE1 + " TEXT, " +
-            ADDRESS_LINE2 + " TEXT, " +
+            ADDRESS_LINE + " TEXT, " +
             ADDRESS_TOWN + " TEXT, " +
             ADDRESS_COUNTY + " TEXT, " +
             ADDRESS_POSTCODE + " TEXT " +
@@ -48,6 +44,17 @@ public class CustomerTable extends CMSTable<Customer> {
     public CustomerTable() {
         super(TABLE_NAME, CREATE_TABLE);
         instance = this;
+    }
+
+    @Override
+    public void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        super.upgrade(db, oldVersion, newVersion);
+        if (newVersion == 2) {
+            String query = "ALTER TABLE %s ADD COLUMN %s TEXT" ;
+            db.execSQL(String.format(query, TABLE_NAME, ADDRESS_LINE));
+            query = "UPDATE %s SET ADDRESS = COALESCE(%s,'') || ' ' || COALESCE(%s,'') || ' ' || COALESCE(%s,'')";
+            db.execSQL(String.format(query, TABLE_NAME, "house_name", "line1", "line2"));
+        }
     }
 
     protected void insertDbValues(ContentValues values, Customer customer) {
@@ -62,9 +69,7 @@ public class CustomerTable extends CMSTable<Customer> {
         }
         Address address = customer.address;
         values.put(ADDRESS_ID, address.getDbId());
-        values.put(ADDRESS_NAME, address.name);
-        values.put(ADDRESS_LINE1, address.line1);
-        values.put(ADDRESS_LINE2, address.line2);
+        values.put(ADDRESS_LINE, address.line);
         values.put(ADDRESS_TOWN, address.town);
         values.put(ADDRESS_COUNTY, address.county);
         values.put(ADDRESS_POSTCODE, address.postcode);

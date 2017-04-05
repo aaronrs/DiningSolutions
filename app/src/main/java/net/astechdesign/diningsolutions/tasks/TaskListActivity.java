@@ -16,6 +16,7 @@ import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
+import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
@@ -117,9 +118,7 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
 
     public void addCustomer(View v) {
         Intent intent = new Intent(this, OrderActivity.class);
+        intent.putExtra(OrderActivity.CUSTOMER, Customer.newCustomer);
         this.startActivity(intent);
-//        FragmentManager fm = getSupportFragmentManager();
-//        CustomerEditFragment customerEditFragment = new CustomerEditFragment();
-//        customerEditFragment.show(fm, EDIT_CUSTOMER);
     }
 }
