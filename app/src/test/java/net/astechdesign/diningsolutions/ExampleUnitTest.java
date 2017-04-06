@@ -29,9 +29,8 @@ import java.io.Writer;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
@@ -61,7 +60,7 @@ public class ExampleUnitTest {
                 true,
                 DSDDate.create(),
                 "",
-                new Address(null, "Potters Barn", "The Street", "", "The Town", "County", "AB1 1AB"),
+                Address.create(null, "Potters Barn, The Street", "The Town", "County", "AB1 1AB"),
                 null);
         Order order = new Order(null, null, DSDDate.create(), "1234567890");
         Distributor distributor = new Distributor("5555", "Tom Jones", "0987654321", "tom@gmail.com");

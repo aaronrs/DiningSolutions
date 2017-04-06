@@ -1,10 +1,12 @@
 package net.astechdesign.diningsolutions.orders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.widget.Toast;
 
-import com.itextpdf.awt.geom.CubicCurve2D;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -24,9 +26,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 public class EmailTemplate {
 
@@ -44,10 +43,28 @@ public class EmailTemplate {
     private Order order;
     private Context context;
 
-    public EmailTemplate(Context context, Customer customer, Order order) {
+    private EmailTemplate(Context context, Customer customer, Order order) {
         this.context = context;
         this.customer = customer;
         this.order = order;
+    }
+
+    @NonNull
+    public Intent getEmailIntent() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822");
+
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{customer.email.address});
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + order.invoiceNumber);
+        intent.putExtra(Intent.EXTRA_TEXT, "Attached please find Invoice No. " + order.invoiceNumber);
+
+        try {
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(this.createPdf()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return intent;
     }
 
     public File createPdf() throws FileNotFoundException, DocumentException {
@@ -165,5 +182,18 @@ public class EmailTemplate {
         PdfPCell c1 = new PdfPCell(new Phrase(text));
         c1.setHorizontalAlignment(align);
         table.addCell(c1);
+    }
+
+    public static Intent createIntent(Context context, Customer mCustomer, Order mOrder) {
+        return new EmailTemplate(context, mCustomer, mOrder).getEmailIntent();
+    }
+
+    public static void sendEmail(Context context, Customer customer, Order order) {
+        try {
+            context.startActivity(EmailTemplate.createIntent(context, customer, order));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(context, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

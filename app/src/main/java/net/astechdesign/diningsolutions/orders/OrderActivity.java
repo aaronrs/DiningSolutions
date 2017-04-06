@@ -2,7 +2,6 @@ package net.astechdesign.diningsolutions.orders;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
@@ -43,7 +41,6 @@ public class OrderActivity extends AppCompatActivity
         EditEntryFragment.EditEntryAddListener {
 
     public static final String CUSTOMER = "customer";
-    public static final String CUSTOMER_ID = "customer_id";
     public static final String ADD_PRODUCT = "add_product";
     public static final String EDIT_ENTRY = "edit_entry";
 
@@ -59,20 +56,11 @@ public class OrderActivity extends AppCompatActivity
     private TextView mTextAddressPostcode;
     private TextView mTextVisit;
     private TextView mTextVisitTime;
-    private int columnKey = 10;
-    private int titleKey = 20;
-    private VisitDatePicked visitDatePicked;
-    private VisitTimePicked visitTimePicked;
-    private DeliveryDatePicked deliveryDatePicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
-
-        visitDatePicked = new VisitDatePicked(this);
-        visitTimePicked = new VisitTimePicked(this);
-        deliveryDatePicked = new DeliveryDatePicked(this);
 
         initialiseFields();
 
@@ -114,7 +102,7 @@ public class OrderActivity extends AppCompatActivity
         invoiceDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerFragment dialog = DatePickerFragment.newInstance(deliveryDatePicked, (DSDDate) view.getTag());
+                DatePickerFragment dialog = DatePickerFragment.newInstance(new DeliveryDatePicked(OrderActivity.this), (DSDDate) view.getTag());
                 dialog.show(getSupportFragmentManager(), "date_picker");
 
                 Snackbar.make(view, "Clicked", Snackbar.LENGTH_LONG)
@@ -195,26 +183,7 @@ public class OrderActivity extends AppCompatActivity
     }
 
     private void sendEmail() {
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("message/rfc822");
-
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{mCustomer.email.address});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + mOrder.invoiceNumber);
-        intent.putExtra(Intent.EXTRA_TEXT, "Attached please find Invoice No. " + mOrder.invoiceNumber);
-
-        try {
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new EmailTemplate(this, mCustomer, mOrder).createPdf()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-
-        try {
-            startActivity(intent);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(OrderActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
-        }
+        EmailTemplate.sendEmail(this, mCustomer, mOrder);
     }
 
     @Override
@@ -349,12 +318,12 @@ public class OrderActivity extends AppCompatActivity
     }
 
     public void editVisitDate(View view) {
-        DatePickerFragment dialog = DatePickerFragment.newInstance(visitDatePicked, (DSDDate) view.getTag());
+        DatePickerFragment dialog = DatePickerFragment.newInstance(new VisitDatePicked(this), (DSDDate) view.getTag());
         dialog.show(getSupportFragmentManager(), "date_picker");
     }
 
     public void editVisitTime(View view) {
-        TimePickerFragment dialog = TimePickerFragment.newInstance(visitTimePicked, (DSDDate) view.getTag());
+        TimePickerFragment dialog = TimePickerFragment.newInstance(new VisitTimePicked(this), (DSDDate) view.getTag());
         dialog.show(getSupportFragmentManager(), "time_picker");
     }
 
@@ -376,7 +345,7 @@ public class OrderActivity extends AppCompatActivity
 
     @Override
     public void onCustomerEditClick(DialogInterface dialog, Customer customer) {
-        if (customer.name.length() == 0) finish();
+        if (customer.equals(Customer.newCustomer)) finish();
         CustomerRepo customerRepo = CustomerRepo.get(this);
         UUID uuid = customerRepo.addOrUpdate(customer);
         mCustomer = customerRepo.get(uuid);

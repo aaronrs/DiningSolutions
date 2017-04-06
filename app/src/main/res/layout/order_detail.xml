@@ -1,9 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
     <Button
         android:id="@+id/add_product_btn"
         android:layout_width="wrap_content"
@@ -64,10 +63,10 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/add_product_btn"
-        android:layout_toRightOf="@id/text_cost"
         android:layout_marginLeft="16dp"
-        android:textSize="14sp"
-        android:text="Delivery Date" />
+        android:layout_toRightOf="@id/text_cost"
+        android:text="Delivery Date"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/text_batch"
@@ -80,21 +79,19 @@
         android:textSize="14sp" />
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/text_batch"
-        >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_batch">
 
-            <android.support.v7.widget.RecyclerView
-                xmlns:tools="http://schemas.android.com/tools"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/order_items_list"
                 android:name="net.astechdesign.diningsolutions.OrderDetailFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
                 app:layoutManager="LinearLayoutManager"
                 tools:context="net.astechdesign.diningsolutions.customers.OrderDetailFragment"
                 tools:listitem="@layout/order_item_list_content" />
@@ -105,9 +102,8 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/order_items_list"
-                android:layout_marginBottom="24dp"
-                android:textSize="16sp"
-                android:text="Total" />
+                android:text="Total"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/order_detail_total"
