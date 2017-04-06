@@ -68,7 +68,7 @@ public class InvoiceDetailsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_invoice_details, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    // TODO: Rename method, updateCustomer argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

@@ -19,7 +19,6 @@ import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
-import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
@@ -37,7 +36,6 @@ import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
 public class OrderActivity extends AppCompatActivity
         implements OrderAddProductFragment.ProductAddListener,
-        CustomerEditFragment.CustomerEditListener,
         EditEntryFragment.EditEntryAddListener {
 
     public static final String CUSTOMER = "customer";
@@ -208,38 +206,11 @@ public class OrderActivity extends AppCompatActivity
         }
     }
 
-    class VisitDatePicked implements DatePickerFragment.DatePickerListener{
-        private final OrderActivity activity;
-
-        public VisitDatePicked(OrderActivity activity) {
-            this.activity = activity;
-        }
-
-        @Override
-        public void onDatePicked(DSDDate date) {
-            date = DSDDate.withTime(date, mCustomer.visit);
-            CustomerRepo customerRepo = CustomerRepo.get(activity);
-            customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, date.dbFormat());
-            mCustomer = customerRepo.get(mCustomer.getId());
-            activity.displayCustomer();
-        }
-    }
-
-    class VisitTimePicked implements TimePickerFragment.TimePickerListener{
-        private final OrderActivity activity;
-
-        public VisitTimePicked(OrderActivity activity) {
-            this.activity = activity;
-        }
-
-        @Override
-        public void onTimePicked(DSDDate time) {
-            DSDDate date = DSDDate.withTime(mCustomer.visit, time);
-            CustomerRepo customerRepo = CustomerRepo.get(activity);
-            customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, date.dbFormat());
-            mCustomer = customerRepo.get(mCustomer.getId());
-            activity.displayCustomer();
-        }
+    public void updateCustomer(DSDDate date) {
+        CustomerRepo customerRepo = CustomerRepo.get(this);
+        customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, date.dbFormat());
+        mCustomer = customerRepo.get(mCustomer.getId());
+        displayCustomer();
     }
 
     class DeliveryDatePicked implements DatePickerFragment.DatePickerListener{
@@ -259,12 +230,6 @@ public class OrderActivity extends AppCompatActivity
             OrderRepo.get(activity).updateInvoiceDate(mOrder, date);
             activity.updateInvoice();
         }
-    }
-
-    public void addProduct(View view) {
-        FragmentManager fm = getSupportFragmentManager();
-        OrderAddProductFragment newProductFragment = new OrderAddProductFragment();
-        newProductFragment.show(fm, ADD_PRODUCT);
     }
 
     @Override
@@ -289,20 +254,6 @@ public class OrderActivity extends AppCompatActivity
         displayOrder();
     }
 
-    public void deleteItem(View view) {
-        final OrderItem item = (OrderItem) view.getTag();
-        new AlertDialog.Builder(this)
-                .setTitle("Delete Order Item")
-                .setMessage("Delete " + item.name + " from order?")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setNegativeButton(android.R.string.no, null)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        OrderItemRepo.get(OrderActivity.this).delete(mOrder, item);
-                        updateInvoice();
-                    }}).show();
-    }
-
     @Override
     public void onEditFieldPositiveClick(DialogInterface dialog, String field, String value) {
         UUID customerId;
@@ -317,17 +268,34 @@ public class OrderActivity extends AppCompatActivity
         displayCustomer();
     }
 
+    public void addProduct(View view) {
+        FragmentManager fm = getSupportFragmentManager();
+        OrderAddProductFragment newProductFragment = new OrderAddProductFragment();
+        newProductFragment.show(fm, ADD_PRODUCT);
+    }
+
+    public void deleteItem(View view) {
+        final OrderItem item = (OrderItem) view.getTag();
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Order Item")
+                .setMessage("Delete " + item.name + " from order?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        OrderItemRepo.get(OrderActivity.this).delete(mOrder, item);
+                        updateInvoice();
+                    }}).show();
+    }
+
     public void editVisitDate(View view) {
-        DatePickerFragment dialog = DatePickerFragment.newInstance(new VisitDatePicked(this), (DSDDate) view.getTag());
+        DatePickerFragment dialog = DatePickerFragment.newInstance(new VisitDateListener(this, mCustomer.visit), (DSDDate) view.getTag());
         dialog.show(getSupportFragmentManager(), "date_picker");
     }
 
     public void editVisitTime(View view) {
-        TimePickerFragment dialog = TimePickerFragment.newInstance(new VisitTimePicked(this), (DSDDate) view.getTag());
+        TimePickerFragment dialog = TimePickerFragment.newInstance(new VisitDateListener(this, mCustomer.visit), (DSDDate) view.getTag());
         dialog.show(getSupportFragmentManager(), "time_picker");
-    }
-
-    public void showHistory(View view) {
     }
 
     public void editText(View view) {
@@ -341,15 +309,5 @@ public class OrderActivity extends AppCompatActivity
     public void newOrder(View view) {
         createNewOrder();
         displayOrder();
-    }
-
-    @Override
-    public void onCustomerEditClick(DialogInterface dialog, Customer customer) {
-        if (customer.equals(Customer.newCustomer)) finish();
-        CustomerRepo customerRepo = CustomerRepo.get(this);
-        UUID uuid = customerRepo.addOrUpdate(customer);
-        mCustomer = customerRepo.get(uuid);
-        mOrder = OrderRepo.get(this).create(mCustomer);
-        displayCustomer();
     }
 }
