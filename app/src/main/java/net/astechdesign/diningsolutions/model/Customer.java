@@ -67,7 +67,7 @@ public class Customer extends Model {
     }
 
     public static Customer create() {
-        return create(null, "", "", "", true, DSDDate.create(), "", Address.create(), null);
+        return create(null, "", "", "", true, DSDDate.create(), "", Address.create(), DSDDate.EMPTY_DATE);
     }
 
     public static Customer create(String name) {

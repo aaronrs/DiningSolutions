@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/text_visit"
         android:hint="no date set"
-        android:onClick="editVisitDate"
         android:paddingLeft="8dp" />
 
     <TextView
@@ -33,15 +32,7 @@
         android:layout_toRightOf="@+id/text_visit_time"
         android:layout_below="@id/text_visit"
         android:hint="no time set"
-        android:onClick="editVisitTime"
         android:paddingLeft="8dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:onClick="showHistory"
-        android:text="Order History" />
 
     <RelativeLayout
         android:id="@+id/left_column"
@@ -70,7 +61,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Customer Name"
-                android:onClick="editText"
                 android:paddingBottom="8dp"
                 android:tag="Customer Name"
                 android:textSize="14sp" />
@@ -81,7 +71,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/customer_name"
                 android:hint="Phone number"
-                android:onClick="editText"
                 android:paddingBottom="8dp"
                 android:tag="Phone Number"
                 android:textSize="14sp" />
@@ -92,7 +81,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/customer_phone"
                 android:hint="Email address"
-                android:onClick="editText"
                 android:paddingBottom="8dp"
                 android:tag="Phone Number"
                 android:textSize="14sp" />
@@ -127,7 +115,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="House &amp; street"
-                android:onClick="editText"
                 android:paddingBottom="8dp"
                 android:tag="Address"
                 android:textSize="14sp" />
@@ -139,7 +126,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/address_line"
                 android:hint="town"
-                android:onClick="editText"
                 android:paddingBottom="8dp"
                 android:tag="Town"
                 android:textSize="14sp" />
@@ -151,7 +137,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/address_town"
                 android:hint="county"
-                android:onClick="editText"
                 android:paddingBottom="8dp"
                 android:textSize="14sp" />
 
@@ -162,7 +147,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/address_county"
                 android:hint="postcode"
-                android:onClick="editText"
                 android:paddingBottom="8dp"
                 android:textSize="14sp" />
         </RelativeLayout>

@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
@@ -35,8 +34,7 @@ import java.util.UUID;
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
 public class OrderActivity extends AppCompatActivity
-        implements OrderAddProductFragment.ProductAddListener,
-        EditEntryFragment.EditEntryAddListener {
+        implements OrderAddProductFragment.ProductAddListener {
 
     public static final String CUSTOMER = "customer";
     public static final String ADD_PRODUCT = "add_product";
@@ -58,8 +56,11 @@ public class OrderActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
         setContentView(R.layout.activity_order);
 
+        if (true) return;
         initialiseFields();
 
         mTextVisit = (TextView) findViewById(R.id.order_detail_visit);
@@ -68,7 +69,6 @@ public class OrderActivity extends AppCompatActivity
         if (mCustomer.equals(Customer.newCustomer)) {
             mTextVisit.setTag(DSDDate.create());
             mTextVisitTime.setTag(DSDDate.create());
-            editText(mTextName);
         } else {
             mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
             mTextVisit.setTag(mCustomer.visit);
@@ -213,6 +213,10 @@ public class OrderActivity extends AppCompatActivity
         displayCustomer();
     }
 
+    public Customer getCustomer() {
+        return mCustomer;
+    }
+
     class DeliveryDatePicked implements DatePickerFragment.DatePickerListener{
         private final OrderActivity activity;
 
@@ -254,8 +258,7 @@ public class OrderActivity extends AppCompatActivity
         displayOrder();
     }
 
-    @Override
-    public void onEditFieldPositiveClick(DialogInterface dialog, String field, String value) {
+    public void updateCustomer(String field, String value) {
         UUID customerId;
         if (mCustomer.getId() == null) {
             mCustomer = Customer.create(value);
@@ -287,24 +290,16 @@ public class OrderActivity extends AppCompatActivity
                         updateInvoice();
                     }}).show();
     }
-
-    public void editVisitDate(View view) {
-        DatePickerFragment dialog = DatePickerFragment.newInstance(new VisitDateListener(this, mCustomer.visit), (DSDDate) view.getTag());
-        dialog.show(getSupportFragmentManager(), "date_picker");
-    }
-
-    public void editVisitTime(View view) {
-        TimePickerFragment dialog = TimePickerFragment.newInstance(new VisitDateListener(this, mCustomer.visit), (DSDDate) view.getTag());
-        dialog.show(getSupportFragmentManager(), "time_picker");
-    }
-
-    public void editText(View view) {
-        FragmentManager fm = getSupportFragmentManager();
-        EditEntryFragment fragment = new EditEntryFragment();
-        String[] tags = (String[]) view.getTag();
-        fragment.value(tags[0], tags[1], ((TextView)view).getText().toString());
-        fragment.show(fm, EDIT_ENTRY);
-    }
+//
+//    public void editVisitDate(View view) {
+//        DatePickerFragment dialog = DatePickerFragment.newInstance(new VisitDateListener(this, mCustomer.visit), (DSDDate) view.getTag());
+//        dialog.show(getSupportFragmentManager(), "date_picker");
+//    }
+//
+//    public void editVisitTime(View view) {
+//        TimePickerFragment dialog = TimePickerFragment.newInstance(new VisitDateListener(this, mCustomer.visit), (DSDDate) view.getTag());
+//        dialog.show(getSupportFragmentManager(), "time_picker");
+//    }
 
     public void newOrder(View view) {
         createNewOrder();

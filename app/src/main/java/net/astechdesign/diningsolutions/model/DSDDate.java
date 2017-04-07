@@ -8,6 +8,8 @@ import java.util.GregorianCalendar;
 
 public class DSDDate implements Serializable, Comparable {
 
+    public static DSDDate EMPTY_DATE = create(new Date(0l));
+
     private static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE dd MMMM yyyy");
     private static SimpleDateFormat shortDisplayDateFormat = new SimpleDateFormat("dd MMM yyyy");
     private static SimpleDateFormat displayTimeFormat = new SimpleDateFormat("KK:mm a");
@@ -74,22 +76,26 @@ public class DSDDate implements Serializable, Comparable {
     }
 
     public String getDisplayDate() {
-        return displayDateFormat.format(getDate());
+        return display(displayDateFormat);
     }
 
     public String getShortDisplayDate() {
-        return shortDisplayDateFormat.format(getDate());
+        return display(shortDisplayDateFormat);
     }
 
     public String getDisplayTime() {
-        return displayTimeFormat.format(getDate());
+        return display(displayTimeFormat);
     }
 
     public String getDisplayDateTime() {
+        return getDisplayDate() + " - " + getDisplayTime();
+    }
+
+    private String display(SimpleDateFormat format) {
         if (date.getTime() == 0) {
             return "no date set";
         }
-        return getDisplayDate() + " - " + getDisplayTime();
+        return format.format(getDate());
     }
 
     public static DSDDate withTime(DSDDate date, DSDDate time) {
@@ -115,5 +121,21 @@ public class DSDDate implements Serializable, Comparable {
 
     public boolean after(DSDDate newDate) {
         return date.after(newDate.date);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DSDDate dsdDate = (DSDDate) o;
+
+        return date != null ? date.equals(dsdDate.date) : dsdDate.date == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return date != null ? date.hashCode() : 0;
     }
 }
