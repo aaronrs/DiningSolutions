@@ -42,6 +42,9 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         DSDDate time = (DSDDate) getArguments().getSerializable(ARG_TIME);
+        if (time == null) {
+            time = DSDDate.create();
+        }
         return new TimePickerDialog(getActivity(), this, time.getHour(), time.getMinute(), false);
     }
 

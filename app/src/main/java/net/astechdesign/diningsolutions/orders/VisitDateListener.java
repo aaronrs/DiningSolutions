@@ -1,28 +1,31 @@
 package net.astechdesign.diningsolutions.orders;
 
+import android.content.Context;
+
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.TimePickerFragment;
+import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
+import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 class VisitDateListener implements DatePickerFragment.DatePickerListener,
         TimePickerFragment.TimePickerListener {
-    private OrderActivity activity;
-    private DSDDate date;
+    private Context context;
     private Customer mCustomer;
 
-    public VisitDateListener(Customer customer, DSDDate date) {
+    public VisitDateListener(Context context, Customer customer) {
+        this.context = context;
         this.mCustomer = customer;
-        this.date = date;
     }
 
     @Override
     public void onDatePicked(DSDDate newDate) {
-        activity.updateCustomer(DSDDate.withTime(newDate, this.date));
+        CustomerRepo.get(context).update(mCustomer, CustomerTable.VISIT_DATE, DSDDate.withTime(newDate, mCustomer.visit).dbFormat());
     }
 
     @Override
     public void onTimePicked(DSDDate newDate) {
-        activity.updateCustomer(DSDDate.withTime(this.date, newDate));
+        CustomerRepo.get(context).update(mCustomer, CustomerTable.VISIT_DATE, DSDDate.withTime(mCustomer.visit, newDate).dbFormat());
     }
 }

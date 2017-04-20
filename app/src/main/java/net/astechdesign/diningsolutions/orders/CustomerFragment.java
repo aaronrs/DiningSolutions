@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
@@ -21,7 +23,9 @@ import java.util.UUID;
 
 import static net.astechdesign.diningsolutions.orders.OrderActivity.EDIT_ENTRY;
 
-public class CustomerFragment extends Fragment implements EditEntryFragment.EditEntryAddListener {
+public class CustomerFragment extends Fragment implements EditEntryFragment.EditEntryAddListener,
+        DatePickerFragment.DatePickerListener,
+        TimePickerFragment.TimePickerListener {
 
     Customer mCustomer;
     private View view;
@@ -38,7 +42,7 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mCustomer = ((OrderActivity)getActivity()).getCustomer();
+        mCustomer = ((OrderActivity) getActivity()).getCustomer();
     }
 
     @Nullable
@@ -56,7 +60,21 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
         mTextAddressPostcode = setupField(R.id.address_postcode, "Postcode", CustomerTable.ADDRESS_POSTCODE);
 
         mTextVisit = (TextView) view.findViewById(R.id.order_detail_visit);
+        mTextVisit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment dialog = DatePickerFragment.newInstance(CustomerFragment.this, (DSDDate) view.getTag());
+                dialog.show(getActivity().getSupportFragmentManager(), "date_picker");
+            }
+        });
         mTextVisitTime = (TextView) view.findViewById(R.id.order_detail_visit_time);
+        mTextVisitTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerFragment dialog = TimePickerFragment.newInstance(CustomerFragment.this, (DSDDate) view.getTag());
+                dialog.show(getActivity().getSupportFragmentManager(), "time_picker");
+            }
+        });
         if (mCustomer.equals(Customer.newCustomer)) {
             mTextVisit.setTag(DSDDate.create());
             mTextVisitTime.setTag(DSDDate.create());
@@ -66,6 +84,12 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
         }
         displayCustomer();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        displayCustomer();
     }
 
     private TextView setupField(int viewId, String name, String field) {
@@ -83,7 +107,7 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
             mTextAddressTown.setText(mCustomer.address == null ? null : mCustomer.address.town);
             mTextAddressCounty.setText(mCustomer.address == null ? null : mCustomer.address.county);
             mTextAddressPostcode.setText(mCustomer.address == null ? null : mCustomer.address.postcode);
-            if (mCustomer.visit.equals(DSDDate.EMPTY_DATE)) {
+            if (!mCustomer.visit.equals(DSDDate.EMPTY_DATE)) {
                 mTextVisit.setText(mCustomer.visit.getDisplayDate());
                 mTextVisit.setTag(mCustomer.visit);
                 mTextVisitTime.setText(mCustomer.visit.getDisplayTime());
@@ -100,7 +124,7 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
             public void onClick(View v) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 EditEntryFragment fragment = new EditEntryFragment();
-                fragment.value(CustomerFragment.this, name, field, ((TextView)v).getText().toString());
+                fragment.value(CustomerFragment.this, name, field, ((TextView) v).getText().toString());
                 fragment.show(fm, EDIT_ENTRY);
             }
         };
@@ -128,18 +152,24 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
     @Override
     public void onEditFieldNegativeClick(String field) {
         if (mCustomer.getId() == null && CustomerTable.CUSTOMER_NAME.equals(field)) {
-                getActivity().finish();
-            }
+            getActivity().finish();
+        }
     }
-//
-//    public void editVisitDate(View view) {
-//        DatePickerFragment dialog = DatePickerFragment.newInstance(new VisitDateListener(this, mCustomer.visit), (DSDDate) view.getTag());
-//        dialog.show(getActivity().getSupportFragmentManager(), "date_picker");
-//    }
-//
-//    public void editVisitTime(View view) {
-//        TimePickerFragment dialog = TimePickerFragment.newInstance(new VisitDateListener(this, mCustomer.visit), (DSDDate) view.getTag());
-//        dialog.show(getActivity().getSupportFragmentManager(), "time_picker");
-//    }
 
+    @Override
+    public void onDatePicked(DSDDate newDate) {
+        updateVisitDate(newDate, mCustomer.visit);
+    }
+
+    @Override
+    public void onTimePicked(DSDDate newDate) {
+        updateVisitDate(mCustomer.visit, newDate);
+    }
+
+    private void updateVisitDate(DSDDate visit, DSDDate newDate) {
+        CustomerRepo customerRepo = CustomerRepo.get(getActivity());
+        customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, DSDDate.withTime(visit, newDate).dbFormat());
+        mCustomer = customerRepo.get(mCustomer.getId());
+        displayCustomer();
+    }
 }

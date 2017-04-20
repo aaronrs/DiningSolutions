@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="net.astechdesign.diningsolutions.orders.OrderActivity"
+    tools:showIn="@layout/activity_order">
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="584dp"
+    android:layout_height="807dp"
+    tools:layout_editor_absoluteY="8dp"
+    tools:layout_editor_absoluteX="8dp">
 
     <FrameLayout
         android:id="@+id/customer_details"
@@ -10,18 +21,22 @@
         android:layout_height="wrap_content" >
 
         <fragment class="net.astechdesign.diningsolutions.orders.CustomerFragment"
-            android:id="@+id/titles"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:layout="@layout/order_customer_details" />
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/order_container"
-        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_width="wrap_content"
         android:layout_below="@id/customer_details">
 
-        <include layout="@layout/order_detail" />
+        <fragment class="net.astechdesign.diningsolutions.orders.OrderFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/order_detail" />
     </FrameLayout>
 
 </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

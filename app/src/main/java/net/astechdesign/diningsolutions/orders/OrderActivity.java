@@ -25,11 +25,8 @@ import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
-import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
-
-import java.util.UUID;
 
 import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
 
@@ -58,28 +55,14 @@ public class OrderActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
+        Order currentOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
+
         setContentView(R.layout.activity_order);
 
-        if (true) return;
         initialiseFields();
-
-        mTextVisit = (TextView) findViewById(R.id.order_detail_visit);
-        mTextVisitTime = (TextView) findViewById(R.id.order_detail_visit_time);
-        mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
-        if (mCustomer.equals(Customer.newCustomer)) {
-            mTextVisit.setTag(DSDDate.create());
-            mTextVisitTime.setTag(DSDDate.create());
-        } else {
-            mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
-            mTextVisit.setTag(mCustomer.visit);
-            mTextVisitTime.setTag(mCustomer.visit);
-        }
-
-        displayCustomer();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -126,23 +109,23 @@ public class OrderActivity extends AppCompatActivity
         return view;
     }
 
-    private void displayCustomer() {
-        if (!mCustomer.equals(Customer.newCustomer)) {
-            mTextName.setText(mCustomer.name);
-            mTextPhone.setText(mCustomer.phone == null ? null : mCustomer.phone.number);
-            mTextEmail.setText(mCustomer.email == null ? null : mCustomer.email.address);
-            mTextAddressLine.setText(mCustomer.address == null ? null : mCustomer.address.line);
-            mTextAddressTown.setText(mCustomer.address == null ? null : mCustomer.address.town);
-            mTextAddressCounty.setText(mCustomer.address == null ? null : mCustomer.address.county);
-            mTextAddressPostcode.setText(mCustomer.address == null ? null : mCustomer.address.postcode);
-            if (mCustomer.visit != null) {
-                mTextVisit.setText(mCustomer.visit.getDisplayDate());
-                mTextVisit.setTag(mCustomer.visit);
-                mTextVisitTime.setText(mCustomer.visit.getDisplayTime());
-                mTextVisitTime.setTag(mCustomer.visit);
-            };
-        }
-    }
+//    private void displayCustomer() {
+//        if (!mCustomer.equals(Customer.newCustomer)) {
+//            mTextName.setText(mCustomer.name);
+//            mTextPhone.setText(mCustomer.phone == null ? null : mCustomer.phone.number);
+//            mTextEmail.setText(mCustomer.email == null ? null : mCustomer.email.address);
+//            mTextAddressLine.setText(mCustomer.address == null ? null : mCustomer.address.line);
+//            mTextAddressTown.setText(mCustomer.address == null ? null : mCustomer.address.town);
+//            mTextAddressCounty.setText(mCustomer.address == null ? null : mCustomer.address.county);
+//            mTextAddressPostcode.setText(mCustomer.address == null ? null : mCustomer.address.postcode);
+//            if (mCustomer.visit != null) {
+//                mTextVisit.setText(mCustomer.visit.getDisplayDate());
+//                mTextVisit.setTag(mCustomer.visit);
+//                mTextVisitTime.setText(mCustomer.visit.getDisplayTime());
+//                mTextVisitTime.setTag(mCustomer.visit);
+//            };
+//        }
+//    }
 
     private void displayOrder() {
         if (mOrder.getId() == null) {
@@ -206,12 +189,12 @@ public class OrderActivity extends AppCompatActivity
         }
     }
 
-    public void updateCustomer(DSDDate date) {
-        CustomerRepo customerRepo = CustomerRepo.get(this);
-        customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, date.dbFormat());
-        mCustomer = customerRepo.get(mCustomer.getId());
-        displayCustomer();
-    }
+//    public void updateCustomer(DSDDate date) {
+//        CustomerRepo customerRepo = CustomerRepo.get(this);
+//        customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, date.dbFormat());
+//        mCustomer = customerRepo.get(mCustomer.getId());
+//        displayCustomer();
+//    }
 
     public Customer getCustomer() {
         return mCustomer;
@@ -258,18 +241,18 @@ public class OrderActivity extends AppCompatActivity
         displayOrder();
     }
 
-    public void updateCustomer(String field, String value) {
-        UUID customerId;
-        if (mCustomer.getId() == null) {
-            mCustomer = Customer.create(value);
-            customerId = CustomerRepo.get(this).addOrUpdate(mCustomer);
-        } else {
-            CustomerRepo.get(this).update(mCustomer, field, value);
-            customerId = mCustomer.getId();
-        }
-        mCustomer = CustomerRepo.get(this).get(customerId);
-        displayCustomer();
-    }
+//    public void updateCustomer(String field, String value) {
+//        UUID customerId;
+//        if (mCustomer.getId() == null) {
+//            mCustomer = Customer.create(value);
+//            customerId = CustomerRepo.get(this).addOrUpdate(mCustomer);
+//        } else {
+//            CustomerRepo.get(this).update(mCustomer, field, value);
+//            customerId = mCustomer.getId();
+//        }
+//        mCustomer = CustomerRepo.get(this).get(customerId);
+//        displayCustomer();
+//    }
 
     public void addProduct(View view) {
         FragmentManager fm = getSupportFragmentManager();
@@ -290,16 +273,6 @@ public class OrderActivity extends AppCompatActivity
                         updateInvoice();
                     }}).show();
     }
-//
-//    public void editVisitDate(View view) {
-//        DatePickerFragment dialog = DatePickerFragment.newInstance(new VisitDateListener(this, mCustomer.visit), (DSDDate) view.getTag());
-//        dialog.show(getSupportFragmentManager(), "date_picker");
-//    }
-//
-//    public void editVisitTime(View view) {
-//        TimePickerFragment dialog = TimePickerFragment.newInstance(new VisitDateListener(this, mCustomer.visit), (DSDDate) view.getTag());
-//        dialog.show(getSupportFragmentManager(), "time_picker");
-//    }
 
     public void newOrder(View view) {
         createNewOrder();
