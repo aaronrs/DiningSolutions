@@ -60,7 +60,7 @@
                 android:id="@+id/customer_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Customer Name"
+                android:hint="customer name"
                 android:paddingBottom="8dp"
                 android:tag="Customer Name"
                 android:textSize="14sp" />
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/customer_name"
-                android:hint="Phone number"
+                android:hint="phone number"
                 android:paddingBottom="8dp"
                 android:tag="Phone Number"
                 android:textSize="14sp" />
@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/customer_phone"
-                android:hint="Email address"
+                android:hint="email address"
                 android:paddingBottom="8dp"
                 android:tag="Phone Number"
                 android:textSize="14sp" />
@@ -114,7 +114,7 @@
                 android:id="@+id/address_line"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="House &amp; street"
+                android:hint="house &amp; street"
                 android:paddingBottom="8dp"
                 android:tag="Address"
                 android:textSize="14sp" />

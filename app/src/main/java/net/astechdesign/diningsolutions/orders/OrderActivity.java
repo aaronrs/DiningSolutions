@@ -78,7 +78,6 @@ public class OrderActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-
     }
 
     private void displayOrder() {

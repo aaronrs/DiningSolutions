@@ -46,12 +46,11 @@ public class OrderFragment extends Fragment {
             TextView invoiceDateView = (TextView) view.findViewById(R.id.order_invoice_date);
             invoiceDateView.setText(mOrder.created.getDisplayDate());
             invoiceDateView.setTag(mOrder.created.getDisplayDate());
-        fragment.setArguments(args);
-        mActivity.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.order_container, fragment)
-                .commit();
+            fragment.setArguments(args);
+            mActivity.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.order_container, fragment)
+                    .commit();
         }
-
         return view;
     }
 
