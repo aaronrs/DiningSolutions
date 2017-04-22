@@ -52,7 +52,9 @@ public class OrderTable extends CMSTable<Order> {
                 OrderItemTable.TABLE_NAME + "." + PARENT_ID + " " +
                 "GROUP BY strftime('%Y-%m-%d', " + ORDER_DATE + " / 1000, 'unixepoch')" + ", " +
                 OrderItemTable.PRODUCT_NAME;
-        return db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        return cursor;
     }
 
     public Cursor getCurrentOrder(SQLiteDatabase db, Customer customer) {

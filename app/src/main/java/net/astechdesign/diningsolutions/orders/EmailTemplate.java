@@ -2,8 +2,10 @@ package net.astechdesign.diningsolutions.orders;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
@@ -17,10 +19,13 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import net.astechdesign.diningsolutions.admin.Prefs;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Distributor;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
+import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,14 +44,16 @@ public class EmailTemplate {
     private static String DISTRIBUTOR_NAME = "#DISTRIBUTOR_NAME";
     private static String DISTRIBUTOR_MOBILE = "#DISTRIBUTOR_MOBILE";
 
+    private Context context;
     private Customer customer;
     private Order order;
-    private Context context;
+    private final String invoiceNumber;
 
     private EmailTemplate(Context context, Customer customer, Order order) {
         this.context = context;
         this.customer = customer;
         this.order = order;
+        this.invoiceNumber = getInvoiceNumber(context);
     }
 
     @NonNull
@@ -56,7 +63,7 @@ public class EmailTemplate {
 
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{customer.email.address});
         intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + order.invoiceNumber);
-        intent.putExtra(Intent.EXTRA_TEXT, "Attached please find Invoice No. " + order.invoiceNumber);
+        intent.putExtra(Intent.EXTRA_TEXT, "Attached please find Invoice No. " + invoiceNumber);
 
         try {
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(this.createPdf()));
@@ -96,7 +103,7 @@ public class EmailTemplate {
         Distributor distributor = Distributor.get(context);
 
         document.add(new Paragraph(t01));
-        document.add(new Paragraph(t02.replace(INVOICE_NUMBER, order.invoiceNumber).replace(INVOICE_DATE, order.created.getDisplayDate())));
+        document.add(new Paragraph(t02.replace(INVOICE_NUMBER, invoiceNumber).replace(INVOICE_DATE, order.created.getDisplayDate())));
 
         document.add(new Paragraph(c01));
         document.add(new Paragraph(c02.replace(CUSTOMER_NAME, customer.name)));
@@ -184,16 +191,37 @@ public class EmailTemplate {
         table.addCell(c1);
     }
 
-    public static Intent createIntent(Context context, Customer mCustomer, Order mOrder) {
-        return new EmailTemplate(context, mCustomer, mOrder).getEmailIntent();
+    public static EmailTemplate createIntent(Context context, Customer mCustomer, Order mOrder) {
+        return new EmailTemplate(context, mCustomer, mOrder);
     }
 
     public static void sendEmail(Context context, Customer customer, Order order) {
         try {
-            context.startActivity(EmailTemplate.createIntent(context, customer, order));
+            EmailTemplate template = EmailTemplate.createIntent(context, customer, order);
+            Intent intent = template.getEmailIntent();
+            context.startActivity(intent);
+            OrderRepo.get(context).updateInvoiceNumber(order, template.getInvoiceNumber());
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(context, "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
 
     }
+
+    private String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public String getInvoiceNumber(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        long invoiceNumber = Long.parseLong(sharedPref.getString(Prefs.INVOICE.toString(), "1"));
+        String distributor = sharedPref.getString(Prefs.NUMBER.toString(), "0555");
+
+        SharedPreferences.Editor ed = sharedPref.edit();
+        ed.putString("invoice_start_number", Long.toString(invoiceNumber + 1));
+        ed.commit();
+
+        return String.format("%s-%06d", distributor, invoiceNumber);
+    }
+
+
 }

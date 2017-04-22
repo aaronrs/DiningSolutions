@@ -1,12 +1,9 @@
 package net.astechdesign.diningsolutions.repositories;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.preference.PreferenceManager;
 
-import net.astechdesign.diningsolutions.admin.Prefs;
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.database.wrappers.OrderCursorWrapper;
@@ -66,18 +63,6 @@ public class OrderRepo {
         return orders;
     }
 
-    public String getInvoiceNumber(Context context) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        long invoiceNumber = Long.parseLong(sharedPref.getString(Prefs.INVOICE.toString(), "1"));
-        String distributor = sharedPref.getString(Prefs.NUMBER.toString(), "0555");
-
-        SharedPreferences.Editor ed = sharedPref.edit();
-        ed.putString("invoice_start_number", Long.toString(invoiceNumber + 1));
-        ed.commit();
-
-        return String.format("%s-%06d", distributor, invoiceNumber);
-    }
-
     public UUID add(Customer customer, Order order) {
         UUID id = orderTable.addOrUpdate(mDatabase, customer, order);
         for (OrderItem item : order.orderItems) {
@@ -100,7 +85,15 @@ public class OrderRepo {
     }
 
     public void updateInvoiceDate(Order order, DSDDate date) {
-        orderTable.addOrUpdate(mDatabase, new Order(order.getId(), order.customerId, date, order.invoiceNumber));
+        update(order.getId(), order.customerId, date, order.invoiceNumber);
+    }
+
+    public void updateInvoiceNumber(Order order, String invoiceNumber) {
+        update(order.getId(), order.customerId, order.created, invoiceNumber);
+    }
+
+    private void update(UUID id, UUID customerId, DSDDate date, String invoiceNumber) {
+        orderTable.addOrUpdate(mDatabase, new Order(id, customerId, date, invoiceNumber));
     }
 
     public Order getOrder(UUID id) {
@@ -109,7 +102,7 @@ public class OrderRepo {
     }
 
     public Order create(Customer customer) {
-        UUID id = orderTable.addOrUpdate(mDatabase, customer, Order.create(getInvoiceNumber(mContext)));
+        UUID id = orderTable.addOrUpdate(mDatabase, customer, Order.create());
         return new OrderCursorWrapper(orderTable.get(mDatabase, id)).getOrder();
     }
 }

@@ -74,7 +74,7 @@ public class Order extends Model {
         return Arrays.asList(new Order[]{order});
     }
 
-    public static Order create(String invoiceNumber) {
-        return new Order(null, null, DSDDate.create(), invoiceNumber);
+    public static Order create() {
+        return new Order(null, null, DSDDate.create(), null);
     }
 }
