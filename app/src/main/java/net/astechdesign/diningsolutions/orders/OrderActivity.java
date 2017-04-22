@@ -18,7 +18,6 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
-import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
@@ -40,26 +39,15 @@ public class OrderActivity extends AppCompatActivity
     private Customer mCustomer;
     private Order mOrder;
     private Toolbar toolbar;
-    private TextView mTextName;
-    private TextView mTextPhone;
-    private TextView mTextEmail;
-    private TextView mTextAddressLine;
-    private TextView mTextAddressTown;
-    private TextView mTextAddressCounty;
-    private TextView mTextAddressPostcode;
-    private TextView mTextVisit;
-    private TextView mTextVisitTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
-        Order currentOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
+        mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
 
         setContentView(R.layout.activity_order);
-
-        initialiseFields();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -92,40 +80,6 @@ public class OrderActivity extends AppCompatActivity
         });
 
     }
-
-    private void initialiseFields() {
-        mTextName = setupField(R.id.customer_name, "Customer Name", CustomerTable.CUSTOMER_NAME);
-        mTextPhone = setupField(R.id.customer_phone, "Customer Phone", CustomerTable.CUSTOMER_PHONE);
-        mTextEmail = setupField(R.id.customer_email, "Customer Email", CustomerTable.CUSTOMER_EMAIL);
-        mTextAddressLine = setupField(R.id.address_line, "Address", CustomerTable.ADDRESS_LINE);
-        mTextAddressTown = setupField(R.id.address_town, "Town", CustomerTable.ADDRESS_TOWN);
-        mTextAddressCounty = setupField(R.id.address_county, "County", CustomerTable.ADDRESS_COUNTY);
-        mTextAddressPostcode = setupField(R.id.address_postcode, "Postcode", CustomerTable.ADDRESS_POSTCODE);
-    }
-
-    private TextView setupField(int viewId, String... tags) {
-        TextView view = (TextView) findViewById(viewId);
-        view.setTag(tags);
-        return view;
-    }
-
-//    private void displayCustomer() {
-//        if (!mCustomer.equals(Customer.newCustomer)) {
-//            mTextName.setText(mCustomer.name);
-//            mTextPhone.setText(mCustomer.phone == null ? null : mCustomer.phone.number);
-//            mTextEmail.setText(mCustomer.email == null ? null : mCustomer.email.address);
-//            mTextAddressLine.setText(mCustomer.address == null ? null : mCustomer.address.line);
-//            mTextAddressTown.setText(mCustomer.address == null ? null : mCustomer.address.town);
-//            mTextAddressCounty.setText(mCustomer.address == null ? null : mCustomer.address.county);
-//            mTextAddressPostcode.setText(mCustomer.address == null ? null : mCustomer.address.postcode);
-//            if (mCustomer.visit != null) {
-//                mTextVisit.setText(mCustomer.visit.getDisplayDate());
-//                mTextVisit.setTag(mCustomer.visit);
-//                mTextVisitTime.setText(mCustomer.visit.getDisplayTime());
-//                mTextVisitTime.setTag(mCustomer.visit);
-//            };
-//        }
-//    }
 
     private void displayOrder() {
         if (mOrder.getId() == null) {
@@ -189,15 +143,12 @@ public class OrderActivity extends AppCompatActivity
         }
     }
 
-//    public void updateCustomer(DSDDate date) {
-//        CustomerRepo customerRepo = CustomerRepo.get(this);
-//        customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, date.dbFormat());
-//        mCustomer = customerRepo.get(mCustomer.getId());
-//        displayCustomer();
-//    }
-
     public Customer getCustomer() {
         return mCustomer;
+    }
+
+    public Order getOrder() {
+        return mOrder;
     }
 
     class DeliveryDatePicked implements DatePickerFragment.DatePickerListener{
@@ -240,19 +191,6 @@ public class OrderActivity extends AppCompatActivity
         mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
         displayOrder();
     }
-
-//    public void updateCustomer(String field, String value) {
-//        UUID customerId;
-//        if (mCustomer.getId() == null) {
-//            mCustomer = Customer.create(value);
-//            customerId = CustomerRepo.get(this).addOrUpdate(mCustomer);
-//        } else {
-//            CustomerRepo.get(this).update(mCustomer, field, value);
-//            customerId = mCustomer.getId();
-//        }
-//        mCustomer = CustomerRepo.get(this).get(customerId);
-//        displayCustomer();
-//    }
 
     public void addProduct(View view) {
         FragmentManager fm = getSupportFragmentManager();

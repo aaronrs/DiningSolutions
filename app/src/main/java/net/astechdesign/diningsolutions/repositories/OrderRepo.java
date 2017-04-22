@@ -43,7 +43,13 @@ public class OrderRepo {
 
     public Order getCurrentOrder(Customer customer) {
         Cursor cursor = orderTable.getCurrentOrder(mDatabase, customer);
-        Order order = cursor.isAfterLast() ? null : new OrderCursorWrapper(cursor).getOrder();
+        Order order;
+        if (cursor.isAfterLast()) {
+            cursor.close();
+            order = create(customer);
+        } else {
+            order = new OrderCursorWrapper(cursor).getOrder();
+        }
         return order;
     }
 

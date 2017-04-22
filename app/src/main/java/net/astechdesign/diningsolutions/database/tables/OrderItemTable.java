@@ -40,7 +40,9 @@ public class OrderItemTable extends CMSTable<OrderItem> {
     }
 
     public Cursor getOrderItems(SQLiteDatabase db, Order parent) {
-        return db.query(TABLE_NAME, null, PARENT_ID + " = ?", new String[]{parent.getDbId()}, null, null, null);
+        Cursor cursor = db.query(TABLE_NAME, null, PARENT_ID + " = ?", new String[]{parent.getDbId()}, null, null, null);
+        cursor.moveToFirst();
+        return cursor;
     }
 
     public void updateDelivery(SQLiteDatabase db, OrderItem orderItem, DSDDate date) {
