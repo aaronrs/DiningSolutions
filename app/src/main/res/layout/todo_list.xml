@@ -14,14 +14,6 @@
         android:onClick="addTask"
         android:text="Add Task" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="24dp"
-        android:onClick="addCustomer"
-        android:text="New Customer" />
-
     <TextView
         android:id="@+id/text_date"
         android:layout_width="200dp"

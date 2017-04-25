@@ -16,6 +16,7 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
+import net.astechdesign.diningsolutions.model.DSDDate;
 
 public class CustomerEditFragment extends DialogFragment {
 
@@ -87,7 +88,7 @@ public class CustomerEditFragment extends DialogFragment {
                                 customer.created,
                                 "",
                                 address,
-                                null
+                                DSDDate.create()
                                 );
                         mListener.onCustomerEditClick(dialog, newCustomer);
                     }

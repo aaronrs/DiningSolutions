@@ -12,7 +12,7 @@ public class DSDDate implements Serializable, Comparable {
 
     private static SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE dd MMMM yyyy");
     private static SimpleDateFormat shortDisplayDateFormat = new SimpleDateFormat("dd MMM yyyy");
-    private static SimpleDateFormat displayTimeFormat = new SimpleDateFormat("KK:mm a");
+    private static SimpleDateFormat displayTimeFormat = new SimpleDateFormat("h:mm a");
 
     public final Date date;
 

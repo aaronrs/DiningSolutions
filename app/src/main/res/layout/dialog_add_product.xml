@@ -21,7 +21,7 @@
         android:layout_toRightOf="@+id/add_item_name_select"
         android:enabled="false"
         android:onClick="addNewProduct"
-        android:text="Add Product" />
+        android:text="New Product" />
 
     <EditText
         android:id="@+id/add_item_price"

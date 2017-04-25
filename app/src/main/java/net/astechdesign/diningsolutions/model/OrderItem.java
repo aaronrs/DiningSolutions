@@ -26,4 +26,8 @@ public class OrderItem extends Model {
     public void setDeliveryDate(DSDDate date) {
         deliveryDate = date;
     }
+
+    public static OrderItem create(String name, double price, int quantity, String batch, DSDDate deliveryDate) {
+        return new OrderItem(null, name, price, quantity, batch, deliveryDate);
+    }
 }

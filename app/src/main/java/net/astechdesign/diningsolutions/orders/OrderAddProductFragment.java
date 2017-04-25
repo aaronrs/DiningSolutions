@@ -1,7 +1,6 @@
 package net.astechdesign.diningsolutions.orders;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +34,10 @@ public class OrderAddProductFragment extends DialogFragment {
     private OrderItem mItem;
     private int mQuantity;
     private Map<String, Product> productMap;
+
+    public void setListener(OrderFragment listener) {
+        mListener = listener;
+    }
 
     public interface ProductAddListener {
         void onAddProductPositiveClick(DialogInterface dialog, OrderItem item, Product product, double price, int quantity, String batch);
@@ -143,15 +146,5 @@ public class OrderAddProductFragment extends DialogFragment {
 
     public void setOrderItem(OrderItem item) {
         this.mItem = item;
-    }
-
-    @Override
-    public void onAttach(Context activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OrderAddProductFragment.ProductAddListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement ProductAddListener");
-        }
     }
 }

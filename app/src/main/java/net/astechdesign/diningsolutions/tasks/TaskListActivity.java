@@ -15,25 +15,35 @@ import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
+import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
+import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.reports.ReportsActivity;
+import net.astechdesign.diningsolutions.repositories.CustomerRepo;
+import net.astechdesign.diningsolutions.repositories.OrderRepo;
 import net.astechdesign.diningsolutions.repositories.TaskRepo;
 
 import java.util.List;
+import java.util.UUID;
 
 import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
 import static net.astechdesign.diningsolutions.TimePickerFragment.TIME_PICKER;
+import static net.astechdesign.diningsolutions.customers.CustomerEditFragment.EDIT_CUSTOMER;
 import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
-public class TaskListActivity extends AppCompatActivity implements NewTaskFragment.NewTaskListener {
+public class TaskListActivity extends AppCompatActivity
+        implements NewTaskFragment.NewTaskListener,
+        CustomerEditFragment.CustomerEditListener {
 
     private NewTaskFragment newTaskFragment;
     private RecyclerView recyclerView;
+    private List<Task> taskList;
+    private TaskRecyclerViewAdapter viewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +54,10 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
+        taskList = TaskRepo.get(this).get();
+        viewAdapter = new TaskRecyclerViewAdapter(this, taskList);
         recyclerView = (RecyclerView) findViewById(R.id.task_list);
-        setupRecyclerView();
+        recyclerView.setAdapter(viewAdapter);
     }
 
     @Override
@@ -65,6 +77,12 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
                 intent = new Intent(this, CustomerListActivity.class);
                 this.startActivity(intent);
                 return true;
+            case R.id.menu_item_new_customer:
+                FragmentManager fm = getSupportFragmentManager();
+                CustomerEditFragment customerEditFragment = new CustomerEditFragment();
+                customerEditFragment.setCustomer(Customer.newCustomer);
+                customerEditFragment.show(fm, EDIT_CUSTOMER);
+                return true;
             case R.id.action_reports:
                 intent = new Intent(this, ReportsActivity.class);
                 this.startActivity(intent);
@@ -78,21 +96,25 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setupRecyclerView();
-    }
-
-    private void setupRecyclerView() {
-        List<Task> taskList = TaskRepo.get(this).get();
-        recyclerView.setAdapter(new TaskRecyclerViewAdapter(this, taskList));
-    }
-
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        setupRecyclerView(taskList);
+//    }
+//
+//    private void setupRecyclerView(List<Task> taskList) {
+//        TaskRecyclerViewAdapter adapter = new TaskRecyclerViewAdapter(this, taskList);
+//        adapter.notifyDataSetChanged();
+//        recyclerView.setAdapter(adapter);
+//    }
+//
     @Override
     public void onNewTaskPositiveClick(DialogInterface dialog, DSDDate date, String title, String description) {
-        TaskRepo.get(this).addOrUpdate(Task.create(date, title, description));
-        setupRecyclerView();
+        TaskRepo taskRepo = TaskRepo.get(this);
+        taskRepo.addOrUpdate(Task.create(date, title, description));
+        taskList.clear();
+        taskList.addAll(taskRepo.get());
+        viewAdapter.notifyDataSetChanged();
     }
 
     public void getDate(View v) {
@@ -116,9 +138,13 @@ public class TaskListActivity extends AppCompatActivity implements NewTaskFragme
         newTaskFragment.show(fm, ADD_TASK);
     }
 
-    public void addCustomer(View v) {
+    @Override
+    public void onCustomerEditClick(DialogInterface dialog, Customer newCustomer) {
+        UUID customerId = CustomerRepo.get(this).addOrUpdate(newCustomer);
+        Customer customer = CustomerRepo.get(this).get(customerId);
+        OrderRepo.get(this).add(Order.create(customer));
         Intent intent = new Intent(this, OrderActivity.class);
-        intent.putExtra(OrderActivity.CUSTOMER, Customer.newCustomer);
+        intent.putExtra(OrderActivity.CUSTOMER, customer);
         this.startActivity(intent);
     }
 }

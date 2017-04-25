@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class TaskRepo {
 
@@ -80,7 +81,7 @@ public class TaskRepo {
         return tasks;
     }
 
-    public void addOrUpdate(Task task) {
-        mTaskTable.addOrUpdate(mDatabase, task);
+    public UUID addOrUpdate(Task task) {
+        return mTaskTable.addOrUpdate(mDatabase, task);
     }
 }

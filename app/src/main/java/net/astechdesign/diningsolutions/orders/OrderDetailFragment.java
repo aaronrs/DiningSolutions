@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,11 +62,11 @@ public class OrderDetailFragment extends Fragment implements DatePickerFragment.
     private void setupRecyclerView(View rootView) {
         View recyclerView = rootView.findViewById(R.id.order_items_list);
         assert recyclerView != null;
-        ((RecyclerView)recyclerView).setAdapter(
-                new OrderItemRecyclerViewAdapter(
-                        this,
-                        orderItemRepo.getOrderItems(mOrder),
-                        getActivity().getSupportFragmentManager()));
+//        ((RecyclerView)recyclerView).setAdapter(
+//                new OrderItemRecyclerViewAdapter(
+//                        this,
+//                        orderItemRepo.getOrderItems(mOrder),
+//                        getActivity().getSupportFragmentManager()));
     }
 
     @Override

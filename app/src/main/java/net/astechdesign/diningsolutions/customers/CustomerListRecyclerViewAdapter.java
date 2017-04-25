@@ -66,11 +66,6 @@ public class CustomerListRecyclerViewAdapter
             mAddressView = (TextView) view.findViewById(R.id.address);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mNameView.getText() + "'";
-        }
-
         public void setItem(Customer item) {
             this.mItem = item;
             mNameView.setText(item.name);

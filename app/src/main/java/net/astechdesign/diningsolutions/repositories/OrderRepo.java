@@ -39,32 +39,21 @@ public class OrderRepo {
     }
 
     public Order getCurrentOrder(Customer customer) {
-        Cursor cursor = orderTable.getCurrentOrder(mDatabase, customer);
-        Order order;
+        Cursor cursor = orderTable.getOrders(mDatabase, customer);
         if (cursor.isAfterLast()) {
             cursor.close();
-            order = create(customer);
-        } else {
-            order = new OrderCursorWrapper(cursor).getOrder();
+            UUID id = add(Order.create(customer));
+            cursor = orderTable.get(mDatabase, id);
         }
+        Order order = new OrderCursorWrapper(cursor).getOrder();
+        cursor.close();
+        List<OrderItem> orderItems = OrderItemRepo.get(mContext).getOrderItems(order);
+        order.orderItems = orderItems;
         return order;
     }
 
-    public List<Order> getOrders(Customer customer) {
-        Cursor cursor = orderTable.getOrders(mDatabase, customer);
-        List<Order> orders = new ArrayList<>();
-        while (!cursor.isAfterLast() && cursor.getCount() > 0) {
-            Order order = new OrderCursorWrapper(cursor).getOrder();
-            List<OrderItem> orderItems = itemRepo.getOrderItems(order);
-            order.orderItems.addAll(orderItems);
-            orders.add(order);
-            cursor.moveToNext();
-        }
-        return orders;
-    }
-
-    public UUID add(Customer customer, Order order) {
-        UUID id = orderTable.addOrUpdate(mDatabase, customer, order);
+    public UUID add(Order order) {
+        UUID id = orderTable.addOrUpdate(mDatabase, order);
         for (OrderItem item : order.orderItems) {
             itemRepo.add(order, item);
         }
@@ -94,15 +83,5 @@ public class OrderRepo {
 
     private void update(UUID id, UUID customerId, DSDDate date, String invoiceNumber) {
         orderTable.addOrUpdate(mDatabase, new Order(id, customerId, date, invoiceNumber));
-    }
-
-    public Order getOrder(UUID id) {
-        Cursor cursor = orderTable.get(mDatabase, id);
-        return new OrderCursorWrapper(cursor).getOrder();
-    }
-
-    public Order create(Customer customer) {
-        UUID id = orderTable.addOrUpdate(mDatabase, customer, Order.create());
-        return new OrderCursorWrapper(orderTable.get(mDatabase, id)).getOrder();
     }
 }

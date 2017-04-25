@@ -197,12 +197,8 @@ public class CustomerListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_new_customer:
-                Intent intent = new Intent(this, CustomerDetailActivity.class);
-                this.startActivity(intent);
-                return true;
             case R.id.menu_item_products:
-                intent = new Intent(this, ProductListActivity.class);
+                Intent intent = new Intent(this, ProductListActivity.class);
                 this.startActivity(intent);
                 return true;
             case R.id.action_settings:

@@ -6,11 +6,6 @@
         android:id="@+id/menu_item_products"
         app:showAsAction="always|withText" />
 
-    <item android:title="New Customer"
-        android:id="@+id/menu_item_new_customer"
-        android:icon="@drawable/ic_action_add"
-        app:showAsAction="always|withText" />
-
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

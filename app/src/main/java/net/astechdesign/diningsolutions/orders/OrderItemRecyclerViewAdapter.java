@@ -23,10 +23,10 @@ public class OrderItemRecyclerViewAdapter
 
     private FragmentManager fm;
     private final List<OrderItem> mValues;
-    private OrderDetailFragment fragment;
+    private OrderFragment fragment;
     private FragmentManager mSupportFragmentManager;
 
-    public OrderItemRecyclerViewAdapter(OrderDetailFragment fragment, List<OrderItem> items, FragmentManager supportFragmentManager) {
+    public OrderItemRecyclerViewAdapter(OrderFragment fragment, List<OrderItem> items, FragmentManager supportFragmentManager) {
         this.fragment = fragment;
         this.fm = fragment.getActivity().getSupportFragmentManager();
         this.mValues = items;
@@ -57,7 +57,7 @@ public class OrderItemRecyclerViewAdapter
 
     @Override
     public int getItemCount() {
-        return mValues == null ? 0 : mValues.size();
+        return mValues.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

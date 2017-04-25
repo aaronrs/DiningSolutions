@@ -39,6 +39,8 @@ public class ProductTable extends CMSTable<Product> {
     }
 
     public Cursor getProduct(SQLiteDatabase mDatabase, String name) {
-        return mDatabase.query(TABLE_NAME, null, PRODUCT_NAME + " = ?", new String[]{name}, null, null, null);
+        Cursor cursor = mDatabase.query(TABLE_NAME, null, PRODUCT_NAME + " = ?", new String[]{name}, null, null, null);
+        cursor.moveToFirst();
+        return cursor;
     }
 }

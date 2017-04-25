@@ -25,13 +25,16 @@ public class OrderTable extends CMSTable<Order> {
     }
 
     public void insertDbValues(ContentValues values, Order order) {
+        values.put(PARENT_ID, order.customerId.toString());
         values.put(INVOICE_NO, order.invoiceNumber);
         values.put(ORDER_DATE, order.created.dbFormat());
     }
 
     public Cursor getOrders(SQLiteDatabase db, Model parent) {
         String orderBy = ORDER_DATE + " DESC, " + INVOICE_NO + " DESC";
-        return db.query(TABLE_NAME, null, PARENT_ID + " = ?", new String[]{parent.getDbId()}, null, null, orderBy);
+        Cursor cursor = db.query(TABLE_NAME, null, PARENT_ID + " = ?", new String[]{parent.getDbId()}, null, null, orderBy);
+        cursor.moveToFirst();
+        return cursor;
     }
 
     public Cursor get(SQLiteDatabase db) {
@@ -69,6 +72,7 @@ public class OrderTable extends CMSTable<Order> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        cursor.moveToFirst();
         return cursor;
     }
 }
