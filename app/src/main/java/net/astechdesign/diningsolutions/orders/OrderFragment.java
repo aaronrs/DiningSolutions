@@ -22,6 +22,7 @@ import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.OrderItemRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.astechdesign.diningsolutions.orders.OrderActivity.ADD_PRODUCT;
@@ -57,6 +58,7 @@ public class OrderFragment extends Fragment
         orderItems.addAll(mOrder.orderItems);
         dateView.setText(mOrder.created.getDisplayDate());
         totalView.setText(String.format("%.2f", mOrder.total()));
+        update();
     }
 
     @Override
@@ -96,11 +98,12 @@ public class OrderFragment extends Fragment
         });
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        orderItems = mOrder.orderItems;
+        orderItems = new ArrayList<>();
         viewAdapter = new OrderItemRecyclerViewAdapter(this, orderItems, fragmentManager);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.order_items_list);
         recyclerView.setAdapter(viewAdapter);
 
+        update();
         return rootView;
     }
 

@@ -47,19 +47,11 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/text_delete"
-        android:layout_width="48dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_invoice"
-        android:text="Delete" />
-
-    <TextView
         android:id="@+id/text_product"
         style="?android:attr/textAppearanceMedium"
-        android:layout_width="200dp"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_invoice"
-        android:layout_toEndOf="@+id/text_delete"
         android:text="Produce Purchased"
         android:textSize="14sp" />
 
@@ -99,18 +91,26 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_invoice"
-        android:layout_marginLeft="16dp"
         android:layout_toRightOf="@id/text_cost"
+        android:layout_marginLeft="16dp"
         android:text="Delivery Date"
         android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/text_delete"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_invoice"
+        android:layout_toRightOf="@id/text_date"
+        android:text="Delete" />
 
     <TextView
         android:id="@+id/text_batch"
         style="?android:attr/textAppearanceMedium"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/text_product"
-        android:layout_below="@id/text_product"
+        android:layout_alignStart="@+id/text_price"
+        android:layout_below="@id/text_price"
         android:text="Batch No."
         android:textSize="14sp" />
 

@@ -14,20 +14,21 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/batch_number"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/product_name"
-        android:text="batch number"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-    <TextView
         android:id="@+id/product_price"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_toRightOf="@id/product_name"
         android:text="product price"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:id="@+id/batch_number"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_price"
+        android:layout_alignLeft="@id/product_price"
+        android:text="batch number"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
@@ -63,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/delivery_date_btn"
         android:onClick="deleteItem"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:srcCompat="@android:drawable/ic_input_delete" />
 
 
 </RelativeLayout>
