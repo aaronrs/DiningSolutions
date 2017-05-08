@@ -79,8 +79,14 @@ public class OrderItemRecyclerViewAdapter
             mPriceView = (TextView) view.findViewById(R.id.product_price);
             mQuantityView = (TextView) view.findViewById(R.id.product_quantity);
             mCostView = (TextView) view.findViewById(R.id.product_cost);
-            mDeliveryDateBtn = (Button) view.findViewById(R.id.delivery_date_btn);
             mDeleteBtn = (ImageButton) view.findViewById(R.id.delete_item);
+            mDeleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fragment.deleteOrderItem((OrderItem)mDeleteBtn.getTag());
+                }
+            });
+            mDeliveryDateBtn = (Button) view.findViewById(R.id.delivery_date_btn);
             mDeliveryDateBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
@@ -19,7 +18,7 @@ import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
-import static net.astechdesign.diningsolutions.orders.OrderDetailFragment.ORDER;
+import java.util.List;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -28,6 +27,7 @@ public class OrderActivity extends AppCompatActivity {
     public static final String EDIT_ENTRY = "edit_entry";
 
     private Customer mCustomer;
+    private List<Order> mOrders;
     private Order mOrder;
     private Toolbar toolbar;
     private OrderFragment orderFragment;
@@ -37,7 +37,8 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
-        mOrder = OrderRepo.get(this).getCurrentOrder(mCustomer);
+        mOrders = OrderRepo.get(this).get(mCustomer);
+        mOrder = mOrders.get(0);
 
         setContentView(R.layout.activity_order);
 
@@ -58,37 +59,6 @@ public class OrderActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-    }
-
-    private void displayOrder() {
-        if (mOrder.getId() == null) {
-            return;
-        }
-
-        OrderDetailFragment fragment = new OrderDetailFragment();
-
-        Bundle args = new Bundle();
-        args.putSerializable(CUSTOMER, mCustomer);
-
-        args.putSerializable(ORDER, mOrder);
-        initialiseOrderView();
-        fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.order_container, fragment)
-                .commit();
-    }
-
-    private void initialiseOrderView() {
-        TextView invoiceDateView = setFields(R.id.order_invoice_date, mOrder.created != null ? mOrder.created.getDisplayDate() : "");
-        invoiceDateView.setTag(mOrder.created);
-    }
-
-    private TextView setFields(int id, String text) {
-        TextView view = (TextView) findViewById(id);
-        if (text != null) {
-            view.setText(text);
-        }
-        return view;
     }
 
     private void sendEmail() {
@@ -121,27 +91,13 @@ public class OrderActivity extends AppCompatActivity {
         return mCustomer;
     }
 
-    public Order getOrder() {
-        return mOrder;
+    public List<Order> getOrders() {
+        return mOrders;
     }
-
-//    public void deleteItem(View view) {
-//        final OrderItem item = (OrderItem) view.getTag();
-//        new AlertDialog.Builder(this)
-//                .setTitle("Delete Order Item")
-//                .setMessage("Delete " + item.name + " from order?")
-//                .setIcon(android.R.drawable.ic_dialog_alert)
-//                .setNegativeButton(android.R.string.no, null)
-//                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int whichButton) {
-//                        OrderItemRepo.get(OrderActivity.this).delete(mOrder, item);
-//                        updateInvoice();
-//                    }}).show();
-//    }
 
     public void newOrder(View view) {
         OrderRepo.get(this).add(Order.create(mCustomer));
-        orderFragment.update();
+        orderFragment.updateAdapter();
     }
 
     public void setOrderFragment(OrderFragment orderFragment) {

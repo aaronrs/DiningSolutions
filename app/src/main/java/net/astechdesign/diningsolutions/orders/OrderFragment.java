@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
@@ -31,6 +33,7 @@ public class OrderFragment extends Fragment
         implements DatePickerFragment.DatePickerListener,
         OrderAddProductFragment.ProductAddListener {
 
+    private List<Order> mOrders;
     private Order mOrder;
     private OrderActivity mActivity;
     private OrderItemRepo orderItemRepo;
@@ -41,24 +44,17 @@ public class OrderFragment extends Fragment
     private RecyclerView recyclerView;
     private TextView dateView;
     private TextView totalView;
+    private Customer mCustomer;
+    private int mIndex;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mActivity = (OrderActivity) getActivity();
         mActivity.setOrderFragment(this);
-        mOrder = mActivity.getOrder();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mOrder = mActivity.getOrder();
-        orderItems.clear();
-        orderItems.addAll(mOrder.orderItems);
-        dateView.setText(mOrder.created.getDisplayDate());
-        totalView.setText(String.format("%.2f", mOrder.total()));
-        update();
+        mCustomer = mActivity.getCustomer();
+        mOrders = mActivity.getOrders();
+        mOrder = mOrders.get(mIndex);
     }
 
     @Override
@@ -72,30 +68,7 @@ public class OrderFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.order_detail, container);
 
-        rootView.findViewById(R.id.add_product_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = mActivity.getSupportFragmentManager();
-                OrderAddProductFragment newProductFragment = new OrderAddProductFragment();
-                newProductFragment.setListener(OrderFragment.this);
-                newProductFragment.show(fm, ADD_PRODUCT);
-            }
-        });
-        dateView = (TextView) rootView.findViewById(R.id.order_invoice_date);
-        dateView.setText(mOrder.created.getDisplayDate());
-        totalView = (TextView) rootView.findViewById(R.id.order_detail_total);
-        totalView.setText(String.format("%.2f", mOrder.total()));
-
-        dateView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatePickerFragment dialog = DatePickerFragment.newInstance(new DeliveryDatePicked(mActivity), (DSDDate) view.getTag());
-                dialog.show(mActivity.getSupportFragmentManager(), "date_picker");
-
-                Snackbar.make(view, "Clicked", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        initialiseFields(rootView);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         orderItems = new ArrayList<>();
@@ -103,23 +76,30 @@ public class OrderFragment extends Fragment
         recyclerView = (RecyclerView) rootView.findViewById(R.id.order_items_list);
         recyclerView.setAdapter(viewAdapter);
 
-        update();
+        updateAdapter();
         return rootView;
     }
 
+    public void updateAdapter() {
+        List<OrderItem> updatedItems = orderItemRepo.getOrderItems(mOrder);
+        orderItems.clear();
+        orderItems.addAll(updatedItems);
+        viewAdapter.notifyDataSetChanged();
+    }
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        mOrders = mActivity.getOrders();
+        orderItems.clear();
+        orderItems.addAll(mOrder.orderItems);
+        dateView.setText(mOrder.created.getDisplayDate());
+        totalView.setText(String.format("%.2f", mOrder.total()));
+        updateAdapter();
     }
 
     public void setSelectedOrderItem(OrderItem selectedOrderItem) {
         this.selectedOrderItem = selectedOrderItem;
-    }
-
-    @Override
-    public void onDatePicked(DSDDate date) {
-        orderItemRepo.updateDelivery(selectedOrderItem, date);
-        update();
     }
 
     @Override
@@ -132,19 +112,75 @@ public class OrderFragment extends Fragment
         }
         item = new OrderItem(null, product.name, price, quantity, batch, mOrder.created);
         OrderItemRepo.get(mActivity).add(mOrder, item);
-        update();
+        updateAdapter();
     }
 
-    public void update() {
-        List<OrderItem> updatedItems = orderItemRepo.getOrderItems(mOrder);
-        orderItems.clear();
-        orderItems.addAll(updatedItems);
-        viewAdapter.notifyDataSetChanged();
+    @Override
+    public void onDatePicked(DSDDate date) {
+        orderItemRepo.updateDelivery(selectedOrderItem, date);
+        updateAdapter();
+    }
+
+    private void initialiseFields(View rootView) {
+        rootView.findViewById(R.id.add_product_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = mActivity.getSupportFragmentManager();
+                OrderAddProductFragment newProductFragment = new OrderAddProductFragment();
+                newProductFragment.setListener(OrderFragment.this);
+                newProductFragment.show(fm, ADD_PRODUCT);
+            }
+        });
+        rootView.findViewById(R.id.btn_latest).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOrder = mOrders.get(0);
+                updateAdapter();
+            }
+        });
+        rootView.findViewById(R.id.btn_previous).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mIndex < mOrders.size()) {
+                    mOrder = mOrders.get(mIndex++);
+                    updateAdapter();
+                }
+            }
+        });
+
+        dateView = (TextView) rootView.findViewById(R.id.order_invoice_date);
+        dateView.setText(mOrder.created.getDisplayDate());
+        dateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerFragment dialog = DatePickerFragment.newInstance(new DeliveryDatePicked(mActivity), (DSDDate) view.getTag());
+                dialog.show(mActivity.getSupportFragmentManager(), "date_picker");
+
+                Snackbar.make(view, "Clicked", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        totalView = (TextView) rootView.findViewById(R.id.order_detail_total);
+        totalView.setText(String.format("%.2f", mOrder.total()));
+    }
+
+    public void deleteOrderItem(final OrderItem item) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Delete Order Item")
+                .setMessage("Delete " + item.name + " from order?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        OrderItemRepo.get(getActivity()).delete(mOrder, item);
+                        updateAdapter();
+                    }}).show();
     }
 
     class DeliveryDatePicked implements DatePickerFragment.DatePickerListener{
-        private final OrderActivity activity;
 
+        private final OrderActivity activity;
         public DeliveryDatePicked(OrderActivity activity) {
             this.activity = activity;
         }
@@ -158,5 +194,6 @@ public class OrderFragment extends Fragment
             }
             OrderRepo.get(activity).updateInvoiceDate(mOrder, date);
         }
+
     }
 }

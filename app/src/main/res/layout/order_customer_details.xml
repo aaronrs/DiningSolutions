@@ -5,8 +5,10 @@
 
     <TextView
         android:id="@+id/text_visit"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
         android:text="Visit Date:" />
 
     <TextView
@@ -19,9 +21,10 @@
 
     <TextView
         android:id="@+id/text_visit_time"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_visit"
+        android:paddingLeft="8dp"
         android:paddingBottom="8dp"
         android:text="Visit Time:" />
 
@@ -63,7 +66,8 @@
                 android:hint="customer name"
                 android:paddingBottom="8dp"
                 android:tag="Customer Name"
-                android:textSize="14sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/customer_phone"
@@ -73,10 +77,12 @@
                 android:hint="phone number"
                 android:paddingBottom="8dp"
                 android:tag="Phone Number"
-                android:textSize="14sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/customer_email"
+                style="?android:attr/textAppearanceLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/customer_phone"
@@ -112,6 +118,7 @@
 
             <TextView
                 android:id="@+id/address_line"
+                style="?android:attr/textAppearanceLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="house &amp; street"

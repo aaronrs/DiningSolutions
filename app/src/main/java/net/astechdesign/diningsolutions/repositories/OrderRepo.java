@@ -38,18 +38,27 @@ public class OrderRepo {
         orderTable = DBHelper.getOrderTable();
     }
 
-    public Order getCurrentOrder(Customer customer) {
+    public List<Order> get(Customer customer) {
+        List<Order> orders = new ArrayList<>();
         Cursor cursor = orderTable.getOrders(mDatabase, customer);
-        if (cursor.isAfterLast()) {
-            cursor.close();
+        while (cursor.moveToNext()) {
+            Order order = new OrderCursorWrapper(cursor).getOrder();
+            orders.add(order);
+        }
+        cursor.close();
+        if (orders.isEmpty()) {
             UUID id = add(Order.create(customer));
             cursor = orderTable.get(mDatabase, id);
+            Order order = new OrderCursorWrapper(cursor).getOrder();
+            orders.add(order);
+            cursor.close();
+        } else {
+            for (Order order : orders) {
+                List<OrderItem> orderItems = OrderItemRepo.get(mContext).getOrderItems(order);
+                order.orderItems = orderItems;
+            }
         }
-        Order order = new OrderCursorWrapper(cursor).getOrder();
-        cursor.close();
-        List<OrderItem> orderItems = OrderItemRepo.get(mContext).getOrderItems(order);
-        order.orderItems = orderItems;
-        return order;
+        return orders;
     }
 
     public UUID add(Order order) {

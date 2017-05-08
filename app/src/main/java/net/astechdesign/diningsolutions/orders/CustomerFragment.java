@@ -51,38 +51,9 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
 
         view = inflater.inflate(R.layout.order_customer_details, container);
 
-        mTextName = setupField(R.id.customer_name, "Customer Name", CustomerTable.CUSTOMER_NAME);
-        mTextPhone = setupField(R.id.customer_phone, "Customer Phone", CustomerTable.CUSTOMER_PHONE);
-        mTextEmail = setupField(R.id.customer_email, "Customer Email", CustomerTable.CUSTOMER_EMAIL);
-        mTextAddressLine = setupField(R.id.address_line, "Address", CustomerTable.ADDRESS_LINE);
-        mTextAddressTown = setupField(R.id.address_town, "Town", CustomerTable.ADDRESS_TOWN);
-        mTextAddressCounty = setupField(R.id.address_county, "County", CustomerTable.ADDRESS_COUNTY);
-        mTextAddressPostcode = setupField(R.id.address_postcode, "Postcode", CustomerTable.ADDRESS_POSTCODE);
-
-        mTextVisit = (TextView) view.findViewById(R.id.order_detail_visit);
-        mTextVisit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerFragment dialog = DatePickerFragment.newInstance(CustomerFragment.this, (DSDDate) view.getTag());
-                dialog.show(getActivity().getSupportFragmentManager(), "date_picker");
-            }
-        });
-        mTextVisitTime = (TextView) view.findViewById(R.id.order_detail_visit_time);
-        mTextVisitTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerFragment dialog = TimePickerFragment.newInstance(CustomerFragment.this, (DSDDate) view.getTag());
-                dialog.show(getActivity().getSupportFragmentManager(), "time_picker");
-            }
-        });
-        if (mCustomer.equals(Customer.newCustomer)) {
-            mTextVisit.setTag(DSDDate.create());
-            mTextVisitTime.setTag(DSDDate.create());
-        } else {
-            mTextVisit.setTag(mCustomer.visit);
-            mTextVisitTime.setTag(mCustomer.visit);
-        }
+        initialiseFields();
         displayCustomer();
+
         return view;
     }
 
@@ -90,45 +61,6 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
     public void onResume() {
         super.onResume();
         displayCustomer();
-    }
-
-    private TextView setupField(int viewId, String name, String field) {
-        TextView fieldView = (TextView) view.findViewById(viewId);
-        fieldView.setOnClickListener(getFieldListener(name, field));
-        return fieldView;
-    }
-
-    private void displayCustomer() {
-        if (!mCustomer.equals(Customer.newCustomer)) {
-            mTextName.setText(mCustomer.name);
-            mTextPhone.setText(mCustomer.phone == null ? null : mCustomer.phone.number);
-            mTextEmail.setText(mCustomer.email == null ? null : mCustomer.email.address);
-            mTextAddressLine.setText(mCustomer.address == null ? null : mCustomer.address.line);
-            mTextAddressTown.setText(mCustomer.address == null ? null : mCustomer.address.town);
-            mTextAddressCounty.setText(mCustomer.address == null ? null : mCustomer.address.county);
-            mTextAddressPostcode.setText(mCustomer.address == null ? null : mCustomer.address.postcode);
-            if (!mCustomer.visit.equals(DSDDate.EMPTY_DATE)) {
-                mTextVisit.setText(mCustomer.visit.getDisplayDate());
-                mTextVisit.setTag(mCustomer.visit);
-                mTextVisitTime.setText(mCustomer.visit.getDisplayTime());
-                mTextVisitTime.setTag(mCustomer.visit);
-            }
-        } else {
-            mTextName.performClick();
-        }
-    }
-
-    private View.OnClickListener getFieldListener(final String name, final String field) {
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                EditEntryFragment fragment = new EditEntryFragment();
-                fragment.value(CustomerFragment.this, name, field, ((TextView) v).getText().toString());
-                fragment.show(fm, EDIT_ENTRY);
-            }
-        };
-        return listener;
     }
 
     @Override
@@ -171,5 +103,78 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
         customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, DSDDate.withTime(visit, newDate).dbFormat());
         mCustomer = customerRepo.get(mCustomer.getId());
         displayCustomer();
+    }
+
+    private void initialiseFields() {
+        mTextName = setupField(R.id.customer_name, "Customer Name", CustomerTable.CUSTOMER_NAME);
+        mTextPhone = setupField(R.id.customer_phone, "Customer Phone", CustomerTable.CUSTOMER_PHONE);
+        mTextEmail = setupField(R.id.customer_email, "Customer Email", CustomerTable.CUSTOMER_EMAIL);
+        mTextAddressLine = setupField(R.id.address_line, "Address", CustomerTable.ADDRESS_LINE);
+        mTextAddressTown = setupField(R.id.address_town, "Town", CustomerTable.ADDRESS_TOWN);
+        mTextAddressCounty = setupField(R.id.address_county, "County", CustomerTable.ADDRESS_COUNTY);
+        mTextAddressPostcode = setupField(R.id.address_postcode, "Postcode", CustomerTable.ADDRESS_POSTCODE);
+
+        mTextVisit = (TextView) view.findViewById(R.id.order_detail_visit);
+        mTextVisit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment dialog = DatePickerFragment.newInstance(CustomerFragment.this, (DSDDate) view.getTag());
+                dialog.show(getActivity().getSupportFragmentManager(), "date_picker");
+            }
+        });
+        mTextVisitTime = (TextView) view.findViewById(R.id.order_detail_visit_time);
+        mTextVisitTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerFragment dialog = TimePickerFragment.newInstance(CustomerFragment.this, (DSDDate) view.getTag());
+                dialog.show(getActivity().getSupportFragmentManager(), "time_picker");
+            }
+        });
+        if (mCustomer.equals(Customer.newCustomer)) {
+            mTextVisit.setTag(DSDDate.create());
+            mTextVisitTime.setTag(DSDDate.create());
+        } else {
+            mTextVisit.setTag(mCustomer.visit);
+            mTextVisitTime.setTag(mCustomer.visit);
+        }
+    }
+
+    private TextView setupField(int viewId, String name, String field) {
+        TextView fieldView = (TextView) view.findViewById(viewId);
+        fieldView.setOnClickListener(getFieldListener(name, field));
+        return fieldView;
+    }
+
+    private View.OnClickListener getFieldListener(final String name, final String field) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                EditEntryFragment fragment = new EditEntryFragment();
+                fragment.value(CustomerFragment.this, name, field, ((TextView) v).getText().toString());
+                fragment.show(fm, EDIT_ENTRY);
+            }
+        };
+        return listener;
+    }
+
+    private void displayCustomer() {
+        if (!mCustomer.equals(Customer.newCustomer)) {
+            mTextName.setText(mCustomer.name);
+            mTextPhone.setText(mCustomer.phone == null ? null : mCustomer.phone.number);
+            mTextEmail.setText(mCustomer.email == null ? null : mCustomer.email.address);
+            mTextAddressLine.setText(mCustomer.address == null ? null : mCustomer.address.line);
+            mTextAddressTown.setText(mCustomer.address == null ? null : mCustomer.address.town);
+            mTextAddressCounty.setText(mCustomer.address == null ? null : mCustomer.address.county);
+            mTextAddressPostcode.setText(mCustomer.address == null ? null : mCustomer.address.postcode);
+            if (!mCustomer.visit.equals(DSDDate.EMPTY_DATE)) {
+                mTextVisit.setText(mCustomer.visit.getDisplayDate());
+                mTextVisit.setTag(mCustomer.visit);
+                mTextVisitTime.setText(mCustomer.visit.getDisplayTime());
+                mTextVisitTime.setTag(mCustomer.visit);
+            }
+        } else {
+            mTextName.performClick();
+        }
     }
 }
