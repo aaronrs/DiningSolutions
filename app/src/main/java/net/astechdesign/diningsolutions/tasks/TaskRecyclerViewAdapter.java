@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
@@ -62,6 +63,7 @@ public class TaskRecyclerViewAdapter
         private final TextView mTimeView;
         private final TextView mTitleView;
         private final TextView mDescriptionView;
+        private final ImageButton mDeleteBtn;
         private Task mTask;
 
         public ViewHolder(View view) {
@@ -71,19 +73,26 @@ public class TaskRecyclerViewAdapter
             mTimeView = (TextView) view.findViewById(R.id.task_time);
             mTitleView = (TextView) view.findViewById(R.id.task_title);
             mDescriptionView = (TextView) view.findViewById(R.id.task_description);
+            mDeleteBtn = (ImageButton) view.findViewById(R.id.btn_delete_task);
         }
 
         public void setItem(Task item) {
             this.mTask = item;
-            if (mTask.title.startsWith("Visit")) {
+            if (mTask.title.equals("Visit")) {
                 mView.setBackgroundColor(Color.parseColor("#ADC8FA"));
-            } else if (mTask.title.startsWith("Delivery")) {
+            } else if (mTask.title.equals("Delivery")) {
                 mView.setBackgroundColor(Color.parseColor("#F0CBCB"));
             }
             mDateView.setText(mTask.date.getDisplayDate());
             mTimeView.setText(mTask.date.getDisplayTime());
             mTitleView.setText(mTask.title);
             mDescriptionView.setText(mTask.description);
+            if (mTask.title.equals("Visit") || mTask.title.equals("Delivery")) {
+                mDeleteBtn.setEnabled(false);
+            } else {
+                mDeleteBtn.setTag(mTask);
+                mDeleteBtn.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override

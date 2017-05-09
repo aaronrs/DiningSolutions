@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -136,6 +137,27 @@ public class TaskListActivity extends AppCompatActivity
         args.putString(NewTaskFragment.HEADER, "New Task");
         newTaskFragment.setArguments(args);
         newTaskFragment.show(fm, ADD_TASK);
+    }
+
+    public void deleteTask(View view) {
+        final TaskRepo taskRepo = TaskRepo.get(this);
+        final Task deleteTask = (Task) view.getTag();
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Task")
+                .setMessage("Delete task \"" + deleteTask.title + "\" ?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        taskRepo.delete(deleteTask);
+                        update();
+                    }}).show();
+    }
+
+    private void update() {
+        taskList.clear();
+        taskList.addAll(TaskRepo.get(this).get());
+        viewAdapter.notifyDataSetChanged();
     }
 
     @Override

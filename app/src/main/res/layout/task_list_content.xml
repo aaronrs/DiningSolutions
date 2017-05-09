@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp">
@@ -11,6 +12,7 @@
         android:layout_weight="7"
         android:paddingLeft="8dp"
         android:textAlignment="viewStart"
+        android:text="Mar 3 2017"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
@@ -20,14 +22,16 @@
         android:layout_below="@+id/task_date"
         android:paddingLeft="8dp"
         android:textAlignment="viewStart"
+        android:text="00:00 PM"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/task_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/task_date"
         android:paddingLeft="8dp"
+        android:text="Title"
         android:textAppearance="?attr/textAppearanceListItem" />
 
 
@@ -36,8 +40,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/task_title"
+        android:layout_toLeftOf="@+id/btn_delete_task"
         android:layout_toRightOf="@+id/task_time"
         android:paddingLeft="8dp"
+        android:text="Description"
         android:textAppearance="?attr/textAppearanceListItem" />
+
+    <ImageButton
+        android:id="@+id/btn_delete_task"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:onClick="deleteTask"
+        android:visibility="invisible"
+        app:srcCompat="@android:drawable/btn_dialog" />
 
 </RelativeLayout>

@@ -9,15 +9,18 @@
         android:layout_height="wrap_content"
         android:paddingLeft="8dp"
         android:paddingTop="8dp"
-        android:text="Visit Date:" />
+        android:text="Visit Date:"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/order_detail_visit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text_visit"
         android:layout_toRightOf="@+id/text_visit"
         android:hint="no date set"
-        android:paddingLeft="8dp" />
+        android:paddingLeft="8dp"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/text_visit_time"
@@ -26,16 +29,19 @@
         android:layout_below="@id/text_visit"
         android:paddingLeft="8dp"
         android:paddingBottom="8dp"
-        android:text="Visit Time:" />
+        android:text="Visit Time:"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/order_detail_visit_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/text_visit_time"
+        android:layout_alignBottom="@+id/text_visit_time"
         android:layout_below="@id/text_visit"
+        android:layout_toRightOf="@+id/text_visit_time"
         android:hint="no time set"
-        android:paddingLeft="8dp" />
+        android:paddingLeft="8dp"
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:id="@+id/left_column"
@@ -63,7 +69,7 @@
                 android:id="@+id/customer_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="customer name"
+                android:hint="customer name can be very_long"
                 android:paddingBottom="8dp"
                 android:tag="Customer Name"
                 android:textSize="18sp"

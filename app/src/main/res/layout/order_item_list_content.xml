@@ -71,7 +71,7 @@
         android:layout_marginLeft="8dp"
         android:layout_toRightOf="@id/delivery_date_btn"
         android:onClick="deleteItem"
-        app:srcCompat="@android:drawable/ic_notification_clear_all" />
+        app:srcCompat="@android:drawable/btn_dialog" />
 
 
 </RelativeLayout>

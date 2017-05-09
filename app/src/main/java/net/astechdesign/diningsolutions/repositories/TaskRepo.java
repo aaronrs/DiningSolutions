@@ -84,4 +84,8 @@ public class TaskRepo {
     public UUID addOrUpdate(Task task) {
         return mTaskTable.addOrUpdate(mDatabase, task);
     }
+
+    public void delete(Task task) {
+        mTaskTable.delete(mDatabase, task);
+    }
 }
