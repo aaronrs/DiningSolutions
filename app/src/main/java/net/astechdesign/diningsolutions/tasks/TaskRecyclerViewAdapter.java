@@ -2,6 +2,7 @@ package net.astechdesign.diningsolutions.tasks;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -72,6 +73,7 @@ public class TaskRecyclerViewAdapter
             mDateView = (TextView) view.findViewById(R.id.task_date);
             mTimeView = (TextView) view.findViewById(R.id.task_time);
             mTitleView = (TextView) view.findViewById(R.id.task_title);
+            mTitleView.setTypeface(Typeface.DEFAULT_BOLD);
             mDescriptionView = (TextView) view.findViewById(R.id.task_description);
             mDeleteBtn = (ImageButton) view.findViewById(R.id.btn_delete_task);
         }
@@ -79,9 +81,9 @@ public class TaskRecyclerViewAdapter
         public void setItem(Task item) {
             this.mTask = item;
             if (mTask.title.equals("Visit")) {
-                mView.setBackgroundColor(Color.parseColor("#ADC8FA"));
+                mView.setBackgroundColor(Color.parseColor("#E8E8E8"));
             } else if (mTask.title.equals("Delivery")) {
-                mView.setBackgroundColor(Color.parseColor("#F0CBCB"));
+                mView.setBackgroundColor(Color.parseColor("#CCCCCC"));
             }
             mDateView.setText(mTask.date.getDisplayDate());
             mTimeView.setText(mTask.date.getDisplayTime());

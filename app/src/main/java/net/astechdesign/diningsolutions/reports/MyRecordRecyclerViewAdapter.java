@@ -17,8 +17,8 @@ public class MyRecordRecyclerViewAdapter extends RecyclerView.Adapter<MyRecordRe
 
     private final List<Record> mValues;
     private String previousDate;
-    private int color1 = Color.parseColor("#EEEE99");
-    private int color2 = Color.parseColor("#99EEEE");
+    private int color1 = Color.WHITE;
+    private int color2 = Color.LTGRAY;
     private int color;
 
     public MyRecordRecyclerViewAdapter(List<Record> items) {

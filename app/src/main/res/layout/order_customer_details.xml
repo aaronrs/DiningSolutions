@@ -69,7 +69,7 @@
                 android:id="@+id/customer_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="customer name can be very_long"
+                android:hint="customer name"
                 android:paddingBottom="8dp"
                 android:tag="Customer Name"
                 android:textSize="18sp"

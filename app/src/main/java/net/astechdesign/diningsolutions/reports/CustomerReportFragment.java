@@ -11,15 +11,10 @@ import net.astechdesign.diningsolutions.R;
 
 public class CustomerReportFragment extends Fragment {
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public CustomerReportFragment() {
     }
 
     // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static CustomerReportFragment newInstance() {
         CustomerReportFragment fragment = new CustomerReportFragment();
         return fragment;
