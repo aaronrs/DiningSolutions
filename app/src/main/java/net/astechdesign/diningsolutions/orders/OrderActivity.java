@@ -92,6 +92,7 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     public List<Order> getOrders() {
+        mOrders = OrderRepo.get(this).get(mCustomer);
         return mOrders;
     }
 

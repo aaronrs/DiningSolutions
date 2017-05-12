@@ -46,6 +46,7 @@ public class OrderFragment extends Fragment
     private TextView totalView;
     private Customer mCustomer;
     private int mIndex;
+    private OrderRepo orderRepo;
 
     @Override
     public void onAttach(Context context) {
@@ -60,6 +61,7 @@ public class OrderFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        orderRepo = OrderRepo.get(getContext());
         orderItemRepo = OrderItemRepo.get(getContext());
     }
 
@@ -81,20 +83,26 @@ public class OrderFragment extends Fragment
     }
 
     public void updateAdapter() {
-        List<OrderItem> updatedItems = orderItemRepo.getOrderItems(mOrder);
+        updateAdapter(0);
+    }
+
+    public void updateAdapter(int index) {
+        List<Order> orders = mActivity.getOrders();
+        index = index < 0 ? 0 : index >= orders.size() ? mIndex : index;
+        mIndex = index;
+        mOrder = orders.get(index);
         orderItems.clear();
-        orderItems.addAll(updatedItems);
+        orderItems.addAll(mOrder.orderItems);
+        dateView.setText(mOrder.created.getDisplayDate());
         viewAdapter.notifyDataSetChanged();
+        totalView.setText(String.format("%.2f", mOrder.total()));
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mOrders = mActivity.getOrders();
-        orderItems.clear();
-        orderItems.addAll(mOrder.orderItems);
-        dateView.setText(mOrder.created.getDisplayDate());
-        totalView.setText(String.format("%.2f", mOrder.total()));
+        mOrder = mOrders.get(0);
         updateAdapter();
     }
 
@@ -134,17 +142,19 @@ public class OrderFragment extends Fragment
         rootView.findViewById(R.id.btn_latest).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOrder = mOrders.get(0);
                 updateAdapter();
             }
         });
         rootView.findViewById(R.id.btn_previous).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mIndex < mOrders.size()) {
-                    mOrder = mOrders.get(mIndex++);
-                    updateAdapter();
-                }
+                updateAdapter(mIndex + 1);
+            }
+        });
+        rootView.findViewById(R.id.btn_next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateAdapter(mIndex - 1);
             }
         });
 

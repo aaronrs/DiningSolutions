@@ -89,8 +89,8 @@ public class NewTaskFragment extends DialogFragment implements DatePickerFragmen
 
     @Override
     public void onTimePicked(DSDDate time) {
-        mDateText.setText(time.getDisplayTime());
-        mDateText.setTag(time);
+        mTimeText.setText(time.getDisplayTime());
+        mTimeText.setTag(time);
     }
 
     @Override
