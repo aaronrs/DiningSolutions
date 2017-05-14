@@ -24,6 +24,8 @@ import net.astechdesign.diningsolutions.R;
 
 import java.util.List;
 
+import static net.astechdesign.diningsolutions.admin.Prefs.*;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -177,10 +179,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("distributor_name"));
-            bindPreferenceSummaryToValue(findPreference("distributor_number"));
-            bindPreferenceSummaryToValue(findPreference("distributor_mobile"));
-            bindPreferenceSummaryToValue(findPreference("distributor_email"));
+            bindPreferenceSummaryToValue(findPreference(NAME.name));
+            bindPreferenceSummaryToValue(findPreference(NUMBER.name));
+            bindPreferenceSummaryToValue(findPreference(MOBILE.name));
+            bindPreferenceSummaryToValue(findPreference(EMAIL.name));
+            bindPreferenceSummaryToValue(findPreference(DSD.name));
         }
 
         @Override

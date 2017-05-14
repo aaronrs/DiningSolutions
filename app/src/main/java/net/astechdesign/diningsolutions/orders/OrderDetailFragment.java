@@ -70,7 +70,7 @@ public class OrderDetailFragment extends Fragment implements DatePickerFragment.
     }
 
     @Override
-    public void onDatePicked(DSDDate date) {
+    public void onDatePicked(String mode, DSDDate date) {
         orderItemRepo.updateDelivery(selectedOrderItem, date);
         setupRecyclerView(rootView);
     }

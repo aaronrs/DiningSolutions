@@ -120,7 +120,7 @@ public class TaskListActivity extends AppCompatActivity
 
     public void getDate(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        DatePickerFragment dialog = DatePickerFragment.newInstance(newTaskFragment, DSDDate.create());
+        DatePickerFragment dialog = DatePickerFragment.newInstance("", newTaskFragment, DSDDate.create());
         dialog.show(fm, DATE_PICKER);
     }
 

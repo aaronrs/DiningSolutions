@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -124,12 +123,26 @@ public class OrderFragment extends Fragment
     }
 
     @Override
-    public void onDatePicked(DSDDate date) {
-        orderItemRepo.updateDelivery(selectedOrderItem, date);
+    public void onDatePicked(String mode, DSDDate date) {
+        if ("INVOICE".equals(mode)) {
+
+        } else
+        if ("ITEM".equals(mode)) {
+            orderItemRepo.updateDelivery(selectedOrderItem, date);
+        }
         updateAdapter();
     }
 
     private void initialiseFields(View rootView) {
+        rootView.findViewById(R.id.btn_new_order).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mOrders.get(0).created.isCurrent()) {
+                    mActivity.newOrder();
+                }
+                updateAdapter();
+            }
+        });
         rootView.findViewById(R.id.add_product_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,11 +176,8 @@ public class OrderFragment extends Fragment
         dateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerFragment dialog = DatePickerFragment.newInstance(new DeliveryDatePicked(mActivity), (DSDDate) view.getTag());
+                DatePickerFragment dialog = DatePickerFragment.newInstance("INVOICE", OrderFragment.this, (DSDDate) view.getTag());
                 dialog.show(mActivity.getSupportFragmentManager(), "date_picker");
-
-                Snackbar.make(view, "Clicked", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
 
@@ -186,24 +196,5 @@ public class OrderFragment extends Fragment
                         OrderItemRepo.get(getActivity()).delete(mOrder, item);
                         updateAdapter();
                     }}).show();
-    }
-
-    class DeliveryDatePicked implements DatePickerFragment.DatePickerListener{
-
-        private final OrderActivity activity;
-        public DeliveryDatePicked(OrderActivity activity) {
-            this.activity = activity;
-        }
-
-        @Override
-        public void onDatePicked(DSDDate date) {
-            for (OrderItem item : mOrder.orderItems) {
-                if (date.after(item.deliveryDate)) {
-                    OrderItemRepo.get(activity).updateDelivery(item, date);
-                }
-            }
-            OrderRepo.get(activity).updateInvoiceDate(mOrder, date);
-        }
-
     }
 }

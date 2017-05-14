@@ -36,4 +36,12 @@
         android:singleLine="true"
         android:title="@string/pref_title_distributor_email" />
 
+    <EditTextPreference
+        android:inputType="textEmailAddress"
+        android:key="dsd_email"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_dsd_email" />
+
 </PreferenceScreen>

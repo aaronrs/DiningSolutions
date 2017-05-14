@@ -20,7 +20,7 @@ class VisitDateListener implements DatePickerFragment.DatePickerListener,
     }
 
     @Override
-    public void onDatePicked(DSDDate newDate) {
+    public void onDatePicked(String mode, DSDDate newDate) {
         CustomerRepo.get(context).update(mCustomer, CustomerTable.VISIT_DATE, DSDDate.withTime(newDate, mCustomer.visit).dbFormat());
     }
 

@@ -89,7 +89,7 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
     }
 
     @Override
-    public void onDatePicked(DSDDate newDate) {
+    public void onDatePicked(String mode, DSDDate newDate) {
         updateVisitDate(newDate, mCustomer.visit);
     }
 
@@ -118,7 +118,7 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
         mTextVisit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragment dialog = DatePickerFragment.newInstance(CustomerFragment.this, (DSDDate) view.getTag());
+                DatePickerFragment dialog = DatePickerFragment.newInstance("", CustomerFragment.this, (DSDDate) view.getTag());
                 dialog.show(getActivity().getSupportFragmentManager(), "date_picker");
             }
         });

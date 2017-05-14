@@ -91,7 +91,7 @@ public class OrderItemRecyclerViewAdapter
                 @Override
                 public void onClick(View v) {
                     fragment.setSelectedOrderItem(mItem);
-                    DatePickerFragment dialog = DatePickerFragment.newInstance(fragment, mItem.deliveryDate);
+                    DatePickerFragment dialog = DatePickerFragment.newInstance("ITEM", fragment, mItem.deliveryDate);
                     dialog.setTargetFragment(fragment, DatePickerFragment.REQUEST_DATE);
                     dialog.show(fm, DATE_PICKER);
                 }

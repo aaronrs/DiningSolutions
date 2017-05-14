@@ -96,12 +96,11 @@ public class OrderActivity extends AppCompatActivity {
         return mOrders;
     }
 
-    public void newOrder(View view) {
-        OrderRepo.get(this).add(Order.create(mCustomer));
-        orderFragment.updateAdapter();
-    }
-
     public void setOrderFragment(OrderFragment orderFragment) {
         this.orderFragment = orderFragment;
+    }
+
+    public void newOrder() {
+        OrderRepo.get(this).add(Order.create(mCustomer));
     }
 }

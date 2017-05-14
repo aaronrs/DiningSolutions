@@ -63,7 +63,7 @@ public class NextVisitFragment extends DialogFragment implements DatePickerFragm
     }
 
     @Override
-    public void onDatePicked(DSDDate date) {
+    public void onDatePicked(String mode, DSDDate date) {
         mDateText.setText(date.getDisplayDate());
         mDateText.setTag(date);
     }

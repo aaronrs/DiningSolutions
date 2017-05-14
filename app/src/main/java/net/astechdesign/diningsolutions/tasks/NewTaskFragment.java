@@ -82,7 +82,7 @@ public class NewTaskFragment extends DialogFragment implements DatePickerFragmen
     }
 
     @Override
-    public void onDatePicked(DSDDate date) {
+    public void onDatePicked(String mode, DSDDate date) {
         mDateText.setText(date.getDisplayDate());
         mDateText.setTag(date);
     }

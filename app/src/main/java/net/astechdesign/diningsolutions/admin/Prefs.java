@@ -5,9 +5,10 @@ public enum Prefs {
     NUMBER("distributor_number"),
     MOBILE("distributor_mobile"),
     EMAIL("distributor_email"),
-    INVOICE("invoice_start_number");
+    INVOICE("invoice_start_number"),
+    DSD("dsd_email");
 
-    private String name;
+    public final String name;
 
     Prefs(String name) {
         this.name = name;
