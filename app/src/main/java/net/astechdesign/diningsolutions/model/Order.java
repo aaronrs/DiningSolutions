@@ -62,7 +62,7 @@ public class Order extends Model {
     public List<OrderItem> getDeliveryItems() {
         List<OrderItem> deliveryItems = new ArrayList<>();
         for (OrderItem item : orderItems ) {
-            if (item.deliveryDate.futureDate()) {
+            if (item.deliveryDate.isFuture()) {
                 deliveryItems.add(item);
             }
         }

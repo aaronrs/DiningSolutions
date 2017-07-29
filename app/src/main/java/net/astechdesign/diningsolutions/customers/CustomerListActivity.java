@@ -1,26 +1,22 @@
 package net.astechdesign.diningsolutions.customers;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.admin.SettingsActivity;
+import net.astechdesign.diningsolutions.app.flow.OptionsActivity;
+import net.astechdesign.diningsolutions.customers.helpers.AddressTextWatcher;
+import net.astechdesign.diningsolutions.customers.helpers.CustomerListener;
+import net.astechdesign.diningsolutions.customers.helpers.CustomerTextWatcher;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.ArrayList;
@@ -29,7 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CustomerListActivity extends AppCompatActivity {
+public class CustomerListActivity extends OptionsActivity {
 
     private RecyclerView mRecyclerView;
     private List<Customer> mCustomerList;
@@ -69,67 +65,9 @@ public class CustomerListActivity extends AppCompatActivity {
         mTownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, towns);
         spinner.setAdapter(mTownAdapter);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position > 0) {
-                    if (customerSelect.getText().length() != 0) {
-                        customerSelect.setText("");
-                    }
-                    if (addressSelect.getText().length() != 0) {
-                        addressSelect.setText("");
-                    }
-                    updateRecyclerTown(towns.get(position));
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        customerSelect.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String value = s.toString().trim();
-                if (value.length() > 0) {
-                    spinner.setAdapter(mTownAdapter);
-                    if (addressSelect.getText().length() != 0) {
-                        addressSelect.setText("");
-                    }
-                }
-                updateRecyclerName(value);
-            }
-        });
-        addressSelect.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String value = s.toString().trim();
-                if (value.length() > 0) {
-                    spinner.setAdapter(mTownAdapter);
-                    if (customerSelect.getText().length() != 0) {
-                        customerSelect.setText("");
-                    }
-                }
-                updateRecyclerAddress(value);
-            }
-        });
+        spinner.setOnItemSelectedListener(new CustomerListener(this, customerSelect, addressSelect, towns));
+        customerSelect.addTextChangedListener(new CustomerTextWatcher(this, spinner, addressSelect, mTownAdapter));
+        addressSelect.addTextChangedListener(new AddressTextWatcher(this, spinner, customerSelect, mTownAdapter));
         setupRecyclerView();
     }
 
@@ -146,7 +84,7 @@ public class CustomerListActivity extends AppCompatActivity {
         setupRecyclerView();
     }
 
-    private void updateRecyclerName(String name) {
+    public void updateRecyclerName(String name) {
         if (updateRecycler(name)) {
             for (Customer customer : mCustomerList) {
                 if (customer.compareName(name)) {
@@ -157,7 +95,7 @@ public class CustomerListActivity extends AppCompatActivity {
         setupRecyclerView();
     }
 
-    private void updateRecyclerAddress(String address) {
+    public void updateRecyclerAddress(String address) {
         if (updateRecycler(address)) {
             for (Customer customer : mCustomerList) {
                 if (customer.compareAddress(address)) {
@@ -168,7 +106,7 @@ public class CustomerListActivity extends AppCompatActivity {
         setupRecyclerView();
     }
 
-    private void updateRecyclerTown(String town) {
+    public void updateRecyclerTown(String town) {
         if (updateRecycler(town)) {
             for (Customer customer : mCustomerList) {
                 if (customer.compareTown(town)) {
@@ -196,18 +134,7 @@ public class CustomerListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_products:
-                Intent intent = new Intent(this, ProductListActivity.class);
-                this.startActivity(intent);
-                return true;
-            case R.id.action_settings:
-                intent = new Intent(this, SettingsActivity.class);
-                this.startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupRecyclerView() {

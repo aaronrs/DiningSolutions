@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,16 +14,13 @@ import android.view.View;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
-import net.astechdesign.diningsolutions.admin.SettingsActivity;
+import net.astechdesign.diningsolutions.app.flow.OptionsActivity;
 import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
-import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
-import net.astechdesign.diningsolutions.products.ProductListActivity;
-import net.astechdesign.diningsolutions.reports.ReportsActivity;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 import net.astechdesign.diningsolutions.repositories.TaskRepo;
@@ -34,10 +30,9 @@ import java.util.UUID;
 
 import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
 import static net.astechdesign.diningsolutions.TimePickerFragment.TIME_PICKER;
-import static net.astechdesign.diningsolutions.customers.CustomerEditFragment.EDIT_CUSTOMER;
 import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
-public class TaskListActivity extends AppCompatActivity
+public class TaskListActivity extends OptionsActivity
         implements NewTaskFragment.NewTaskListener,
         CustomerEditFragment.CustomerEditListener {
 
@@ -69,32 +64,7 @@ public class TaskListActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_products:
-                Intent intent = new Intent(this, ProductListActivity.class);
-                this.startActivity(intent);
-                return true;
-            case R.id.menu_item_customers:
-                intent = new Intent(this, CustomerListActivity.class);
-                this.startActivity(intent);
-                return true;
-            case R.id.menu_item_new_customer:
-                FragmentManager fm = getSupportFragmentManager();
-                CustomerEditFragment customerEditFragment = new CustomerEditFragment();
-                customerEditFragment.setCustomer(Customer.newCustomer);
-                customerEditFragment.show(fm, EDIT_CUSTOMER);
-                return true;
-            case R.id.action_reports:
-                intent = new Intent(this, ReportsActivity.class);
-                this.startActivity(intent);
-                return true;
-            case R.id.action_settings:
-                intent = new Intent(this, SettingsActivity.class);
-                this.startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
 //    @Override

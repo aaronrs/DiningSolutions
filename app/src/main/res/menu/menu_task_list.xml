@@ -2,23 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="Customers"
+    <item
         android:id="@+id/menu_item_customers"
-        app:showAsAction="always|withText" />
-
-    <item android:title="New Customer"
-        android:id="@+id/menu_item_new_customer"
-        android:icon="@drawable/ic_action_add"
-        app:showAsAction="always|withText" />
-
-    <item android:title="Products"
-        android:id="@+id/menu_item_products"
+        android:title="@string/action_customers"
         app:showAsAction="always|withText" />
 
     <item
-        android:id="@+id/action_reports"
-        android:orderInCategory="100"
+        android:id="@+id/menu_item_invoices"
+        android:title="@string/action_invoices"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/menu_item_reports"
         android:title="@string/action_reports"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/action_products"
+        android:orderInCategory="100"
+        android:title="@string/action_products"
         app:showAsAction="never" />
 
     <item

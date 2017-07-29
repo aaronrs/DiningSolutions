@@ -2,6 +2,7 @@ package net.astechdesign.diningsolutions.customers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,7 @@ public class CustomerListRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, OrderActivity.class);
-                intent.putExtra(OrderActivity.CUSTOMER, holder.mItem);
+                intent.putExtra(OrderActivity.CUSTOMER, holder.mCustomer);
                 context.startActivity(intent);
             }
         });
@@ -56,7 +57,7 @@ public class CustomerListRecyclerViewAdapter
         public final TextView mNameView;
         public final TextView mPhoneView;
         public final TextView mAddressView;
-        public Customer mItem;
+        public Customer mCustomer;
 
         public ViewHolder(View view) {
             super(view);
@@ -66,11 +67,16 @@ public class CustomerListRecyclerViewAdapter
             mAddressView = (TextView) view.findViewById(R.id.address);
         }
 
-        public void setItem(Customer item) {
-            this.mItem = item;
-            mNameView.setText(item.name);
-            mPhoneView.setText(item.phone.number);
-            mAddressView.setText(item.address.toString());
+        public void setItem(Customer customer) {
+            this.mCustomer = customer;
+            mNameView.setText(customer.name);
+            mPhoneView.setText(customer.phone.number);
+            mAddressView.setText(customer.address.toString());
+            if (customer.visit.isFuture()) {
+                mView.setBackgroundColor(Color.parseColor("#FFFF8800"));
+            } else if (customer.visit.isRecent()) {
+                mView.setBackgroundColor(Color.GREEN);
+            }
         }
     }
 }

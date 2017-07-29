@@ -59,6 +59,7 @@
         <activity
             android:name=".reports.ReportsActivity"
             android:label="@string/title_activity_reports"
+            android:parentActivityName=".tasks.TaskListActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

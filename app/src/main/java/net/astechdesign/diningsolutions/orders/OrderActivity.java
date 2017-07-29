@@ -1,26 +1,24 @@
 package net.astechdesign.diningsolutions.orders;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.admin.SettingsActivity;
+import net.astechdesign.diningsolutions.app.flow.OptionsActivity;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
-import net.astechdesign.diningsolutions.products.ProductListActivity;
+import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 import net.astechdesign.diningsolutions.repositories.OrderRepo;
 
 import java.util.List;
 
-public class OrderActivity extends AppCompatActivity {
+public class OrderActivity extends OptionsActivity {
 
     public static final String CUSTOMER = "customer";
     public static final String ADD_PRODUCT = "add_product";
@@ -73,18 +71,7 @@ public class OrderActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_products:
-                Intent intent = new Intent(this, ProductListActivity.class);
-                this.startActivity(intent);
-                return true;
-            case R.id.action_settings:
-                intent = new Intent(this, SettingsActivity.class);
-                this.startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
     public Customer getCustomer() {
@@ -102,5 +89,9 @@ public class OrderActivity extends AppCompatActivity {
 
     public void newOrder() {
         OrderRepo.get(this).add(Order.create(mCustomer));
+    }
+
+    public void updateCustomer() {
+        mCustomer = CustomerRepo.get(this).get(mCustomer.getId());
     }
 }

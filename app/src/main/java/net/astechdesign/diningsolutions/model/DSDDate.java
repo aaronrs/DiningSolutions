@@ -106,7 +106,7 @@ public class DSDDate implements Serializable, Comparable {
         return create(cal);
     }
 
-    public boolean futureDate() {
+    public boolean isFuture() {
         return this.date.compareTo(new Date()) >= 0;
     }
 
@@ -117,6 +117,12 @@ public class DSDDate implements Serializable, Comparable {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return date.after(cal.getTime());
+    }
+
+    public boolean isRecent() {
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.MONTH, -4);
+        return date.before(new Date()) && after(DSDDate.create(cal));
     }
 
     public boolean after(DSDDate newDate) {

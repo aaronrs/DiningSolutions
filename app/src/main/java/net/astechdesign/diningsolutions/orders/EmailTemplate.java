@@ -21,7 +21,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import net.astechdesign.diningsolutions.admin.Prefs;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Distributor;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
@@ -43,6 +42,7 @@ public class EmailTemplate {
     private static String DISTRIBUTOR_NUMBER = "#DISTRIBUTOR_NUMBER";
     private static String DISTRIBUTOR_NAME = "#DISTRIBUTOR_NAME";
     private static String DISTRIBUTOR_MOBILE = "#DISTRIBUTOR_MOBILE";
+    private static String DSD_EMAIL = "#DSD_EMAIL";
 
     private Context context;
     private Customer customer;
@@ -61,8 +61,10 @@ public class EmailTemplate {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
 
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{customer.email.address});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + order.invoiceNumber);
+        String distributorEmail = getDistributorEmail(context);
+        String dsdEmail = getDSDEmail(context);
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{customer.email.address, distributorEmail, dsdEmail});
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Dining Solutions Direct - Invoice : " + invoiceNumber);
         intent.putExtra(Intent.EXTRA_TEXT, "Attached please find Invoice No. " + invoiceNumber);
 
         try {
@@ -223,5 +225,13 @@ public class EmailTemplate {
         return String.format("%s-%06d", distributor, invoiceNumber);
     }
 
+    public String getDistributorEmail(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPref.getString(Prefs.EMAIL.toString(), "");
+    }
 
+    public String getDSDEmail(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPref.getString(Prefs.DSD.toString(), "");
+    }
 }

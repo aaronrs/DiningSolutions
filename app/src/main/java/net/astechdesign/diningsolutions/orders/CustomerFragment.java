@@ -38,11 +38,13 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
     private TextView mTextAddressPostcode;
     private TextView mTextVisit;
     private TextView mTextVisitTime;
+    private OrderActivity activity;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mCustomer = ((OrderActivity) getActivity()).getCustomer();
+        activity = (OrderActivity) getActivity();
+        mCustomer = activity.getCustomer();
     }
 
     @Nullable
@@ -77,7 +79,8 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
             customerRepo.update(mCustomer, field, value);
             customerId = mCustomer.getId();
         }
-        mCustomer = customerRepo.get(customerId);
+        activity.updateCustomer();
+        mCustomer = activity.getCustomer();
         displayCustomer();
     }
 

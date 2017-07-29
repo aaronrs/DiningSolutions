@@ -125,7 +125,7 @@ public class OrderFragment extends Fragment
     @Override
     public void onDatePicked(String mode, DSDDate date) {
         if ("INVOICE".equals(mode)) {
-
+            orderRepo.updateInvoiceDate(mOrder, date);
         } else
         if ("ITEM".equals(mode)) {
             orderItemRepo.updateDelivery(selectedOrderItem, date);
@@ -173,10 +173,11 @@ public class OrderFragment extends Fragment
 
         dateView = (TextView) rootView.findViewById(R.id.order_invoice_date);
         dateView.setText(mOrder.created.getDisplayDate());
+        final OrderFragment fragment = this;
         dateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerFragment dialog = DatePickerFragment.newInstance("INVOICE", OrderFragment.this, (DSDDate) view.getTag());
+                DatePickerFragment dialog = DatePickerFragment.newInstance("INVOICE", fragment, (DSDDate) view.getTag());
                 dialog.show(mActivity.getSupportFragmentManager(), "date_picker");
             }
         });

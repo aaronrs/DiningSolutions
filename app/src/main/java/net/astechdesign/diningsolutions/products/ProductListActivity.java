@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -23,20 +22,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.astechdesign.diningsolutions.R;
-import net.astechdesign.diningsolutions.admin.SettingsActivity;
+import net.astechdesign.diningsolutions.app.flow.OptionsActivity;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductRepo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductListActivity extends AppCompatActivity implements ProductEditFragment.EditProductListener {
+public class ProductListActivity extends OptionsActivity implements ProductEditFragment.EditProductListener {
 
     public static final String EDIT_PRODUCT = "EDIT_PRODUCT";
-    private static final String ADD_PRODUCT = "add_product";
     private ProductRecyclerViewAdapter adapter;
     private View mRecyclerView;
-    private ProductEditFragment newProductFragment;
     private List<Product> mProductList;
     private List<Product> mFilteredProducts;
     private EditText mProductSelect;
@@ -110,20 +107,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductEdi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_new_product:
-                mProductSelect.setText("");
-                FragmentManager fm = getSupportFragmentManager();
-                newProductFragment = new ProductEditFragment();
-                newProductFragment.show(fm, ADD_PRODUCT);
-                return true;
-            case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                this.startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
