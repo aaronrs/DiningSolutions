@@ -11,6 +11,7 @@ import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +38,10 @@ public class CustomerRepo {
 
     public List<Customer> get() {
         Cursor cursor = mCustomerTable.get(mDatabase, CustomerTable.CUSTOMER_NAME);
+        return get(cursor);
+    }
 
+    private List<Customer> get(Cursor cursor) {
         List<Customer> customerList = new ArrayList<>();
         while (!cursor.isAfterLast()) {
             CustomerCursorWrapper customerCursorWrapper = new CustomerCursorWrapper(cursor);
@@ -77,5 +81,35 @@ public class CustomerRepo {
     public Customer create() {
         UUID id = mCustomerTable.addOrUpdate(mDatabase, Customer.create());
         return new CustomerCursorWrapper(mCustomerTable.get(mDatabase, id)).getCustomer();
+    }
+
+    public List<Customer> findByName(String value) {
+        Cursor cursor = mCustomerTable.findByName(mDatabase, value);
+        cursor.moveToFirst();
+        return get(cursor);
+    }
+
+    public List<Customer> findByAddress(String value) {
+        Cursor cursor = mCustomerTable.findByAddress(mDatabase, value);
+        cursor.moveToFirst();
+        return get(cursor);
+    }
+
+    public List<Customer> findByTown(String value) {
+        Cursor cursor = mCustomerTable.findByTown(mDatabase, value);
+        cursor.moveToFirst();
+        return get(cursor);
+    }
+
+    public List<String> getTowns() {
+        Cursor cursor = mCustomerTable.getTowns(mDatabase);
+        List<String> townList = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            townList.add(cursor.getString(0));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return townList;
     }
 }

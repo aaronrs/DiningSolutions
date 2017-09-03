@@ -6,8 +6,6 @@ import java.util.UUID;
 
 public class Customer extends Model {
 
-    public static Customer newCustomer = create();
-
     public final String name;
     public final Email email;
     public final Phone phone;
@@ -93,5 +91,9 @@ public class Customer extends Model {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         return result;
+    }
+
+    public boolean isNew() {
+        return false;
     }
 }

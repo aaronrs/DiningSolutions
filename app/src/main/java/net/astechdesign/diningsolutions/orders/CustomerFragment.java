@@ -1,6 +1,5 @@
 package net.astechdesign.diningsolutions.orders;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,10 +13,12 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
+import net.astechdesign.diningsolutions.app.CustomerManager;
+import net.astechdesign.diningsolutions.app.SourceMode;
+import net.astechdesign.diningsolutions.app.model.CurrentCustomer;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.repositories.CustomerRepo;
 
 import java.util.UUID;
 
@@ -27,7 +28,6 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
         DatePickerFragment.DatePickerListener,
         TimePickerFragment.TimePickerListener {
 
-    Customer mCustomer;
     private View view;
     private TextView mTextName;
     private TextView mTextPhone;
@@ -38,14 +38,6 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
     private TextView mTextAddressPostcode;
     private TextView mTextVisit;
     private TextView mTextVisitTime;
-    private OrderActivity activity;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        activity = (OrderActivity) getActivity();
-        mCustomer = activity.getCustomer();
-    }
 
     @Nullable
     @Override
@@ -67,44 +59,38 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
 
     @Override
     public void onEditFieldPositiveClick(DialogInterface dialog, String field, String value) {
-        CustomerRepo customerRepo = CustomerRepo.get(getActivity());
-        UUID customerId;
-        if (mCustomer.getId() == null) {
+        Customer customer = CurrentCustomer.get();
+        if (customer.getId() == null) {
             if (CustomerTable.CUSTOMER_NAME.equals(field) && value == null) {
                 getActivity().finish();
             }
-            mCustomer = Customer.create(value);
-            customerId = customerRepo.addOrUpdate(mCustomer);
+            UUID uuid = CustomerManager.create(value);
+            CurrentCustomer.set(uuid);
         } else {
-            customerRepo.update(mCustomer, field, value);
-            customerId = mCustomer.getId();
+            CustomerManager.update(field, value);
+            CurrentCustomer.set(customer);
         }
-        activity.updateCustomer();
-        mCustomer = activity.getCustomer();
+        customer = CurrentCustomer.get();
         displayCustomer();
     }
 
     @Override
     public void onEditFieldNegativeClick(String field) {
-        if (mCustomer.getId() == null && CustomerTable.CUSTOMER_NAME.equals(field)) {
+        Customer customer = CurrentCustomer.get();
+        if (customer.getId() == null && CustomerTable.CUSTOMER_NAME.equals(field)) {
             getActivity().finish();
         }
     }
 
     @Override
-    public void onDatePicked(String mode, DSDDate newDate) {
-        updateVisitDate(newDate, mCustomer.visit);
+    public void onDatePicked(SourceMode mode, DSDDate newDate) {
+        CustomerManager.update(CustomerTable.VISIT_DATE, newDate.dbFormat());
     }
 
     @Override
     public void onTimePicked(DSDDate newDate) {
-        updateVisitDate(mCustomer.visit, newDate);
-    }
-
-    private void updateVisitDate(DSDDate visit, DSDDate newDate) {
-        CustomerRepo customerRepo = CustomerRepo.get(getActivity());
-        customerRepo.update(mCustomer, CustomerTable.VISIT_DATE, DSDDate.withTime(visit, newDate).dbFormat());
-        mCustomer = customerRepo.get(mCustomer.getId());
+        DSDDate visit = CurrentCustomer.get().visit;
+        CustomerManager.update(CustomerTable.VISIT_DATE, DSDDate.withTime(visit, newDate).dbFormat());
         displayCustomer();
     }
 
@@ -121,7 +107,8 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
         mTextVisit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragment dialog = DatePickerFragment.newInstance("", CustomerFragment.this, (DSDDate) view.getTag());
+                DSDDate visitDate = CurrentCustomer.getVisitDate();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(SourceMode.OTHER, CustomerFragment.this, visitDate == null ? DSDDate.create() : visitDate);
                 dialog.show(getActivity().getSupportFragmentManager(), "date_picker");
             }
         });
@@ -129,17 +116,11 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
         mTextVisitTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerFragment dialog = TimePickerFragment.newInstance(CustomerFragment.this, (DSDDate) view.getTag());
+                DSDDate visitDate = CurrentCustomer.getVisitDate();
+                TimePickerFragment dialog = TimePickerFragment.newInstance(CustomerFragment.this, visitDate == null ? DSDDate.create() : visitDate);
                 dialog.show(getActivity().getSupportFragmentManager(), "time_picker");
             }
         });
-        if (mCustomer.equals(Customer.newCustomer)) {
-            mTextVisit.setTag(DSDDate.create());
-            mTextVisitTime.setTag(DSDDate.create());
-        } else {
-            mTextVisit.setTag(mCustomer.visit);
-            mTextVisitTime.setTag(mCustomer.visit);
-        }
     }
 
     private TextView setupField(int viewId, String name, String field) {
@@ -162,22 +143,16 @@ public class CustomerFragment extends Fragment implements EditEntryFragment.Edit
     }
 
     private void displayCustomer() {
-        if (!mCustomer.equals(Customer.newCustomer)) {
-            mTextName.setText(mCustomer.name);
-            mTextPhone.setText(mCustomer.phone == null ? null : mCustomer.phone.number);
-            mTextEmail.setText(mCustomer.email == null ? null : mCustomer.email.address);
-            mTextAddressLine.setText(mCustomer.address == null ? null : mCustomer.address.line);
-            mTextAddressTown.setText(mCustomer.address == null ? null : mCustomer.address.town);
-            mTextAddressCounty.setText(mCustomer.address == null ? null : mCustomer.address.county);
-            mTextAddressPostcode.setText(mCustomer.address == null ? null : mCustomer.address.postcode);
-            if (!mCustomer.visit.equals(DSDDate.EMPTY_DATE)) {
-                mTextVisit.setText(mCustomer.visit.getDisplayDate());
-                mTextVisit.setTag(mCustomer.visit);
-                mTextVisitTime.setText(mCustomer.visit.getDisplayTime());
-                mTextVisitTime.setTag(mCustomer.visit);
-            }
-        } else {
-            mTextName.performClick();
-        }
+        mTextName.setText(CurrentCustomer.getName());
+        mTextPhone.setText(CurrentCustomer.getPhoneNumber());
+        mTextEmail.setText(CurrentCustomer.getEmailAddress());
+        mTextAddressLine.setText(CurrentCustomer.getAddressLine());
+        mTextAddressTown.setText(CurrentCustomer.getAddressTown());
+        mTextAddressCounty.setText(CurrentCustomer.getAddressCounty());
+        mTextAddressPostcode.setText(CurrentCustomer.getAddressPostcode());
+        mTextVisit.setText(CurrentCustomer.getVisitDate().getDisplayDate());
+        mTextVisit.setTag(CurrentCustomer.getVisitDate());
+        mTextVisitTime.setText(CurrentCustomer.getVisitDate().getDisplayTime());
+        mTextVisitTime.setTag(CurrentCustomer.getVisitDate());
     }
 }

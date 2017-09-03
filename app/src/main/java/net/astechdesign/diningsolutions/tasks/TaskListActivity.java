@@ -14,45 +14,41 @@ import android.view.View;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
+import net.astechdesign.diningsolutions.app.AppManager;
+import net.astechdesign.diningsolutions.app.OrderManager;
+import net.astechdesign.diningsolutions.app.SourceMode;
+import net.astechdesign.diningsolutions.app.TaskManager;
 import net.astechdesign.diningsolutions.app.flow.OptionsActivity;
 import net.astechdesign.diningsolutions.customers.CustomerEditFragment;
-import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
-import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.Task;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
-import net.astechdesign.diningsolutions.repositories.CustomerRepo;
-import net.astechdesign.diningsolutions.repositories.OrderRepo;
-import net.astechdesign.diningsolutions.repositories.TaskRepo;
-
-import java.util.List;
-import java.util.UUID;
 
 import static net.astechdesign.diningsolutions.DatePickerFragment.DATE_PICKER;
 import static net.astechdesign.diningsolutions.TimePickerFragment.TIME_PICKER;
 import static net.astechdesign.diningsolutions.tasks.NewTaskFragment.ADD_TASK;
 
 public class TaskListActivity extends OptionsActivity
-        implements NewTaskFragment.NewTaskListener,
-        CustomerEditFragment.CustomerEditListener {
+        implements CustomerEditFragment.CustomerEditListener {
 
     private NewTaskFragment newTaskFragment;
-    private RecyclerView recyclerView;
-    private List<Task> taskList;
     private TaskRecyclerViewAdapter viewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppManager.setContext(this.getApplicationContext());
+        TaskManager.setActivity(this);
+
         setContentView(R.layout.activity_task_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        taskList = TaskRepo.get(this).get();
-        viewAdapter = new TaskRecyclerViewAdapter(this, taskList);
-        recyclerView = (RecyclerView) findViewById(R.id.task_list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.task_list);
+        viewAdapter = new TaskRecyclerViewAdapter(this, TaskManager.getTasks());
         recyclerView.setAdapter(viewAdapter);
     }
 
@@ -67,30 +63,9 @@ public class TaskListActivity extends OptionsActivity
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        setupRecyclerView(taskList);
-//    }
-//
-//    private void setupRecyclerView(List<Task> taskList) {
-//        TaskRecyclerViewAdapter adapter = new TaskRecyclerViewAdapter(this, taskList);
-//        adapter.notifyDataSetChanged();
-//        recyclerView.setAdapter(adapter);
-//    }
-//
-    @Override
-    public void onNewTaskPositiveClick(DialogInterface dialog, DSDDate date, String title, String description) {
-        TaskRepo taskRepo = TaskRepo.get(this);
-        taskRepo.addOrUpdate(Task.create(date, title, description));
-        taskList.clear();
-        taskList.addAll(taskRepo.get());
-        viewAdapter.notifyDataSetChanged();
-    }
-
     public void getDate(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        DatePickerFragment dialog = DatePickerFragment.newInstance("", newTaskFragment, DSDDate.create());
+        DatePickerFragment dialog = DatePickerFragment.newInstance(SourceMode.OTHER, newTaskFragment, DSDDate.create());
         dialog.show(fm, DATE_PICKER);
     }
 
@@ -110,7 +85,6 @@ public class TaskListActivity extends OptionsActivity
     }
 
     public void deleteTask(View view) {
-        final TaskRepo taskRepo = TaskRepo.get(this);
         final Task deleteTask = (Task) view.getTag();
         new AlertDialog.Builder(this)
                 .setTitle("Delete Task")
@@ -119,24 +93,19 @@ public class TaskListActivity extends OptionsActivity
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        taskRepo.delete(deleteTask);
-                        update();
+                        TaskManager.delete(deleteTask);
+                        TaskManager.updateView();
                     }}).show();
     }
 
-    private void update() {
-        taskList.clear();
-        taskList.addAll(TaskRepo.get(this).get());
-        viewAdapter.notifyDataSetChanged();
+    @Override
+    public void onCustomerEditClick(DialogInterface dialog) {
+        OrderManager.create();
+        Intent intent = new Intent(this, OrderActivity.class);
+        this.startActivity(intent);
     }
 
-    @Override
-    public void onCustomerEditClick(DialogInterface dialog, Customer newCustomer) {
-        UUID customerId = CustomerRepo.get(this).addOrUpdate(newCustomer);
-        Customer customer = CustomerRepo.get(this).get(customerId);
-        OrderRepo.get(this).add(Order.create(customer));
-        Intent intent = new Intent(this, OrderActivity.class);
-        intent.putExtra(OrderActivity.CUSTOMER, customer);
-        this.startActivity(intent);
+    public void updateView() {
+        viewAdapter.notifyDataSetChanged();
     }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
+import net.astechdesign.diningsolutions.app.SourceMode;
 import net.astechdesign.diningsolutions.model.DSDDate;
 
 import java.util.Calendar;
@@ -18,10 +19,10 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     private static final String ARG_DATE = "date";
     public static final String RETURN_DATE = "net.astechdesign.diningsolutions.date";
     public static final int REQUEST_DATE = 0;
-    private static String sourceMode;
+    private static SourceMode sourceMode;
     private DatePickerListener mListener;
 
-    public static DatePickerFragment newInstance(String mode, DatePickerListener listener, DSDDate date) {
+    public static DatePickerFragment newInstance(SourceMode mode, DatePickerListener listener, DSDDate date) {
         sourceMode = mode;
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.setListener(listener);
@@ -34,7 +35,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     }
 
     public interface DatePickerListener {
-        void onDatePicked(String mode, DSDDate newDate);
+        void onDatePicked(SourceMode mode, DSDDate newDate);
     }
 
     private void setListener(DatePickerListener listener) {

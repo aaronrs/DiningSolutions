@@ -1,5 +1,6 @@
 package net.astechdesign.diningsolutions.orders;
 
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.app.OrderManager;
+import net.astechdesign.diningsolutions.app.SourceMode;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
 import java.util.List;
@@ -23,12 +26,12 @@ public class OrderItemRecyclerViewAdapter
 
     private FragmentManager fm;
     private final List<OrderItem> mValues;
-    private OrderFragment fragment;
+    private FragmentActivity fragment;
     private FragmentManager mSupportFragmentManager;
 
-    public OrderItemRecyclerViewAdapter(OrderFragment fragment, List<OrderItem> items, FragmentManager supportFragmentManager) {
+    public OrderItemRecyclerViewAdapter(FragmentActivity fragment, List<OrderItem> items, FragmentManager supportFragmentManager) {
         this.fragment = fragment;
-        this.fm = fragment.getActivity().getSupportFragmentManager();
+        this.fm = fragment.getSupportFragmentManager();
         this.mValues = items;
         this.mSupportFragmentManager = supportFragmentManager;
     }
@@ -83,16 +86,16 @@ public class OrderItemRecyclerViewAdapter
             mDeleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.deleteOrderItem((OrderItem)mDeleteBtn.getTag());
+                    OrderManager.delete((OrderItem)mDeleteBtn.getTag());
                 }
             });
             mDeliveryDateBtn = (Button) view.findViewById(R.id.delivery_date_btn);
             mDeliveryDateBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.setSelectedOrderItem(mItem);
-                    DatePickerFragment dialog = DatePickerFragment.newInstance("ITEM", fragment, mItem.deliveryDate);
-                    dialog.setTargetFragment(fragment, DatePickerFragment.REQUEST_DATE);
+                    OrderManager.setOrderItem(mItem);
+                    DatePickerFragment dialog = DatePickerFragment.newInstance(SourceMode.ITEM, OrderManager.getInstance(), mItem.deliveryDate);
+//                    dialog.setTargetFragment(fragment, DatePickerFragment.REQUEST_DATE);
                     dialog.show(fm, DATE_PICKER);
                 }
             });

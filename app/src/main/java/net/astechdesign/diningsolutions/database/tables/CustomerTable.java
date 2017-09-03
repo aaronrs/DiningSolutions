@@ -8,6 +8,8 @@ import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 
+import java.util.List;
+
 public class CustomerTable extends CMSTable<Customer> {
 
     public static final String TABLE_NAME = "customers";
@@ -93,5 +95,30 @@ public class CustomerTable extends CMSTable<Customer> {
         ContentValues values = new ContentValues();
         values.put(field, value);
         db.update(TABLE_NAME, values, UUID_ID + " = ?", new String[]{customer.getId().toString()});
+    }
+
+    public Cursor findByName(SQLiteDatabase db, String name) {
+        return findBy(db, CUSTOMER_NAME + " LIKE ?", formatLike(name));
+    }
+
+    public Cursor findByTown(SQLiteDatabase db, String town) {
+        return findBy(db, ADDRESS_TOWN + " LIKE ?", formatLike(town));
+    }
+
+    public Cursor findByAddress(SQLiteDatabase db, String address) {
+        String value = formatLike(address);
+        return findBy(db, ADDRESS_LINE + " LIKE ? || " + ADDRESS_COUNTY + " LIKE ? || " + ADDRESS_POSTCODE + " LIKE ?", value, value, value);
+    }
+
+    private String formatLike(String value) {
+        return String.format("%%%s%%", value);
+    }
+
+    private Cursor findBy(SQLiteDatabase db, String query, String... value) {
+        return db.query(TABLE_NAME, null, query, value, null, null, CUSTOMER_NAME);
+    }
+
+    public Cursor getTowns(SQLiteDatabase db) {
+        return db.query(TABLE_NAME, new String[]{ADDRESS_TOWN}, ADDRESS_TOWN + " IS NOT NULL", null, ADDRESS_TOWN, null, ADDRESS_TOWN);
     }
 }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
+import net.astechdesign.diningsolutions.app.SourceMode;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
 
@@ -63,7 +64,7 @@ public class NextVisitFragment extends DialogFragment implements DatePickerFragm
     }
 
     @Override
-    public void onDatePicked(String mode, DSDDate date) {
+    public void onDatePicked(SourceMode mode, DSDDate date) {
         mDateText.setText(date.getDisplayDate());
         mDateText.setTag(date);
     }

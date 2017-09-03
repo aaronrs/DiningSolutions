@@ -4,18 +4,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import net.astechdesign.diningsolutions.app.CustomerManager;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 
 import java.util.List;
 
 public class CustomerListener implements AdapterView.OnItemSelectedListener {
-    private CustomerListActivity customerListActivity;
     private final TextView customerSelect;
     private final TextView addressSelect;
     private final List<String> towns;
 
-    public CustomerListener(CustomerListActivity customerListActivity, TextView customerSelect, TextView addressSelect, List<String> towns) {
-        this.customerListActivity = customerListActivity;
+    public CustomerListener(TextView customerSelect, TextView addressSelect, List<String> towns) {
         this.customerSelect = customerSelect;
         this.addressSelect = addressSelect;
         this.towns = towns;
@@ -30,12 +29,13 @@ public class CustomerListener implements AdapterView.OnItemSelectedListener {
             if (addressSelect.getText().length() != 0) {
                 addressSelect.setText("");
             }
-            customerListActivity.updateRecyclerTown(towns.get(position));
+            CustomerManager.filter("town", towns.get(position));
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        CustomerManager.getCustomerList();
+        CustomerManager.updateView();
     }
 }

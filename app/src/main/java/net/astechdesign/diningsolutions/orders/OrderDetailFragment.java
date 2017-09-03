@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.app.SourceMode;
 import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
@@ -70,7 +71,7 @@ public class OrderDetailFragment extends Fragment implements DatePickerFragment.
     }
 
     @Override
-    public void onDatePicked(String mode, DSDDate date) {
+    public void onDatePicked(SourceMode mode, DSDDate date) {
         orderItemRepo.updateDelivery(selectedOrderItem, date);
         setupRecyclerView(rootView);
     }

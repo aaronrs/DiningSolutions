@@ -10,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.app.OrderManager;
 import net.astechdesign.diningsolutions.app.flow.OptionsActivity;
+import net.astechdesign.diningsolutions.app.model.CurrentCustomer;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.repositories.CustomerRepo;
@@ -20,11 +22,9 @@ import java.util.List;
 
 public class OrderActivity extends OptionsActivity {
 
-    public static final String CUSTOMER = "customer";
     public static final String ADD_PRODUCT = "add_product";
     public static final String EDIT_ENTRY = "edit_entry";
 
-    private Customer mCustomer;
     private List<Order> mOrders;
     private Order mOrder;
     private Toolbar toolbar;
@@ -34,10 +34,8 @@ public class OrderActivity extends OptionsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mCustomer = (Customer) getIntent().getSerializableExtra(CUSTOMER);
-        mOrders = OrderRepo.get(this).get(mCustomer);
-        mOrder = mOrders.get(0);
-
+        mOrders = OrderManager.getOrders();
+        mOrder = OrderManager.getCurrentOrder();
         setContentView(R.layout.activity_order);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,14 +51,14 @@ public class OrderActivity extends OptionsActivity {
             @Override
             public void onClick(View view) {
                 sendEmail();
-                Snackbar.make(view, "Emailing order to " + mCustomer.email.address, Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Emailing order to " + CurrentCustomer.get().email.address, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
     }
 
     private void sendEmail() {
-        EmailTemplate.sendEmail(this, mCustomer, mOrder);
+        EmailTemplate.sendEmail(this, mOrder);
     }
 
     @Override
@@ -74,24 +72,11 @@ public class OrderActivity extends OptionsActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public Customer getCustomer() {
-        return mCustomer;
-    }
-
-    public List<Order> getOrders() {
-        mOrders = OrderRepo.get(this).get(mCustomer);
-        return mOrders;
-    }
-
     public void setOrderFragment(OrderFragment orderFragment) {
         this.orderFragment = orderFragment;
     }
 
     public void newOrder() {
-        OrderRepo.get(this).add(Order.create(mCustomer));
-    }
-
-    public void updateCustomer() {
-        mCustomer = CustomerRepo.get(this).get(mCustomer.getId());
+        OrderManager.create();
     }
 }

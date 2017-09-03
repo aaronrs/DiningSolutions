@@ -2,7 +2,6 @@ package net.astechdesign.diningsolutions.tasks;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +16,11 @@ import android.widget.TextView;
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.TimePickerFragment;
+import net.astechdesign.diningsolutions.app.SourceMode;
+import net.astechdesign.diningsolutions.app.TaskManager;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
+import net.astechdesign.diningsolutions.model.Task;
 
 public class NewTaskFragment extends DialogFragment implements DatePickerFragment.DatePickerListener, TimePickerFragment.TimePickerListener {
 
@@ -27,15 +29,10 @@ public class NewTaskFragment extends DialogFragment implements DatePickerFragmen
     public static final String HEADER = "task_header";
     public static final String TITLE = "task_title";
 
-    private NewTaskListener mListener;
     private TextView mDateText;
     private TextView mTimeText;
     private EditText mTitleText;
     private TextView mDescText;
-
-    public interface NewTaskListener {
-        void onNewTaskPositiveClick(DialogInterface dialog, DSDDate date, String title, String description);
-    }
 
     @NonNull
     @Override
@@ -74,7 +71,8 @@ public class NewTaskFragment extends DialogFragment implements DatePickerFragmen
                         if (title.length() > 0 || description.length() > 0) {
                             DSDDate date = (DSDDate) mDateText.getTag();
                             date = DSDDate.withTime(date, (DSDDate) mTimeText.getTag());
-                            mListener.onNewTaskPositiveClick(dialog, date, title, description);
+                            TaskManager.save(Task.create(date, title, description));
+                            TaskManager.updateView();
                         }
                     }
                 })
@@ -82,7 +80,7 @@ public class NewTaskFragment extends DialogFragment implements DatePickerFragmen
     }
 
     @Override
-    public void onDatePicked(String mode, DSDDate date) {
+    public void onDatePicked(SourceMode mode, DSDDate date) {
         mDateText.setText(date.getDisplayDate());
         mDateText.setTag(date);
     }
@@ -109,16 +107,6 @@ public class NewTaskFragment extends DialogFragment implements DatePickerFragmen
             mTimeText.setText(time.getDisplayTime());
             mTimeText.setTag(time);
             return;
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mListener = (NewTaskListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement NewTaskListener");
         }
     }
 }

@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.app.OrderManager;
+import net.astechdesign.diningsolutions.app.model.CurrentCustomer;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.orders.OrderActivity;
 
@@ -40,8 +42,8 @@ public class CustomerListRecyclerViewAdapter
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CurrentCustomer.set(holder.mCustomer);
                 Intent intent = new Intent(context, OrderActivity.class);
-                intent.putExtra(OrderActivity.CUSTOMER, holder.mCustomer);
                 context.startActivity(intent);
             }
         });
@@ -68,6 +70,7 @@ public class CustomerListRecyclerViewAdapter
         }
 
         public void setItem(Customer customer) {
+            CurrentCustomer.set(customer);
             this.mCustomer = customer;
             mNameView.setText(customer.name);
             mPhoneView.setText(customer.phone.number);

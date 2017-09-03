@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.astechdesign.diningsolutions.app.OrderManager;
+import net.astechdesign.diningsolutions.app.model.CurrentCustomer;
 import net.astechdesign.diningsolutions.database.DBHelper;
 import net.astechdesign.diningsolutions.database.tables.OrderTable;
 import net.astechdesign.diningsolutions.database.wrappers.OrderCursorWrapper;
@@ -13,6 +15,7 @@ import net.astechdesign.diningsolutions.model.Order;
 import net.astechdesign.diningsolutions.model.OrderItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +42,9 @@ public class OrderRepo {
     }
 
     public List<Order> get(Customer customer) {
+        if (customer.isNew()) {
+            return new ArrayList<>();
+        }
         List<Order> orders = new ArrayList<>();
         Cursor cursor = orderTable.getOrders(mDatabase, customer);
         while (cursor.moveToNext()) {
@@ -47,6 +53,10 @@ public class OrderRepo {
         }
         cursor.close();
         if (orders.isEmpty()) {
+            customer = CurrentCustomer.get();
+            if (customer == null) {
+                return Collections.emptyList();
+            }
             UUID id = add(Order.create(customer));
             cursor = orderTable.get(mDatabase, id);
             Order order = new OrderCursorWrapper(cursor).getOrder();

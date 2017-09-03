@@ -20,6 +20,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import net.astechdesign.diningsolutions.admin.Prefs;
+import net.astechdesign.diningsolutions.app.model.CurrentCustomer;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.Distributor;
 import net.astechdesign.diningsolutions.model.Order;
@@ -197,9 +198,9 @@ public class EmailTemplate {
         return new EmailTemplate(context, mCustomer, mOrder);
     }
 
-    public static void sendEmail(Context context, Customer customer, Order order) {
+    public static void sendEmail(Context context, Order order) {
         try {
-            EmailTemplate template = EmailTemplate.createIntent(context, customer, order);
+            EmailTemplate template = EmailTemplate.createIntent(context, CurrentCustomer.get(), order);
             Intent intent = template.getEmailIntent();
             context.startActivity(intent);
             OrderRepo.get(context).updateInvoiceNumber(order, template.getInvoiceNumber());

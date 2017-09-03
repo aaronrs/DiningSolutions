@@ -6,16 +6,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import net.astechdesign.diningsolutions.app.CustomerManager;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
 
 public class CustomerTextWatcher implements TextWatcher {
-    private CustomerListActivity customerListActivity;
     private final Spinner spinner;
     private final TextView addressSelect;
     private ArrayAdapter<String> mTownAdapter;
 
-    public CustomerTextWatcher(CustomerListActivity customerListActivity, Spinner spinner, TextView addressSelect, ArrayAdapter<String> mTownAdapter) {
-        this.customerListActivity = customerListActivity;
+    public CustomerTextWatcher(Spinner spinner, TextView addressSelect, ArrayAdapter<String> mTownAdapter) {
         this.spinner = spinner;
         this.addressSelect = addressSelect;
         this.mTownAdapter = mTownAdapter;
@@ -38,6 +37,6 @@ public class CustomerTextWatcher implements TextWatcher {
                 addressSelect.setText("");
             }
         }
-        customerListActivity.updateRecyclerName(value);
+        CustomerManager.filter("name", value);
     }
 }

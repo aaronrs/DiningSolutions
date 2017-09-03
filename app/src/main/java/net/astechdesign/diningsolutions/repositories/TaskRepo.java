@@ -23,8 +23,9 @@ import java.util.UUID;
 public class TaskRepo {
 
     private static TaskRepo repo;
-    private final TaskTable mTaskTable;
+
     private final SQLiteDatabase mDatabase;
+    private final TaskTable mTaskTable;
     private final Context mContext;
 
     public static TaskRepo get(Context context) {

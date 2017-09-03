@@ -4,6 +4,7 @@ import android.content.Context;
 
 import net.astechdesign.diningsolutions.DatePickerFragment;
 import net.astechdesign.diningsolutions.TimePickerFragment;
+import net.astechdesign.diningsolutions.app.SourceMode;
 import net.astechdesign.diningsolutions.database.tables.CustomerTable;
 import net.astechdesign.diningsolutions.model.Customer;
 import net.astechdesign.diningsolutions.model.DSDDate;
@@ -20,7 +21,7 @@ class VisitDateListener implements DatePickerFragment.DatePickerListener,
     }
 
     @Override
-    public void onDatePicked(String mode, DSDDate newDate) {
+    public void onDatePicked(SourceMode mode, DSDDate newDate) {
         CustomerRepo.get(context).update(mCustomer, CustomerTable.VISIT_DATE, DSDDate.withTime(newDate, mCustomer.visit).dbFormat());
     }
 

@@ -32,7 +32,8 @@ public class OrderTable extends CMSTable<Order> {
 
     public Cursor getOrders(SQLiteDatabase db, Model parent) {
         String orderBy = ORDER_DATE + " DESC, " + INVOICE_NO + " DESC";
-        Cursor cursor = db.query(TABLE_NAME, null, PARENT_ID + " = ?", new String[]{parent.getDbId()}, null, null, orderBy);
+        String dbId = parent.getDbId() == null ? "-1" : parent.getDbId();
+        Cursor cursor = db.query(TABLE_NAME, null, PARENT_ID + " = ?", new String[]{dbId}, null, null, orderBy);
         return cursor;
     }
 

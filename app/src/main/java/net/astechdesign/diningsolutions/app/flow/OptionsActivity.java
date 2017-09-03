@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import net.astechdesign.diningsolutions.R;
 import net.astechdesign.diningsolutions.admin.SettingsActivity;
 import net.astechdesign.diningsolutions.customers.CustomerListActivity;
+import net.astechdesign.diningsolutions.orders.OrderActivity;
 import net.astechdesign.diningsolutions.products.ProductEditFragment;
 import net.astechdesign.diningsolutions.products.ProductListActivity;
 import net.astechdesign.diningsolutions.reports.ReportsActivity;
@@ -31,6 +32,10 @@ public abstract class OptionsActivity extends AppCompatActivity {
 //                customerEditFragment.setCustomer(Customer.newCustomer);
 //                customerEditFragment.show(fm, EDIT_CUSTOMER);
 //                return true;
+            case R.id.menu_item_invoices:
+                intent = new Intent(this, OrderActivity.class);
+                startActivity(intent);
+                return true;
             case R.id.menu_item_reports:
                 intent = new Intent(this, ReportsActivity.class);
                 startActivity(intent);

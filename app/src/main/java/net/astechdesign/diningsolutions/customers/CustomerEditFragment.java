@@ -14,16 +14,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.app.CustomerManager;
+import net.astechdesign.diningsolutions.app.model.CurrentCustomer;
 import net.astechdesign.diningsolutions.model.Address;
 import net.astechdesign.diningsolutions.model.Customer;
-import net.astechdesign.diningsolutions.model.DSDDate;
 
 public class CustomerEditFragment extends DialogFragment {
 
     public static final String EDIT_CUSTOMER = "edit_customer";
 
     private CustomerEditListener mListener;
-    private Customer mCurrentCustomer;
     private TextView mNameText;
     private TextView mPhoneText;
     private TextView mAddressLineText;
@@ -32,18 +32,13 @@ public class CustomerEditFragment extends DialogFragment {
     private TextView mAddressPostcodeText;
     private TextView mEmailText1;
 
-    public void setCustomer(Customer mCurrentCustomer) {
-        this.mCurrentCustomer = mCurrentCustomer;
-    }
-
     public interface CustomerEditListener {
-        void onCustomerEditClick(DialogInterface dialog, Customer customer);
+        void onCustomerEditClick(DialogInterface dialog);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final Customer customer = mCurrentCustomer;
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_customer, null);
         mNameText = (TextView) view.findViewById(R.id.customer_name);
         mEmailText1 = (TextView) view.findViewById(R.id.customer_email);
@@ -53,18 +48,13 @@ public class CustomerEditFragment extends DialogFragment {
         mAddressCountyText = (TextView) view.findViewById(R.id.address_county);
         mAddressPostcodeText = (TextView) view.findViewById(R.id.address_postcode);
 
-        if (mCurrentCustomer != Customer.newCustomer) {
-            mNameText.setText(customer.name);
-            mEmailText1.setText(customer.email.address);
-            mPhoneText.setText(customer.phone.number);
-            Address address = customer.address;
-            if (address != null) {
-                mAddressLineText.setText(address.line);
-                mAddressTownText.setText(address.town);
-                mAddressCountyText.setText(address.county);
-                mAddressPostcodeText.setText(address.postcode);
-            }
-        }
+            mNameText.setText(CurrentCustomer.getName());
+            mEmailText1.setText(CurrentCustomer.getEmailAddress());
+            mPhoneText.setText(CurrentCustomer.getPhoneNumber());
+                mAddressLineText.setText(CurrentCustomer.getAddressLine());
+                mAddressTownText.setText(CurrentCustomer.getAddressTown());
+                mAddressCountyText.setText(CurrentCustomer.getAddressCounty());
+                mAddressPostcodeText.setText(CurrentCustomer.getAddressPostcode());
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(R.string.edit_customer_title)
@@ -79,18 +69,12 @@ public class CustomerEditFragment extends DialogFragment {
                                 getText(mAddressCountyText),
                                 getText(mAddressPostcodeText)
                                 );
-                        Customer newCustomer = Customer.create(
-                                customer.getId(),
+                        CustomerManager.create(
                                 getText(mNameText),
                                 getText(mEmailText1),
                                 getText(mPhoneText),
-                                true,
-                                customer.created,
-                                "",
-                                address,
-                                DSDDate.create()
-                                );
-                        mListener.onCustomerEditClick(dialog, newCustomer);
+                                address);
+                        mListener.onCustomerEditClick(dialog);
                     }
                 })
                 .create();

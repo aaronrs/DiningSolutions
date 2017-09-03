@@ -16,6 +16,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import net.astechdesign.diningsolutions.R;
+import net.astechdesign.diningsolutions.app.OrderManager;
+import net.astechdesign.diningsolutions.model.DSDDate;
 import net.astechdesign.diningsolutions.model.OrderItem;
 import net.astechdesign.diningsolutions.model.Product;
 import net.astechdesign.diningsolutions.repositories.ProductRepo;
@@ -26,7 +28,6 @@ import java.util.TreeMap;
 
 public class OrderAddProductFragment extends DialogFragment {
 
-    private ProductAddListener mListener;
     private TextView mBatchView;
     private TextView mPriceView;
     private Spinner mQuantityView;
@@ -34,14 +35,8 @@ public class OrderAddProductFragment extends DialogFragment {
     private OrderItem mItem;
     private int mQuantity;
     private Map<String, Product> productMap;
+    private OrderFragment orderFragment;
 
-    public void setListener(OrderFragment listener) {
-        mListener = listener;
-    }
-
-    public interface ProductAddListener {
-        void onAddProductPositiveClick(DialogInterface dialog, OrderItem item, Product product, double price, int quantity, String batch);
-    }
 
     @NonNull
     @Override
@@ -133,12 +128,19 @@ public class OrderAddProductFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onAddProductPositiveClick(dialog,
-                                mItem,
-                                mProduct,
-                                Double.parseDouble(mProduct != null ? mPriceView.getText().toString() : "0"),
-                                mProduct != null ? mQuantity : 0,
-                                mBatchView.getText().toString());
+                        if (mProduct == null) {
+                            return;
+                        }
+                        if (mItem != null) {
+                            OrderManager.delete(mItem);
+                        }
+                        mItem = new OrderItem(null,
+                                mProduct.name,
+                                Double.parseDouble(mPriceView.getText().toString()),
+                                mQuantity,
+                                "",
+                                DSDDate.create());
+                        OrderManager.add(mItem);
                     }
                 })
                 .create();
@@ -146,5 +148,9 @@ public class OrderAddProductFragment extends DialogFragment {
 
     public void setOrderItem(OrderItem item) {
         this.mItem = item;
+    }
+
+    public void setListener(OrderFragment orderFragment) {
+        this.orderFragment = orderFragment;
     }
 }
